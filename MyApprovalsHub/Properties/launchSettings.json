@@ -1,0 +1,25 @@
+{
+  "profiles": {
+    "Microsoft Teams (browser)": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "launchUrl": "https://teams.microsoft.com/l/app/be6d49ba-40a9-4e2b-bc90-49503f22030a?installAppPackage=true&webjoin=true&appTenantId=b690fbd8-801a-47ad-8280-c2c247538c82&login_hint=harry@luisdemetrio.com",
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+  ***REMOVED***
+      "hotReloadProfile": "aspnetcore"
+***REMOVED***
+    "MyApprovalsHub": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44302;http://localhost:2544",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+  ***REMOVED***
+      "hotReloadProfile": "aspnetcore"
+    }
+  }
+}

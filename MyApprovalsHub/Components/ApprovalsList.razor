@@ -1,0 +1,102 @@
+﻿
+
+
+<div id="similar">
+                <h3>Pending Approvals</h3>
+
+
+            @*<FluentDataGrid id="defaultGrid2" RowsData=RowsGridApproval ColumnDefinitions=ColumnsGridApproval GridTemplateColumns="1fr 1fr 1fr" style="float:left"/>*@
+
+       <FluentDataGrid id="ApprovalGrid"
+                    ColumnDefinitions=ColumnsGridApproval 
+                    RowsData=RowsGridApproval
+                    GridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
+                    style="float:left">
+           <RowItemTemplate>
+               <FluentDataGridRow TItem=string RowType="DataGridRowType.Header">
+                <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader">@context.Source</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader">@context.Description</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Name</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Requester</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=6 CellType="DataGridCellType.ColumnHeader">
+                <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context.ID))>
+                    Details            
+                    </FluentButton>
+                </FluentDataGridCell>
+            </FluentDataGridRow>
+           
+           </RowItemTemplate>
+       </FluentDataGrid>
+
+
+    <FluentDialog Hidden="ModalHidden" id="foo" aria-label="Simple dialog" Modal="true">
+    <h2>Dialog referenced for approval id: @selectedID</h2>
+    <button @onclick="OnCloseModalParameterButtonClick">Close dialog updating the variable</button>
+</FluentDialog>
+
+
+
+
+   
+</div>
+
+
+@code{
+
+    public int selectedID { get; set; }
+
+    public class Approval
+    {
+        public int ID { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string Source { get; set; }
+        public string Requester { get; set; }
+        public decimal Amount { get; set; }
+
+        public Approval(int id, string description, string name, string source, string requester, decimal amount)
+        {
+            ID = id;
+            Description = description;
+            Name = name;
+            Source = source;
+            Requester = requester;
+            Amount = amount;
+        }
+    }
+
+    public List<ColumnDefinition<Approval>> ColumnsGridApproval = new();
+
+    List<Approval> RowsGridApproval = new()
+    {
+        new Approval(1, "Expense Report Status Change","Internet June 2022", "SAP Concur", "Hermione Granger", 100 ),
+        new Approval(2, "Expense Report Status Change","Internet May 2022", "SAP Concur", "Draco Malfoy" , 100)
+    };
+
+
+
+    protected override void OnInitialized()
+    {
+
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Source", x => x.Source));
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Name", x => x.Name));
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Description", x => x.Description));
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Requester", x => x.Description));
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Amount", x => x.Amount));
+        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("", x => x.ID));
+
+
+        base.OnInitialized();
+    }
+
+    public bool ModalHidden { get; set; } = true;
+
+    private void OnOpenModalParameterButtonClick(int id) 
+    {
+        selectedID = id;
+        ModalHidden = false;
+    }
+
+    private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+}
