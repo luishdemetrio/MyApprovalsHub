@@ -21,20 +21,22 @@
     }
     else if (Profile != null)
     {
-        <ProfileCard IsLoading="false" Profile="@Profile" UserPhotoUri="@UserPhotoUri" />
+        <ProfileCard IsLoading="false" Profile="@Profile" UserPhotoUri="@UserPhotoUri"  />
     }
 </div>
 
 @code {
     [Parameter]
     public string ErrorMessage { get; set; }
+    [Parameter]
+    public string UserEmail { get; set; }
 
     public bool IsLoading { get; set; }
     public bool NeedConsent { get; set; }
     public User Profile { get; set; }
     public string UserPhotoUri { get; set; }
 
-    private readonly string _scope = "User.Read";
+    private readonly string[] _scope = { "User.Read", "User.Read.All", "Directory.Read.All", "Contacts.Read" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,11 +52,74 @@
         IsLoading = true;
         var graph = GetGraphServiceClient();
 
-        Profile = await graph.Me.Request().GetAsync();
-        UserPhotoUri = await GetPhotoAsync(graph);
+        if (String.IsNullOrEmpty(UserEmail))
+        {
+            Profile = await graph.Me.Request().GetAsync();
+        }else
+        {
+            var user = await graph.Users
+                .Request()
+                .Select(e => new {
+                    e.DisplayName,
+                    e.Mail
+                })
+                .Filter($"mail eq '{UserEmail}'")
+                .GetAsync() ;
+
+            Profile = user.FirstOrDefault();
+
+        }
+
+        if (await HasPermission(_scope))
+        {
+            UserPhotoUri = await GetPhotoAsync(graph);
+        }
+       
 
         IsLoading = false;
         ErrorMessage = string.Empty;
+    }
+
+    private async Task<string> GetPhotoAsync(GraphServiceClient graph)
+    {
+        string userPhoto = "";
+
+        Stream photoStream;
+
+        try
+        {
+
+           
+
+            if (String.IsNullOrEmpty(UserEmail))
+            {
+
+                photoStream = await graph.Me.Photo.Content.Request().GetAsync();
+
+            }
+            else
+            {
+                photoStream = await graph.Users[UserEmail].Photo.Content
+                                .Request()
+                                .GetAsync();
+            }
+          
+
+            if (photoStream != null)
+            {
+                // Copy the photo stream to a memory stream
+                // to get the bytes out of it
+                var memoryStream = new MemoryStream();
+                photoStream.CopyTo(memoryStream);
+                var photoBytes = memoryStream.ToArray();
+
+                // Generate a data URI for the photo
+                userPhoto = $"data:image/png;base64,{Convert.ToBase64String(photoBytes)}";
+            }
+        }
+        catch { /* Unable to get the users photo */ }
+
+        return userPhoto;
     }
 
     private async Task ConsentAndShow()
@@ -71,12 +136,12 @@
         }
     }
 
-    private async Task<bool> HasPermission(string scope)
+    private async Task<bool> HasPermission(string[] scope)
     {
         IsLoading = true;
         try
         {
-            await teamsUserCredential.GetTokenAsync(new TokenRequestContext(new string[] { _scope }), new System.Threading.CancellationToken());
+            await teamsUserCredential.GetTokenAsync(new TokenRequestContext(_scope ), new System.Threading.CancellationToken());
             return true;
         }
         catch (ExceptionWithCode e)
@@ -94,7 +159,7 @@
         IsLoading = false;
         return false;
     }
-    
+
     private GraphServiceClient GetGraphServiceClient()
     {
         var msGraphAuthProvider = new MsGraphAuthProvider(teamsUserCredential, _scope);
@@ -102,27 +167,5 @@
         return client;
     }
 
-    private async Task<string> GetPhotoAsync(GraphServiceClient graph)
-    {
-        string userPhoto = "";
-        try
-        {
-            var photoStream = await graph.Me.Photo.Content.Request().GetAsync();
-
-            if (photoStream != null)
-            {
-                // Copy the photo stream to a memory stream
-                // to get the bytes out of it
-                var memoryStream = new MemoryStream();
-                photoStream.CopyTo(memoryStream);
-                var photoBytes = memoryStream.ToArray();
-
-                // Generate a data URI for the photo
-                userPhoto = $"data:image/png;base64,{Convert.ToBase64String(photoBytes)}";
-            }
-        }
-        catch (Exception) { /* Unable to get the users photo */ }
-
-        return userPhoto;
-    }
+   
 }

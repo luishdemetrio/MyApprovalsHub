@@ -16,24 +16,48 @@
                <FluentDataGridRow TItem=string RowType="DataGridRowType.Header">
                 <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader">@context.Source</FluentDataGridCell>
                 <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader">@context.Description</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Name</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Requester</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=6 CellType="DataGridCellType.ColumnHeader">
-                <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context.ID))>
+                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Requester</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">
+                <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context))>
                     Details            
                     </FluentButton>
+                
                 </FluentDataGridCell>
             </FluentDataGridRow>
            
            </RowItemTemplate>
        </FluentDataGrid>
 
+    <FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true">
 
-    <FluentDialog Hidden="ModalHidden" id="foo" aria-label="Simple dialog" Modal="true">
-    <h2>Dialog referenced for approval id: @selectedID</h2>
-    <button @onclick="OnCloseModalParameterButtonClick">Close dialog updating the variable</button>
-</FluentDialog>
+        @if (@selectedExpense != null && @ModalHidden == false)
+        {
+            <div style="margin-left: 20px;">
+                <div >
+                    <h2>@selectedExpense.Description</h2>
+                </div>
+
+                
+
+                <div >
+                    <Graph UserEmail=@selectedExpense.Email />
+                </div>
+            
+            </div>
+
+            <div class="row">
+                <button @onclick="OnCloseModalParameterButtonClick">Close</button>
+            </div>
+            
+             
+            
+        }
+
+        
+
+    </FluentDialog>
+    
 
 
 
@@ -44,25 +68,27 @@
 
 @code{
 
-    public int selectedID { get; set; }
-
+    public Approval selectedExpense { get; set; }
+    
     public class Approval
     {
         public int ID { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
-        public string Name { get; set; }
         public string Source { get; set; }
         public string Requester { get; set; }
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
+        public string Email { get; set; }
 
-        public Approval(int id, string description, string name, string source, string requester, decimal amount)
+        public Approval(int id, string description, string source, string requester, double amount, DateTime date, string email)
         {
             ID = id;
             Description = description;
-            Name = name;
             Source = source;
             Requester = requester;
             Amount = amount;
+            Date = date;
+            Email = email;
         }
     }
 
@@ -70,8 +96,8 @@
 
     List<Approval> RowsGridApproval = new()
     {
-        new Approval(1, "Expense Report Status Change","Internet June 2022", "SAP Concur", "Hermione Granger", 100 ),
-        new Approval(2, "Expense Report Status Change","Internet May 2022", "SAP Concur", "Draco Malfoy" , 100)
+        new Approval(1, "London Sales Conference", "SAP Concur", "Hermione Granger", 1413.43, new DateTime(2022, 09, 02) , "granger@luisdemetrio.com" ),
+        new Approval(2, "Internet May 2022", "SAP Concur", "Draco Malfoy" , 100, new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com")
     };
 
 
@@ -80,7 +106,6 @@
     {
 
         ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Source", x => x.Source));
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Name", x => x.Name));
         ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Description", x => x.Description));
         ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Requester", x => x.Description));
         ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Amount", x => x.Amount));
@@ -92,9 +117,9 @@
 
     public bool ModalHidden { get; set; } = true;
 
-    private void OnOpenModalParameterButtonClick(int id) 
+    private void OnOpenModalParameterButtonClick(Approval expense)
     {
-        selectedID = id;
+        selectedExpense = expense;
         ModalHidden = false;
     }
 
