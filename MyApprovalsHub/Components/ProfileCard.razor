@@ -17,12 +17,12 @@
 	else if (!IsLoading && Profile != null)
 	{
 		<div class="profile" style="background:none;border:none;">
-			<div class="avatar">
+			<div class="avatar" style="margin-right:0px;">
 				@if (!string.IsNullOrEmpty(@UserPhotoUri)) {
-					<img src="@UserPhotoUri" />
+					<img src="@UserPhotoUri"  style="margin-right:0px;"/>
 				}
 			</div>
-			<div class="info">
+			<div class="info" style="margin-left:0px;">
 				<h3>@Profile.DisplayName</h3>
 				<p>@Profile.Mail</p>
 				<p>@Profile.OfficeLocation</p>

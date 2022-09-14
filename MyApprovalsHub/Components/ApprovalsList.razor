@@ -2,21 +2,51 @@
 
 
 <div id="similar">
-                <h3>Pending Approvals</h3>
+                <h4>Pending Approvals</h4>
 
 
             @*<FluentDataGrid id="defaultGrid2" RowsData=RowsGridApproval ColumnDefinitions=ColumnsGridApproval GridTemplateColumns="1fr 1fr 1fr" style="float:left"/>*@
 
+       <div>
+   
+            <FluentTextField @oninput="FilterChanged">Filter Requestor</FluentTextField>
+    
+       </div>
+
        <FluentDataGrid id="ApprovalGrid"
-                    ColumnDefinitions=ColumnsGridApproval 
-                    RowsData=RowsGridApproval
+                    ColumnDefinitions=SortingColumnsGrid
+                    RowsData=SortedRowsGridApproval
                     GridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
-                    style="float:left">
+                    style="float:left"
+        >
+        <HeaderCellTemplate>
+       
+            @if(!string.IsNullOrEmpty(@context.Title))
+            {
+                
+                <FluentButton @onclick=@(()=>SortColumn(context)) >
+
+                
+                            @context.Title
+                            @if (context.Title == lastSortColumn?.Title)
+                            {
+                                @(isAscending ? " ↑" : " ↓")
+                            }
+                
+                
+                    </FluentButton>
+            }
+        </HeaderCellTemplate>
            <RowItemTemplate>
-               <FluentDataGridRow TItem=string RowType="DataGridRowType.Header">
-                <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader">@context.Source</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader">@context.Description</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Requester</FluentDataGridCell>
+               <FluentDataGridRow TItem=string RowType="DataGridRowType.Header" >
+
+                <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader" >
+                
+                    <img src=@GetSourceImage(context.Source) height="25" width="25"/>
+                    
+                </FluentDataGridCell>
+                <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader"  >@context.Description</FluentDataGridCell>
+                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Requestor</FluentDataGridCell>
                 <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
                 <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">
                 <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context))>
@@ -37,11 +67,15 @@
                 <div >
                     <h2>@selectedExpense.Description</h2>
                 </div>
-
-                
-
                 <div >
+                    
                     <Graph UserEmail=@selectedExpense.Email />
+
+                    <h4>Report Date:</h4>
+
+                    <h4>Report Status:</h4>
+
+                    <h4>Amount:</h4>
                 </div>
             
             </div>
@@ -50,18 +84,10 @@
                 <button @onclick="OnCloseModalParameterButtonClick">Close</button>
             </div>
             
-             
-            
         }
-
-        
 
     </FluentDialog>
     
-
-
-
-
    
 </div>
 
@@ -69,48 +95,36 @@
 @code{
 
     public Approval selectedExpense { get; set; }
-    
-    public class Approval
-    {
-        public int ID { get; set; }
-        public DateTime Date { get; set; }
-        public string Description { get; set; }
-        public string Source { get; set; }
-        public string Requester { get; set; }
-        public double Amount { get; set; }
-        public string Email { get; set; }
 
-        public Approval(int id, string description, string source, string requester, double amount, DateTime date, string email)
-        {
-            ID = id;
-            Description = description;
-            Source = source;
-            Requester = requester;
-            Amount = amount;
-            Date = date;
-            Email = email;
-        }
-    }
+    private bool isAscending = false;
+    public string filterValue = "";
+    private ColumnDefinition<Approval>? lastSortColumn = null;
 
-    public List<ColumnDefinition<Approval>> ColumnsGridApproval = new();
+    public List<ColumnDefinition<Approval>> RawColumnsGridApproval = new();
+    public List<ColumnDefinition<Approval>> SortingColumnsGrid = new();
 
-    List<Approval> RowsGridApproval = new()
+    List<Approval> SortedRowsGridApproval = new();
+
+    List<Approval> RawRowsGridApproval = new()
     {
         new Approval(1, "London Sales Conference", "SAP Concur", "Hermione Granger", 1413.43, new DateTime(2022, 09, 02) , "granger@luisdemetrio.com" ),
-        new Approval(2, "Internet May 2022", "SAP Concur", "Draco Malfoy" , 100, new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com")
+        new Approval(2, "Internet May 2022", "SAP Concur", "Draco Malfoy" , 100, new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com"),
+        new Approval(3, "Internet May 2022", "Service Now", "Harry Potter" , 100, new DateTime(2022, 09, 14), "harry@luisdemetrio.com")
     };
 
+    public record Approval(int Id, string Description, string Source, string Requestor, double Amount, DateTime Date, string Email);
 
 
     protected override void OnInitialized()
     {
 
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Source", x => x.Source));
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Description", x => x.Description));
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Requester", x => x.Description));
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("Amount", x => x.Amount));
-        ColumnsGridApproval.Add(new ColumnDefinition<Approval>("", x => x.ID));
+        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Source", x => x.Source));
+        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Description", x => x.Description));
+        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Requestor", x => x.Requestor));
+        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Amount", x => x.Amount));
+        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("", x => x.Id));
 
+        SortedRowsGridApproval = RawRowsGridApproval;
 
         base.OnInitialized();
     }
@@ -124,4 +138,76 @@
     }
 
     private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+
+    private void FilterChanged(ChangeEventArgs args)
+    {
+        var filter = args.Value as string;
+
+        if (string.IsNullOrWhiteSpace(filter))
+        {
+            SortedRowsGridApproval = RawRowsGridApproval;
+        }
+        else
+        {
+            SortedRowsGridApproval = RawRowsGridApproval.Where(x => x.Requestor.Contains(filter, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        }
+        if (lastSortColumn != null)
+        {
+            SortedRowsGridApproval.Sort(new CustomComparer(lastSortColumn.FieldSelector!, isAscending));
+        }
+    }
+
+    private void SortColumn(ColumnDefinition<Approval> columnDefinition)
+    {
+        if (lastSortColumn?.Title == columnDefinition.Title)
+        {
+            isAscending = !isAscending;
+        }
+        else
+        {
+            lastSortColumn = columnDefinition;
+            isAscending = true;
+        }
+        SortedRowsGridApproval.Sort(new CustomComparer(columnDefinition.FieldSelector!, isAscending));
+    }
+
+    class CustomComparer : IComparer<Approval>
+    {
+        Func<Approval, object> _selector;
+        bool _isAscending;
+
+        public CustomComparer(Func<Approval, object> selector, bool isAscending)
+        {
+            _selector = selector;
+            _isAscending = isAscending;
+        }
+
+        int IComparer<Approval>.Compare(Approval? x, Approval? y)
+        {
+            var xs = _selector(x!) as string;
+            var ys = _selector(y!) as string;
+            if (xs == null || ys == null)
+                return 0;
+            return string.Compare(xs, ys) * (_isAscending ? 1 : -1);
+        }
+    }
+
+    private string GetSourceImage(string source)
+    {
+        string image = string.Empty;
+
+        switch (source)
+        {
+            case "SAP Concur":
+                image = "concur.png";
+                break;
+
+            case "Service Now":
+                image = "servicenow.png";
+                break;
+
+        }
+
+        return image;
+    }
 }
