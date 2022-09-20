@@ -1,10 +1,31 @@
 ﻿@using System.IO
 @using Azure.Core
 @using Microsoft.Graph
+@using MyApprovalsHub.Interfaces
+@using MyApprovalsHub.Services
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 
 
-<ApprovalsCard ApprovalLogoUri="servicenow.png" ApprovalPending="2" />
+<ApprovalsCard ApprovalLogoUri="servicenow.png" ApprovalPending="@expensesTotal" />
 
 
+@code {
+
+    private int expensesTotal;
+
+
+    protected override void OnInitialized()
+    {
+
+        IExpenseService expenseService = new ServiceNowExpenseService();
+
+        var expenses = expenseService.GetExpenses();
+
+        expensesTotal = expenses.Count();
+
+        ExpenseList.AddRange(expenses);
+
+    }
+
+}

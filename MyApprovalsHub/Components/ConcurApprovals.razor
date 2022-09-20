@@ -1,10 +1,32 @@
 ﻿@using System.IO
 @using Azure.Core
 @using Microsoft.Graph
+@using MyApprovalsHub.Interfaces
+@using MyApprovalsHub.Models
+@using MyApprovalsHub.Services
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 
 
-<ApprovalsCard ApprovalLogoUri="concur.png" ApprovalPending="5" />
+<ApprovalsCard ApprovalLogoUri="concur.png" ApprovalPending="@expensesTotal" />
 
 
+@code{
+
+    private int expensesTotal;
+
+
+    protected override void OnInitialized()
+    {
+
+        IApprovalRequestService expenseService = new ConcurExpenseService();
+
+        var expenses = expenseService.GetExpenses();
+
+        expensesTotal = expenses.Count();
+
+        ExpenseList.AddRange(expenses);
+
+    }
+
+}

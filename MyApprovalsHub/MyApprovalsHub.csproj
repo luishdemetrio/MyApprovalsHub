@@ -16,11 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Auth0.AuthenticationApi" Version="7.17.2" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="4.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Microsoft.Fast.Components.FluentUI" Version="1.0.0" />
     <PackageReference Include="Microsoft.TeamsFx" Version="1.0.0" />
+    <PackageReference Include="RestSharp" Version="108.0.1" />
+    <PackageReference Include="ServiceNow.Api" Version="1.2.36" />
   </ItemGroup>
 
 </Project>

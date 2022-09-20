@@ -1,30 +1,76 @@
-﻿
+﻿@using MyApprovalsHub.Interfaces
+@using MyApprovalsHub.Models
+@using MyApprovalsHub.Services
 
 
-<div id="similar">
-                <h4>Pending Approvals</h4>
 
+<div id="similar" style="margin-top: 40px;">
+       
+    <h5>Pending Approvals</h5>
 
-            @*<FluentDataGrid id="defaultGrid2" RowsData=RowsGridApproval ColumnDefinitions=ColumnsGridApproval GridTemplateColumns="1fr 1fr 1fr" style="float:left"/>*@
+    <div class="form-floating mb-3" style="margin-top: 20px;width:30%;">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Luis Demetrio" @oninput="FilterChanged">
+        <label for="floatingInput">Filter by requestor</label>
+    </div>
 
-       <div>
+  @*  <div style="margin-top: 20px;">
    
-            <FluentTextField @oninput="FilterChanged">Filter Requestor</FluentTextField>
+        <FluentTextField @oninput="FilterChanged" >Filter Requestor</FluentTextField>
     
-       </div>
+    </div>*@
 
-       <FluentDataGrid id="ApprovalGrid"
+
+    <table class="table">
+        <thead>
+
+        <tr>
+            @foreach (var item in SortingColumnsGrid)
+            {
+                <th scope="col">
+                    <div>
+                        <button style="border:none;background:none;font-weight:600" @onclick=@(()=>SortColumn(item))>
+
+                            @item.Title
+                            @if (item.Title == lastSortColumn?.Title)
+                            {
+                                @(isAscending ? " ↑" : " ↓")
+                            }
+                        </button>
+                    </div>
+                </th>
+            }              
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in _sortedExpenseGrid)
+        {
+            <tr>
+                <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
+                <td>@item.Description</td>
+                <td>@item.Requestor</td>
+                
+                <td>
+                    <div>
+                        <button type="button" class="btn btn-secondary" @onclick=@(()=>OnOpenModalParameterButtonClick(@item))>Details</button>
+                    </div>
+                        
+                </td>
+            </tr>
+        }
+        </tbody>
+        </table>
+
+
+    @*   <FluentDataGrid id="ApprovalGrid"
                     ColumnDefinitions=SortingColumnsGrid
-                    RowsData=SortedRowsGridApproval
+                    RowsData=_sortedExpenseGrid
                     GridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
                     style="float:left"
-        >
-        <HeaderCellTemplate>
-       
-            @if(!string.IsNullOrEmpty(@context.Title))
-            {
-                
-                <FluentButton @onclick=@(()=>SortColumn(context)) >
+                    >
+            <HeaderCellTemplate>       
+                @if(!string.IsNullOrEmpty(@context.Title))
+                {                
+                    <FluentButton style="border:none;background:none" @onclick=@(()=>SortColumn(context)) >
 
                 
                             @context.Title
@@ -36,102 +82,161 @@
                 
                     </FluentButton>
             }
-        </HeaderCellTemplate>
+            </HeaderCellTemplate>
+
            <RowItemTemplate>
                <FluentDataGridRow TItem=string RowType="DataGridRowType.Header" >
 
                 <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader" >
                 
-                    <img src=@GetSourceImage(context.Source) height="25" width="25"/>
+                    <img src=@context.SourcePhoto height="25" width="25"/>
                     
                 </FluentDataGridCell>
+
                 <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader"  >@context.Description</FluentDataGridCell>
                 <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Requestor</FluentDataGridCell>
                 <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
+
                 <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">
-                <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context))>
-                    Details            
+
+                    <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context))>
+                        Details            
                     </FluentButton>
                 
                 </FluentDataGridCell>
             </FluentDataGridRow>
            
            </RowItemTemplate>
-       </FluentDataGrid>
+       </FluentDataGrid>*@
 
-    <FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true">
+    <FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true" >
 
         @if (@selectedExpense != null && @ModalHidden == false)
         {
-            <div style="margin-left: 20px;">
-                <div >
-                    <h2>@selectedExpense.Description</h2>
+
+            <div class="modal-header" style="margin: 20px;">
+                <div class="column" style="margin-right:0px; width:30px">
+                    @if (!string.IsNullOrEmpty(selectedExpense.SourcePhoto))
+                    {
+                        <img src="@selectedExpense.SourcePhoto" style="margin-right:0px;width:40px" />
+                    }
                 </div>
-                <div >
-                    
+                <div class="row">
+                    <h4>@selectedExpense.Description</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="OnCloseModalParameterButtonClick"></button>
+   
+              </div>
+
+            <div style="margin: 20px;">
+                <div>                    
                     <Graph UserEmail=@selectedExpense.Email />
 
-                    <h4>Report Date:</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
 
-                    <h4>Report Status:</h4>
+                            </tr>
+                        </thead>
+                         <tbody>
+                        <tr>
+                            <th scope="row">Report Date:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Date.ToShortDateString()</td>
+                        </tr>
 
-                    <h4>Amount:</h4>
+                        <tr>
+                            <th scope="row">Report Status:</th>
+                            <td style="padding-bottom: 10px;">
+                                <FluentBadge Circular=true Fill=Fill.Highlight Color=Color.Highlight style="--badge-fill-highlight: #ffd800; --badge-color-highlight: #000">
+                                    Pending
+                                </FluentBadge>
+                            </td>
+                        </tr>
+
+                         </tbody>
+                    </table>
+                 
+                
+
+                   
                 </div>
             
             </div>
 
-            <div class="row">
-                <button @onclick="OnCloseModalParameterButtonClick">Close</button>
+        @*    <div  style="margin-left: 20px;margin-top: 40px;">
+
+                <button type="button" class="btn btn-success">Approve</button>
+
+                <button type="button" class="btn btn-danger"  style="margin-left: 20px">Reject</button>
+
+                <button type="button" class="btn btn-secondary" style="margin-left: 20px">Details</button>
+
+                <button type="button" class="btn btn-dark"  style="margin-left: 20px" @onclick="OnCloseModalParameterButtonClick">Close</button>
+
+                
+                
+            </div>*@
+
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
+                style="margin-left: 20px;margin-top: 40px;">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-success" for="btnradio1">Approve</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Details</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
+                <label class="btn btn-outline-dark" for="btnradio4">Close</label>
             </div>
+
             
         }
-
-    </FluentDialog>
-    
+    </FluentDialog>   
    
 </div>
 
 
 @code{
 
-    public Approval selectedExpense { get; set; }
+    public PendingApproval selectedExpense { get; set; }
 
     private bool isAscending = false;
     public string filterValue = "";
-    private ColumnDefinition<Approval>? lastSortColumn = null;
 
-    public List<ColumnDefinition<Approval>> RawColumnsGridApproval = new();
-    public List<ColumnDefinition<Approval>> SortingColumnsGrid = new();
+    private ColumnDefinition<PendingApproval>? lastSortColumn = null;
 
-    List<Approval> SortedRowsGridApproval = new();
+    public List<ColumnDefinition<PendingApproval>> RawColumnsGridApproval = new();
+    public List<ColumnDefinition<PendingApproval>> SortingColumnsGrid = new();
 
-    List<Approval> RawRowsGridApproval = new()
-    {
-        new Approval(1, "London Sales Conference", "SAP Concur", "Hermione Granger", 1413.43, new DateTime(2022, 09, 02) , "granger@luisdemetrio.com" ),
-        new Approval(2, "Internet May 2022", "SAP Concur", "Draco Malfoy" , 100, new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com"),
-        new Approval(3, "Internet May 2022", "Service Now", "Harry Potter" , 100, new DateTime(2022, 09, 14), "harry@luisdemetrio.com")
-    };
+    private List<PendingApproval> _sortedExpenseGrid = new();
 
-    public record Approval(int Id, string Description, string Source, string Requestor, double Amount, DateTime Date, string Email);
+    private List<PendingApproval> _rawExpenseGrid = new();
 
 
     protected override void OnInitialized()
     {
 
-        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Source", x => x.Source));
-        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Description", x => x.Description));
-        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Requestor", x => x.Requestor));
-        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("Amount", x => x.Amount));
-        SortingColumnsGrid.Add(new ColumnDefinition<Approval>("", x => x.Id));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.Description));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Id));
 
-        SortedRowsGridApproval = RawRowsGridApproval;
+        
+        _rawExpenseGrid = ExpenseList.PendingApprovals;
+
+        _sortedExpenseGrid = _rawExpenseGrid;
 
         base.OnInitialized();
     }
 
     public bool ModalHidden { get; set; } = true;
 
-    private void OnOpenModalParameterButtonClick(Approval expense)
+    private void OnOpenModalParameterButtonClick(PendingApproval expense)
     {
         selectedExpense = expense;
         ModalHidden = false;
@@ -145,19 +250,19 @@
 
         if (string.IsNullOrWhiteSpace(filter))
         {
-            SortedRowsGridApproval = RawRowsGridApproval;
+            _sortedExpenseGrid = _rawExpenseGrid;
         }
         else
         {
-            SortedRowsGridApproval = RawRowsGridApproval.Where(x => x.Requestor.Contains(filter, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            _sortedExpenseGrid = _rawExpenseGrid.Where(x => x.Requestor.Contains(filter, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
         if (lastSortColumn != null)
         {
-            SortedRowsGridApproval.Sort(new CustomComparer(lastSortColumn.FieldSelector!, isAscending));
+            _sortedExpenseGrid.Sort(new CustomComparer(lastSortColumn.FieldSelector!, isAscending));
         }
     }
 
-    private void SortColumn(ColumnDefinition<Approval> columnDefinition)
+    private void SortColumn(ColumnDefinition<PendingApproval> columnDefinition)
     {
         if (lastSortColumn?.Title == columnDefinition.Title)
         {
@@ -168,21 +273,21 @@
             lastSortColumn = columnDefinition;
             isAscending = true;
         }
-        SortedRowsGridApproval.Sort(new CustomComparer(columnDefinition.FieldSelector!, isAscending));
+        _sortedExpenseGrid.Sort(new CustomComparer(columnDefinition.FieldSelector!, isAscending));
     }
 
-    class CustomComparer : IComparer<Approval>
+    class CustomComparer : IComparer<PendingApproval>
     {
-        Func<Approval, object> _selector;
+        Func<PendingApproval, object> _selector;
         bool _isAscending;
 
-        public CustomComparer(Func<Approval, object> selector, bool isAscending)
+        public CustomComparer(Func<PendingApproval, object> selector, bool isAscending)
         {
             _selector = selector;
             _isAscending = isAscending;
         }
 
-        int IComparer<Approval>.Compare(Approval? x, Approval? y)
+        int IComparer<PendingApproval>.Compare(PendingApproval? x, PendingApproval? y)
         {
             var xs = _selector(x!) as string;
             var ys = _selector(y!) as string;
@@ -192,22 +297,5 @@
         }
     }
 
-    private string GetSourceImage(string source)
-    {
-        string image = string.Empty;
-
-        switch (source)
-        {
-            case "SAP Concur":
-                image = "concur.png";
-                break;
-
-            case "Service Now":
-                image = "servicenow.png";
-                break;
-
-        }
-
-        return image;
-    }
+  
 }

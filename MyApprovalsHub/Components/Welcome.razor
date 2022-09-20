@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+@using MyApprovalsHub.Services
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
@@ -19,13 +20,13 @@ else
 
         <div class=" page-padding">
 
-        <h2 class="left">Welcome to the My Approval's Hub@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h2>
+        <h3 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h3>
 
        
-        <div class="welcome page">
+        <div class="welcome page" style="margin-top:40px">
 
             <div class="column">
-                <ConcurApprovals />
+                <ConcurApprovals  />
             </div>
 
             <div class="column">
@@ -41,10 +42,11 @@ else
             </div>            
             
         </div>
-       
-         
-       <ApprovalsList />
 
+        
+        <FluentDivider ></FluentDivider>
+        <ApprovalsList />
+        
         
     </div>
 }
@@ -55,8 +57,15 @@ else
     bool isInTeams;
     bool isLoading = true; 
 
+    public Welcome()
+    {
+        //In case user refreshes the page
+        ExpenseList.ClearExpenseList();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        
         await base.OnAfterRenderAsync(firstRender);
 
         if(firstRender)
