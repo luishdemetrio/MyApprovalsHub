@@ -1,21 +1,23 @@
-﻿using MyApprovalsHub.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Graph;
+using Microsoft.TeamsFx.Conversation;
+using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
+using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
 namespace MyApprovalsHub.Services;
 
 public class ServiceNowService : ApprovalRequestService
 {
-
     private string _serviceNowInstanceUrl;
     private string _serviceNowUsername;
     private string _serviceNowPassword;
     private string _serviceNowClientId;
     private string _serviceNowClientSecret;
-    
+
     public ServiceNowService()
     {
-
         _serviceNowInstanceUrl = base._configurationRoot["ServiceNowInstanceURL"];
         _serviceNowUsername = base._configurationRoot["ServiceNowUsername"];
         _serviceNowPassword = base._configurationRoot["ServiceNowPassword"];
@@ -47,18 +49,9 @@ public class ServiceNowService : ApprovalRequestService
         {
             throw new Exception($"{nameof(_serviceNowClientSecret)} must be set.");
         }
+    }
 
-        
-    }        
-    
-    /*
-    {
-        "access_token": "PNr9B-GrTQw16p_Gj-05MFd8HHWrtZCarlP18NaY09kVH7_IijCWXgv6ZyrgSiOWXKedHf-VBVm1JpA6ezmdkw",
-        "refresh_token": "Rcqu4ebNwDonjuYN9bjIY129mQijO1YOkkA3ccCrs0iu4io-tamAvfmHJJrVJ9j2ckig-M1eHl5HH3S5Qcm6aQ",
-        "scope": "useraccount",
-        "token_type": "Bearer",
-        "expires_in": 1799
-    }*/
+
     private string GetToken()
     {
         string token = string.Empty;
@@ -73,19 +66,19 @@ public class ServiceNowService : ApprovalRequestService
         request.AddParameter("grant_type", "password");
         request.AddParameter("username", _serviceNowUsername);
         request.AddParameter("password", _serviceNowPassword);
-        
+
         RestResponse response = client.Execute(request);
 
         if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
         {
             var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
 
-            if ( dic != null && dic.ContainsKey("access_token") == true)
+            if (dic != null && dic.ContainsKey("access_token") == true)
             {
                 token = dic["access_token"];
             }
         }
-        
+
         return token;
     }
 
@@ -93,7 +86,7 @@ public class ServiceNowService : ApprovalRequestService
     //https://dev52648.service-now.com/api/now/table/sys_user?sysparm_query=email%3Dluke.wilson%40example.com&sysparm_fields=sys_id&sysparm_limit=1
     //RETURN
     //"{\"result\":[{\"sys_id\":\"46d96f57a9fe198101947a9620895886\"}]}"
-    public string GetServiceNowUser(string email)
+    private string GetServiceNowUser(string email)
     {
         string sys_id = string.Empty;
 
@@ -105,29 +98,341 @@ public class ServiceNowService : ApprovalRequestService
 
         request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
-
         RestResponse response = client.Execute(request);
 
         if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
         {
             var dynamicObject = JsonConvert.DeserializeObject<dynamic>(response.Content)!;
 
-            var item = dynamicObject.result[0].sys_id;
-            sys_id = item;
+            if (dynamicObject.result.Count > 0)
+            {
+                var item = dynamicObject.result[0].sys_id;
+                sys_id = item;
+            }
+            // else
+            // {
+            //user not found
+            //}
         }
 
         return sys_id;
     }
 
     //API
-    //https://dev52648.service-now.com/api/now/table/sys_user?sysparm_query=email%3Dluke.wilson%40example.com&sysparm_fields=sys_id&sysparm_limit=1
+    //https://dev52648.service-now.com/api/now/table/sysapproval_approver?approver=46d96f57a9fe198101947a9620895886&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval%2Csys_updated_by
     //RETURN
-    //"{\"result\":[{\"sys_id\":\"46d96f57a9fe198101947a9620895886\"}]}"
-    public string GetServiceNowPendingApprovals(string sysId)
+    /*     
     {
-        string sys_id = string.Empty;
+    "result": [
+        {
+            "sysapproval": "31cd7552db252200a6a2b31be0b8f55c",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "41cdb152db252200a6a2b31be0b8f527",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "02cd7552db252200a6a2b31be0b8f5e0",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "66cdf552db252200a6a2b31be0b8f559",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "29cdf152db252200a6a2b31be0b8f58b",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "9acdf552db252200a6a2b31be0b8f507",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "99cdb152db252200a6a2b31be0b8f5e7",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "06cdb552db252200a6a2b31be0b8f53e",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "5dcdf152db252200a6a2b31be0b8f546",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "55cdf152db252200a6a2b31be0b8f540",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "8ecd7552db252200a6a2b31be0b8f581",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "92cdf552db252200a6a2b31be0b8f501",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "cacd7552db252200a6a2b31be0b8f5ad",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "0ecdb552db252200a6a2b31be0b8f537",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "25cdf152db252200a6a2b31be0b8f5ca",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "c6cdb552db252200a6a2b31be0b8f505",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "1acdb552db252200a6a2b31be0b8f583",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "9acdb552db252200a6a2b31be0b8f55d",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "6dcdf152db252200a6a2b31be0b8f5fc",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "9dcdf152db252200a6a2b31be0b8f526",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "91cdf152db252200a6a2b31be0b8f50e",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "35cd3552db252200a6a2b31be0b8f5de",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "5acdb552db252200a6a2b31be0b8f5bc",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "39cd7552db252200a6a2b31be0b8f555",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "21cdf152db252200a6a2b31be0b8f592",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "b5cd7552db252200a6a2b31be0b8f57b",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "b1cd7552db252200a6a2b31be0b8f536",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "c9cdb152db252200a6a2b31be0b8f5bb",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "8dcdb152db252200a6a2b31be0b8f562",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "5ecdb552db252200a6a2b31be0b8f5b5",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "f5cd3552db252200a6a2b31be0b8f5b2",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "a9cd3552db252200a6a2b31be0b8f502",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "b1cd3552db252200a6a2b31be0b8f580",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "a9cd3552db252200a6a2b31be0b8f579",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "49cdb152db252200a6a2b31be0b8f569",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "81cdb152db252200a6a2b31be0b8f589",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "fdcd3552db252200a6a2b31be0b8f5ab",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "ddcdf152db252200a6a2b31be0b8f513",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "3dcd3552db252200a6a2b31be0b8f5e4",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "0dcdb152db252200a6a2b31be0b8f58f",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "f1cd7552db252200a6a2b31be0b8f523",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "0dcdb152db252200a6a2b31be0b8f54f",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "21cd3552db252200a6a2b31be0b8f522",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "29cd3552db252200a6a2b31be0b8f528",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "c2cd7552db252200a6a2b31be0b8f5b4",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "d2cdb552db252200a6a2b31be0b8f5ee",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "dacdb552db252200a6a2b31be0b8f5e7",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "92cdb552db252200a6a2b31be0b8f564",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "e2cdf552db252200a6a2b31be0b8f57f",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "35cd7552db252200a6a2b31be0b8f51d",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "eecdf552db252200a6a2b31be0b8f539",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "0ecd7552db252200a6a2b31be0b8f5e6",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "e6cdf552db252200a6a2b31be0b8f533",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "12cdb552db252200a6a2b31be0b8f58a",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "cecdb552db252200a6a2b31be0b8f50b",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "2dcdf152db252200a6a2b31be0b8f5d0",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "55cdb152db252200a6a2b31be0b8f5ee",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "95cdf152db252200a6a2b31be0b8f52d",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "eacdf552db252200a6a2b31be0b8f578",
+            "state": "requested",
+            "sys_created_by": "admin"
+    ***REMOVED***
+        {
+            "sysapproval": "49cdb152db252200a6a2b31be0b8f548",
+            "state": "requested",
+            "sys_created_by": "admin"
+        }
+    ]
+}
+     */
+    private ServiceNowApprovals GetPendingApprovalsRestAPI(string sysId)
+    {
 
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval%2Csys_updated_by");
+        ServiceNowApprovals approvals = new();
+
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval");
 
         var request = new RestRequest();
 
@@ -135,33 +440,134 @@ public class ServiceNowService : ApprovalRequestService
 
         request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
+        RestResponse response = client.Execute(request);
+
+        if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            var r = JsonConvert.DeserializeObject<ServiceNowApprovals>(response.Content)!;
+
+            approvals = r;
+        }
+
+        return approvals;
+    }
+
+    private PendingApprovalDetails GetPendingApprovalDetailsRestAPI(string approvalId)
+    {
+        PendingApprovalDetails details = new();
+
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cdescription%2Cshort_description%2Cstate%2Cpriority%2Curgency%2Copened_by");
+
+        var request = new RestRequest();
+
+        request.Method = Method.Get;
+
+        request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
         RestResponse response = client.Execute(request);
 
         if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            var dynamicObject = JsonConvert.DeserializeObject<dynamic>(response.Content)!;
+            var r = JsonConvert.DeserializeObject<PendingApprovalDetails>(response.Content)!;
 
-            var item = dynamicObject.result[0].sys_id;
-            sys_id = item;
+            if (r != null && r.result.Count() >0)
+            {
+                details.result = r.result;
+            }
+            
         }
 
-        return sys_id;
+        return details;
     }
-
-
 
     public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
     {
-        //"luke.wilson@example.com"
+
+        List<PendingApproval> r = new();
+
         var sys_id = GetServiceNowUser(approverEmail);
 
+        var approvals = GetPendingApprovalsRestAPI(sys_id);
 
+        PendingApprovals = approvals.result.Length;
 
+        var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(10);
 
-        return new[]
+        foreach (var item in chunck)
         {
-            new PendingApproval(3, "Internet May 2022", "Service Now", "Harry Potter" ,  new DateTime(2022, 09, 14), "harry@luisdemetrio.com", "servicenow.png")
-        };
+            var detail = GetPendingApprovalDetailsRestAPI(string.Join(",", item));
+
+            foreach (var d in detail.result)
+            {
+                
+                r.Add(new PendingApproval(
+                    d.number,
+                    d.short_description,
+                    PendingApprovalSource.ServiceNow.ToString(),
+                    d.opened_by,
+                    DateTime.Now,
+                    "",
+                    "servicenow.png",
+                    d.state
+                ));
+            }
+        }
+
+
+        // var detail = GetPendingApprovalDetailsRestAPI(string.Join(",", approvals.result.Select(p => p.sysapproval).ToList()));
+
+        //foreach (var item in approvals.result)
+        //{
+        //    var detail = GetPendingApprovalDetailsRestAPI(item.sysapproval);
+
+        //    r.Add(new PendingApproval(
+        //        detail.number,
+        //        detail.short_description,
+        //        PendingApprovalSource.ServiceNow.ToString(),
+        //        detail.opened_by,
+        //        DateTime.Now,
+        //        "",
+        //        "servicenow.png",
+        //        detail.state
+        //    ));
+        //}
+
+        return r;
     }
+
+    private class ServiceNowApprovals
+    {
+        public Pending[] result { get; set; }
+
+        public class Pending
+        {
+            public string sysapproval { get; set; }
+            public string state { get; set; }
+            public string sys_created_by { get; set; }
+        }
+    }
+
+
+    public class PendingApprovalDetails
+    {
+        public ApprovalDetail[] result { get; set; }
+
+        public class ApprovalDetail
+        {
+            public string number { get; set; }
+            public string short_description { get; set; }
+            public string urgency { get; set; }
+            public string opened_by { get; set; }
+            public string description { get; set; }
+            public string state { get; set; }
+            public string priority { get; set; }
+        }
+    }
+
+   
+
+
 }
+
+
+

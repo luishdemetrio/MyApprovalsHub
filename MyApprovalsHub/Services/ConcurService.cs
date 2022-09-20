@@ -32,27 +32,27 @@ namespace MyApprovalsHub.Services
         public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
         {
 
-            var client = new RestClient("https://www.concursolutions.com/api/v3.0/expense/reports?approverLoginID=luisdem&approvalStatusCode=A_FILE");
+            //var client = new RestClient("https://www.concursolutions.com/api/v3.0/expense/reports?approverLoginID=luisdem&approvalStatusCode=A_FILE");
 
-            var request = new RestRequest();
+            //var request = new RestRequest();
 
-            request.Method = Method.Get;
+            //request.Method = Method.Get;
 
-            request.AddHeader("Authorization", $"Bearer {GetToken()}");
+            //request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
 
-            RestResponse response = client.Execute(request);
+            //RestResponse response = client.Execute(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
+            //if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            //{
 
-            }
-            Console.WriteLine(response.Content);
+            //}
+            //Console.WriteLine(response.Content);
 
             return new[]
             {
-                new PendingApproval(1, "London Sales Conference", nameof(PendingApprovalSource.Concur), "Hermione Granger",  new DateTime(2022, 09, 02) , "granger@luisdemetrio.com","concur.png" ),
-                new PendingApproval(2, "Internet May 2022", nameof(PendingApprovalSource.Concur), "Draco Malfoy" , new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com","concur.png")
+                new PendingApproval("1", "London Sales Conference", nameof(PendingApprovalSource.Concur), "Hermione Granger",  new DateTime(2022, 09, 02) , "granger@luisdemetrio.com","concur.png", "Requested" ),
+                new PendingApproval("2", "Internet May 2022", nameof(PendingApprovalSource.Concur), "Draco Malfoy" , new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com","concur.png", "Requested")
             };
         }
 

@@ -15,8 +15,7 @@
 		<FluentProgressRing/>
 	</div>
 }
-else
-{
+else{
 
         <div class=" page-padding">
 
@@ -26,11 +25,11 @@ else
         <div class="welcome page" style="margin-top:40px">
 
             <div class="column">
-                <ConcurApprovals  />
+                <ConcurApprovals ApprovalEmail=@userEmail />
             </div>
 
             <div class="column">
-                <ServiceNowApprovals />
+                <ServiceNowApprovals ApprovalEmail="luke.wilson@example.com"/>
             </div>
 
             <div class="column">
@@ -43,8 +42,8 @@ else
             
         </div>
 
-        
         <FluentDivider ></FluentDivider>
+        
         <ApprovalsList />
         
         
@@ -53,6 +52,7 @@ else
 
 @code {
     string userName;
+    string userEmail;
     string errorMessage;
     bool isInTeams;
     bool isLoading = true; 
@@ -65,7 +65,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        
+
         await base.OnAfterRenderAsync(firstRender);
 
         if(firstRender)
@@ -76,6 +76,7 @@ else
             { 
                 var user = await teamsUserCredential.GetUserInfoAsync();
                 userName = user.DisplayName;
+                userEmail = user.PreferredUserName;
             }
             else
             {
@@ -86,16 +87,6 @@ else
             StateHasChanged();            
         }
     }
-
-    private string GetEnvironmentName()
-    {
-        return HostEnvironment.IsDevelopment() ? "local environment" : "Azure environment";
-    }
-
-
-
-
-
-
+    
 }
 

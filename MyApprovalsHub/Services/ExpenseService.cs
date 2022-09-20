@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace MyApprovalsHub.Services;
 
-public abstract class ApprovalRequestService : IApprovalRequestService
+public abstract class ApprovalRequestService : IPendingApprovalService
 {
 
     protected IConfigurationRoot _configurationRoot;
@@ -14,6 +14,8 @@ public abstract class ApprovalRequestService : IApprovalRequestService
     protected string ClientSecret { get; set; }
 
     protected string BaseUrl { get; set; }
+
+    public int PendingApprovals { get; set; }
 
     public ApprovalRequestService()
     {

@@ -1,11 +1,12 @@
 ﻿namespace MyApprovalsHub.Models
 {
     public record PendingApproval(
-        int Id, 
+        string Number, 
         string Description, 
         string Source, 
         string Requestor, 
         DateTime Date, 
         string Email,
-        string SourcePhoto);
+        string SourcePhoto,
+        string State);
 }

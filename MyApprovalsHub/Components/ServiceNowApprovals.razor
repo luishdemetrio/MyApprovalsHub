@@ -12,17 +12,21 @@
 
 @code {
 
+      [Parameter]
+    public string ApprovalEmail { get; set; }
+
     private int expensesTotal;
 
+  
 
     protected override void OnInitialized()
     {
 
-        IExpenseService expenseService = new ServiceNowExpenseService();
+        IPendingApprovalService expenseService = new ServiceNowService();
 
-        var expenses = expenseService.GetExpenses();
+        var expenses = expenseService.GetPendingApprovals(ApprovalEmail);
 
-        expensesTotal = expenses.Count();
+        expensesTotal = expenseService.PendingApprovals;
 
         ExpenseList.AddRange(expenses);
 

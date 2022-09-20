@@ -13,15 +13,19 @@
 
 @code{
 
+    [Parameter]
+    public string ApprovalEmail { get; set; }
+
     private int expensesTotal;
 
+  
 
     protected override void OnInitialized()
     {
 
-        IApprovalRequestService expenseService = new ConcurExpenseService();
+        IPendingApprovalService expenseService = new ConcurService();
 
-        var expenses = expenseService.GetExpenses();
+        var expenses = expenseService.GetPendingApprovals(ApprovalEmail);
 
         expensesTotal = expenses.Count();
 

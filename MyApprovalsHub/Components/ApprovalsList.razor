@@ -2,8 +2,6 @@
 @using MyApprovalsHub.Models
 @using MyApprovalsHub.Services
 
-
-
 <div id="similar" style="margin-top: 40px;">
        
     <h5>Pending Approvals</h5>
@@ -12,13 +10,6 @@
         <input type="text" class="form-control" id="floatingInput" placeholder="Luis Demetrio" @oninput="FilterChanged">
         <label for="floatingInput">Filter by requestor</label>
     </div>
-
-  @*  <div style="margin-top: 20px;">
-   
-        <FluentTextField @oninput="FilterChanged" >Filter Requestor</FluentTextField>
-    
-    </div>*@
-
 
     <table class="table">
         <thead>
@@ -59,55 +50,6 @@
         }
         </tbody>
         </table>
-
-
-    @*   <FluentDataGrid id="ApprovalGrid"
-                    ColumnDefinitions=SortingColumnsGrid
-                    RowsData=_sortedExpenseGrid
-                    GridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
-                    style="float:left"
-                    >
-            <HeaderCellTemplate>       
-                @if(!string.IsNullOrEmpty(@context.Title))
-                {                
-                    <FluentButton style="border:none;background:none" @onclick=@(()=>SortColumn(context)) >
-
-                
-                            @context.Title
-                            @if (context.Title == lastSortColumn?.Title)
-                            {
-                                @(isAscending ? " ↑" : " ↓")
-                            }
-                
-                
-                    </FluentButton>
-            }
-            </HeaderCellTemplate>
-
-           <RowItemTemplate>
-               <FluentDataGridRow TItem=string RowType="DataGridRowType.Header" >
-
-                <FluentDataGridCell GridColumn=1 CellType="DataGridCellType.ColumnHeader" >
-                
-                    <img src=@context.SourcePhoto height="25" width="25"/>
-                    
-                </FluentDataGridCell>
-
-                <FluentDataGridCell GridColumn=2 CellType="DataGridCellType.ColumnHeader"  >@context.Description</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=3 CellType="DataGridCellType.ColumnHeader">@context.Requestor</FluentDataGridCell>
-                <FluentDataGridCell GridColumn=4 CellType="DataGridCellType.ColumnHeader">@context.Amount</FluentDataGridCell>
-
-                <FluentDataGridCell GridColumn=5 CellType="DataGridCellType.ColumnHeader">
-
-                    <FluentButton @onclick=@(()=>OnOpenModalParameterButtonClick(@context))>
-                        Details            
-                    </FluentButton>
-                
-                </FluentDataGridCell>
-            </FluentDataGridRow>
-           
-           </RowItemTemplate>
-       </FluentDataGrid>*@
 
     <FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true" >
 
@@ -165,7 +107,7 @@
             
             </div>
 
-        @*    <div  style="margin-left: 20px;margin-top: 40px;">
+   @*         <div  style="margin-left: 20px;margin-top: 40px;">
 
                 <button type="button" class="btn btn-success">Approve</button>
 
@@ -224,7 +166,7 @@
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.Description));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
-        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Id));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
         
         _rawExpenseGrid = ExpenseList.PendingApprovals;
