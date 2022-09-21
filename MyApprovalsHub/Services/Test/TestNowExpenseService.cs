@@ -12,7 +12,18 @@ namespace MyApprovalsHub.Services
 
             return new[]
             {
-                new PendingApproval("3", "Internet May 2022", "Service Now", "Harry Potter" , new DateTime(2022, 09, 14), "harry@luisdemetrio.com", "servicenow.png", "Requested")
+                 new PendingApproval
+                {
+                    Number ="1",
+                    Description = "London Sales Conference",
+                    Source =nameof(PendingApprovalSource.Concur),
+                    Requestor = "Harry Potter",
+                    Date = new DateTime(2022, 09, 02),
+                    Email = "harry@luisdemetrio.com",
+                    SourcePhoto = "concur.png",
+                    State = "Requested"
+                }
+             
             };
         }
     }

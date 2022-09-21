@@ -51,8 +51,28 @@ namespace MyApprovalsHub.Services
 
             return new[]
             {
-                new PendingApproval("1", "London Sales Conference", nameof(PendingApprovalSource.Concur), "Hermione Granger",  new DateTime(2022, 09, 02) , "granger@luisdemetrio.com","concur.png", "Requested" ),
-                new PendingApproval("2", "Internet May 2022", nameof(PendingApprovalSource.Concur), "Draco Malfoy" , new DateTime(2022, 09, 10), "malfoy@luisdemetrio.com","concur.png", "Requested")
+                new PendingApproval
+                {
+                    Number ="1", 
+                    Description = "London Sales Conference",
+                    Source =nameof(PendingApprovalSource.Concur),
+                    Requestor = "Hermione Granger",
+                    Date = new DateTime(2022, 09, 02),
+                    Email = "granger@luisdemetrio.com",
+                    SourcePhoto = "concur.png",
+                    State = "Requested"
+            ***REMOVED***
+                new PendingApproval
+                {
+                    Number ="2",
+                    Description = "Internet May 2022",
+                    Source =nameof(PendingApprovalSource.Concur),
+                    Requestor = "Draco Malfoy",
+                    Date = new DateTime(2022, 09, 02),
+                    Email = "malfoy@luisdemetrio.com",
+                    SourcePhoto = "concur.png",
+                    State = "Requested"
+                }
             };
         }
 

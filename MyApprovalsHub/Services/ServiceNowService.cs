@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using Microsoft.TeamsFx.Conversation;
+using MyApprovalsHub.Components;
 using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
@@ -432,7 +433,8 @@ public class ServiceNowService : ApprovalRequestService
 
         ServiceNowApprovals approvals = new();
 
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval");
+        //var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=sysapproval,due_date");
 
         var request = new RestRequest();
 
@@ -456,8 +458,8 @@ public class ServiceNowService : ApprovalRequestService
     {
         PendingApprovalDetails details = new();
 
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cdescription%2Cshort_description%2Cstate%2Cpriority%2Curgency%2Cassigned_to");
-
+        //var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cdescription%2Cshort_description%2Cstate%2Cpriority%2Curgency%2Cassigned_to");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cshort_description%2Cassigned_to%2Csys_id");
         var request = new RestRequest();
 
         request.Method = Method.Get;
@@ -473,6 +475,7 @@ public class ServiceNowService : ApprovalRequestService
             if (r != null && r.result.Count() > 0)
             {
                 details.result = r.result;
+                
             }
 
         }
@@ -506,46 +509,47 @@ public class ServiceNowService : ApprovalRequestService
     public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
     {
 
-        List<PendingApproval> r = new();
-
         var sys_id = GetServiceNowUser(approverEmail);
 
         var approvals = GetPendingApprovalsRestAPI(sys_id);
 
         PendingApprovals = approvals.result.Length;
 
-        var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(10);
-
-        
-        PendingApprovalDetails detail = new();
+        //we need to chunck the pending approvals to avoid getting an exception due the request is too long
+        var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(15);
+                
+        PendingApprovalDetails approvalDetails = new();
 
         foreach (var item in chunck)
         {
-            detail.result.AddRange( GetPendingApprovalDetailsRestAPI(string.Join(",", item)).result );
-
+            approvalDetails.result.AddRange( 
+                GetPendingApprovalDetailsRestAPI(string.Join(",", item)).result 
+                );
         }
-
-        var users = GetUserDetail(string.Join(",", detail.result.Select(u => u.assigned_to).Distinct()));
-
         
-        foreach (var d in detail.result)
-        {
+        //we need to get the name and email of the user
+        var users = GetUserDetail(string.Join(",", approvalDetails.result.Select(u => u.assigned_to).Distinct()));
 
-            var user = users.result.Where(u => u.sys_id == d.assigned_to).FirstOrDefault();
 
-            r.Add(new PendingApproval(
-                d.number,
-                d.short_description,
-                PendingApprovalSource.ServiceNow.ToString(),
-                user.name,
-                DateTime.Now,
-                user.email,
-                "servicenow.png",
-                d.state
-            ));
-        }
+        var result = from approval in approvals.result
+                     join approvalDetail in approvalDetails.result
+                        on approval.sysapproval equals approvalDetail.sys_id
+                     join user in users.result
+                        on approvalDetail.assigned_to equals user.sys_id
+                     select new PendingApproval
+                     {
+                         Number = approvalDetail.number,
+                         Description = approvalDetail.short_description,
+                         Requestor = user.name,
+                         Email = user.email,
+                         Date = approval.due_date.Date,
+                         Source = PendingApprovalSource.ServiceNow.ToString(),
+                         SourcePhoto = "servicenow.png",
+                         State = "Requested"
+                     };
 
-        return r;
+        return result;
+             
     }
 
     private class ServiceNowApprovals
@@ -555,8 +559,9 @@ public class ServiceNowService : ApprovalRequestService
         public class Pending
         {
             public string sysapproval { get; set; }
-            public string state { get; set; }
-            public string sys_created_by { get; set; }
+            public DateTime due_date { get; set; }
+            //public string state { get; set; }
+            //public string sys_created_by { get; set; }
         }
     }
 
@@ -567,13 +572,14 @@ public class ServiceNowService : ApprovalRequestService
 
         public class ApprovalDetail
         {
+            public string sys_id { get; set; }
             public string number { get; set; }
             public string short_description { get; set; }
-            public string urgency { get; set; }
+            //public string urgency { get; set; }
             public string assigned_to { get; set; }
-            public string description { get; set; }
-            public string state { get; set; }
-            public string priority { get; set; }
+            //public string description { get; set; }
+            //public string state { get; set; }
+            //public string priority { get; set; }
         }
     }
 

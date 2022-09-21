@@ -37,9 +37,9 @@
         {
             <tr>
                 <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
+                <td>@item.Number</td>
                 <td>@item.Description</td>
-                <td>@item.Requestor</td>
-                
+                <td>@item.Requestor</td>                
                 <td>
                     <div>
                         <button type="button" class="btn btn-secondary" @onclick=@(()=>OnOpenModalParameterButtonClick(@item))>Details</button>
@@ -55,20 +55,22 @@
 
         @if (@selectedExpense != null && @ModalHidden == false)
         {
+            <div class="column" style="margin:30px; width:30px">
+                @if (!string.IsNullOrEmpty(selectedExpense.SourcePhoto))
+                {
+                    <img src="@selectedExpense.SourcePhoto" style="margin-right:0px;width:40px" />
+                }
+            </div>
 
             <div class="modal-header" style="margin: 20px;">
-                <div class="column" style="margin-right:0px; width:30px">
-                    @if (!string.IsNullOrEmpty(selectedExpense.SourcePhoto))
-                    {
-                        <img src="@selectedExpense.SourcePhoto" style="margin-right:0px;width:40px" />
-                    }
-                </div>
+              
+
                 <div class="row">
-                    <h4>@selectedExpense.Description</h4>
+                    <h5>@selectedExpense.Description</h5>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="OnCloseModalParameterButtonClick"></button>
-   
               </div>
+
+            
 
             <div style="margin: 20px;">
                 <div>                    
@@ -164,6 +166,7 @@
     {
 
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Number", x => x.Number));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.Description));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
