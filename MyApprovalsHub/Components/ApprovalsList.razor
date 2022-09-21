@@ -39,6 +39,7 @@
                 <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
                 <td>@item.Number</td>
                 <td>@item.Description</td>
+                    <td>@item.Date.ToShortDateString()</td>
                 <td>@item.Requestor</td>                
                 <td>
                     <div>
@@ -46,101 +47,23 @@
                     </div>
                         
                 </td>
+                <td>
+                        <button type="button" class="btn btn-success">👍</button>
+
+                        
+                </td>
+                <td>
+                        <button type="button" class="btn btn-dark">❌</button>
+                </td>
             </tr>
         }
         </tbody>
         </table>
 
-    <FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true" >
 
-        @if (@selectedExpense != null && @ModalHidden == false)
-        {
-            <div class="column" style="margin:30px; width:30px">
-                @if (!string.IsNullOrEmpty(selectedExpense.SourcePhoto))
-                {
-                    <img src="@selectedExpense.SourcePhoto" style="margin-right:0px;width:40px" />
-                }
-            </div>
+    <ServiceNowPendingApprovalsDetails selectedExpense=@selectedExpense ModalHidden=@ModalHidden/>
 
-            <div class="modal-header" style="margin: 20px;">
-              
 
-                <div class="row">
-                    <h5>@selectedExpense.Description</h5>
-                </div>
-              </div>
-
-            
-
-            <div style="margin: 20px;">
-                <div>                    
-                    <Graph UserEmail=@selectedExpense.Email />
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-
-                            </tr>
-                        </thead>
-                         <tbody>
-                        <tr>
-                            <th scope="row">Report Date:</th>
-                            <td style="padding-bottom: 10px;">@selectedExpense.Date.ToShortDateString()</td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">Report Status:</th>
-                            <td style="padding-bottom: 10px;">
-                                <FluentBadge Circular=true Fill=Fill.Highlight Color=Color.Highlight style="--badge-fill-highlight: #ffd800; --badge-color-highlight: #000">
-                                    Pending
-                                </FluentBadge>
-                            </td>
-                        </tr>
-
-                         </tbody>
-                    </table>
-                 
-                
-
-                   
-                </div>
-            
-            </div>
-
-   @*         <div  style="margin-left: 20px;margin-top: 40px;">
-
-                <button type="button" class="btn btn-success">Approve</button>
-
-                <button type="button" class="btn btn-danger"  style="margin-left: 20px">Reject</button>
-
-                <button type="button" class="btn btn-secondary" style="margin-left: 20px">Details</button>
-
-                <button type="button" class="btn btn-dark"  style="margin-left: 20px" @onclick="OnCloseModalParameterButtonClick">Close</button>
-
-                
-                
-            </div>*@
-
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
-                style="margin-left: 20px;margin-top: 40px;">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                <label class="btn btn-outline-success" for="btnradio1">Approve</label>
-
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
-
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio3">Details</label>
-
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
-                <label class="btn btn-outline-dark" for="btnradio4">Close</label>
-            </div>
-
-            
-        }
-    </FluentDialog>   
    
 </div>
 
@@ -168,10 +91,11 @@
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Number", x => x.Number));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.Description));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Date", x => x.Date));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
-        
+
         _rawExpenseGrid = ExpenseList.PendingApprovals;
 
         _sortedExpenseGrid = _rawExpenseGrid;
@@ -187,7 +111,7 @@
         ModalHidden = false;
     }
 
-    private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+    // private void OnCloseModalParameterButtonClick() => ModalHidden = true;
 
     private void FilterChanged(ChangeEventArgs args)
     {
@@ -209,6 +133,8 @@
 
     private void SortColumn(ColumnDefinition<PendingApproval> columnDefinition)
     {
+        //to avoid the details popup to be displayed
+        ModalHidden = true;
         if (lastSortColumn?.Title == columnDefinition.Title)
         {
             isAscending = !isAscending;
@@ -234,11 +160,23 @@
 
         int IComparer<PendingApproval>.Compare(PendingApproval? x, PendingApproval? y)
         {
-            var xs = _selector(x!) as string;
-            var ys = _selector(y!) as string;
-            if (xs == null || ys == null)
-                return 0;
-            return string.Compare(xs, ys) * (_isAscending ? 1 : -1);
+            if (_selector(x!).GetType().Name == "DateTime")
+            {
+                var xs = (DateTime)_selector(x!) ;
+                var ys = (DateTime)_selector(y!) ;
+                
+                if (xs == null || ys == null)
+                    return 0;
+                return DateTime.Compare(xs, ys) * (_isAscending ? 1 : -1);
+            }
+            else
+            {
+                var xs = _selector(x!) as string;
+                var ys = _selector(y!) as string;
+                if (xs == null || ys == null)
+                    return 0;
+                return string.Compare(xs, ys) * (_isAscending ? 1 : -1);
+            }
         }
     }
 

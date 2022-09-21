@@ -1,0 +1,107 @@
+﻿@using MyApprovalsHub.Models
+
+
+<FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true"  >
+
+     @if (@selectedExpense != null && @ModalHidden == false)
+    {
+
+        <div class="column" style="margin:30px; width:30px">
+            @if (!string.IsNullOrEmpty(selectedExpense.SourcePhoto))
+            {
+                <img src="@selectedExpense.SourcePhoto" style="margin-right:0px;width:40px" />
+            }
+        </div>
+
+        <div class="modal-header" style="margin: 20px;">
+
+            <div class="row">
+                <h5>@selectedExpense.Description</h5>
+            </div>
+        </div>
+
+        <div style="margin: 10px;">
+            <div>
+                <Graph UserEmail=@selectedExpense.Email  UserName=@selectedExpense.Requestor />
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                        <tr>
+                            <th scope="row">Request Date:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Date.ToShortDateString()</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Request State:</th>
+                            <td style="padding-bottom: 10px;">
+                                <FluentBadge Circular=true Fill=Fill.Highlight Color=Color.Highlight style="--badge-fill-highlight: #ffd800; --badge-color-highlight: #000">
+                                    @selectedExpense.State
+                                </FluentBadge>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Description:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Description</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        @*         <div  style="margin-left: 20px;margin-top: 40px;">
+
+                <button type="button" class="btn btn-success">Approve</button>
+
+                <button type="button" class="btn btn-danger"  style="margin-left: 20px">Reject</button>
+
+                <button type="button" class="btn btn-secondary" style="margin-left: 20px">Details</button>
+
+                <button type="button" class="btn btn-dark"  style="margin-left: 20px" @onclick="OnCloseModalParameterButtonClick">Close</button>
+
+
+
+            </div>*@
+
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
+     style="margin-left: 20px;margin-top: 10px;">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+            <label class="btn btn-outline-success" for="btnradio1">Approve</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
+            <label class="btn btn-outline-dark" for="btnradio3">Close</label>
+        </div>
+    }
+</FluentDialog>
+
+@code {
+
+    [Parameter]
+    public PendingApproval selectedExpense { get; set; }
+
+    [Parameter]
+    public bool ModalHidden { get; set; } = true;
+
+    //[Parameter]
+    //public EventCallback CloseModalParameterButtonClick { get; set; }
+
+    //protected async Task OnCloseModalParameterButtonClick()
+    //{
+    //    await CloseModalParameterButtonClick.InvokeAsync(null);
+    //}
+
+    private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+}
