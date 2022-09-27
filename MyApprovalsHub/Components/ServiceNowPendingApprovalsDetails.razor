@@ -1,7 +1,9 @@
-﻿@using MyApprovalsHub.Models
+﻿@using MyApprovalsHub.Interfaces
+@using MyApprovalsHub.Models
+@using MyApprovalsHub.Services
 
 
-<FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true"  >
+<FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 480px;">
 
      @if (@selectedExpense != null && @ModalHidden == false)
     {
@@ -22,7 +24,7 @@
 
         <div style="margin: 10px;">
             <div>
-                <Graph UserEmail=@selectedExpense.Email  UserName=@selectedExpense.Requestor />
+               @* <Graph UserEmail=@selectedExpense.Email  UserName=@selectedExpense.Requestor />*@
 
                 <table class="table">
                     <thead>
@@ -32,7 +34,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
+                        <tr>
+                            <th scope="row">Requestor:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Requestor</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Email</td>
+                        </tr>
                         <tr>
                             <th scope="row">Request Date:</th>
                             <td style="padding-bottom: 10px;">@selectedExpense.Date.ToShortDateString()</td>
@@ -75,7 +84,7 @@
 
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
      style="margin-left: 20px;margin-top: 10px;">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked @onclick="OnApproveClick">
             <label class="btn btn-outline-success" for="btnradio1">Approve</label>
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
@@ -84,8 +93,39 @@
             <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
             <label class="btn btn-outline-dark" for="btnradio3">Close</label>
         </div>
+
+       
     }
 </FluentDialog>
+
+
+@*<ActionConfirmation @ref=ModalActionConfirmation ModalHidden=@ModalActionConfirmationHidden />*@
+
+
+<FluentDialog @ref="ModalActionConfirmation" Hidden=@ModalActionConfirmationHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
+
+    <div style="margin:20px;vertical-align:central;">
+
+        <h5>Confirm @ActionDescription?</h5>
+
+        <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
+            <input type="text" class="form-control" id="floatingInput" >
+            <label for="floatingInput">Comments</label>
+        </div>
+
+        <div style="margin-top: 20px;">
+
+            <button type="button" class="btn btn-success">Confirm</button>
+
+            <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=OnCloseModalActionConfirmation>Cancel</button>
+
+        </div>
+
+    </div>
+
+</FluentDialog>
+
+
 
 @code {
 
@@ -94,6 +134,12 @@
 
     [Parameter]
     public bool ModalHidden { get; set; } = true;
+
+  //  private ActionConfirmation? ModalActionConfirmation;
+    private FluentDialog? ModalActionConfirmation;
+    public bool ModalActionConfirmationHidden { get; set; } = true;
+
+    public string ActionDescription { get; set; } 
 
     //[Parameter]
     //public EventCallback CloseModalParameterButtonClick { get; set; }
@@ -104,4 +150,33 @@
     //}
 
     private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+
+    //private void OnCloseModalActionConfirmation()
+    //{
+    //    ModalActionConfirmation!.Hide(); 
+    //    ModalActionConfirmationHidden = ModalActionConfirmation.Hidden;
+    //}
+
+    private void OnDismiss() => ModalHidden = false;
+
+    private void OnApproveClick()
+    {
+        //ModalActionConfirmationHidden = false;
+        ActionDescription = "approval";
+        ModalActionConfirmation.Show();
+
+         ModalActionConfirmationHidden = ModalActionConfirmation.Hidden;
+
+        //IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
+
+        //_serviceNow.Approve(selectedExpense.Id, "test");
+
+    }
+
+    private void OnCloseModalActionConfirmation()
+    {
+        ModalActionConfirmation!.Hide();
+        ModalActionConfirmationHidden = true;
+    }
+
 }

@@ -29,6 +29,11 @@ namespace MyApprovalsHub.Services
             _accessTokenUrl = base._configurationRoot["SAPConcurAccessTokenUrl"];
         }
 
+        public override bool Approve(string Id, string comments)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
         {
 

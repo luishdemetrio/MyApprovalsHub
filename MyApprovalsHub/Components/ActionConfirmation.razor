@@ -1,0 +1,60 @@
+﻿
+
+
+<FluentDialog @ref="ModalAction" Hidden=@ModalHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
+
+   
+        <div style="margin:20px;vertical-align:central;">
+
+            <h5>Confirm @ActionDescription?</h5>
+
+            <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
+                <input type="text" class="form-control" id="floatingInput">
+                <label for="floatingInput">Comments</label>
+            </div>
+
+            <div style="margin-top: 20px;">
+
+                <button type="button" class="btn btn-success">Confirm</button>
+
+                <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=OnCloseModalActionConfirmation>Cancel</button>
+
+            </div>
+
+        </div>
+   
+</FluentDialog>
+
+@code {
+
+    [Parameter]
+    public bool ModalHidden { get; set; } = true;
+
+    [Parameter]
+    public string ActionDescription { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private FluentDialog? ModalAction;
+   
+        private void FilterChanged(ChangeEventArgs args)
+    {
+        var filter = args.Value as string;
+
+
+    }
+
+    private void OnCloseModalActionConfirmation()
+    {
+        ModalAction!.Hide();
+        ModalHidden = true;
+    }
+
+    public void Show()
+    {
+        ModalHidden = false;
+        ModalAction!.Show();
+    }
+
+}

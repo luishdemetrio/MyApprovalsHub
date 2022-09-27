@@ -11,8 +11,12 @@
 
   <ItemGroup>
     <None Include=".fx/**/*" />
+    <Compile Remove="Services\Test\**" />
     <None Remove="build/**/*" />
+    <None Remove="Services\Test\**" />
     <Content Remove="build/**/*" />
+    <Content Remove="Services\Test\**" />
+    <EmbeddedResource Remove="Services\Test\**" />
   </ItemGroup>
 
   <ItemGroup>

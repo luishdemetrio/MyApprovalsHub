@@ -22,7 +22,7 @@
     protected override void OnInitialized()
     {
 
-        IPendingApprovalService expenseService = new ServiceNowService();
+        IPendingApprovalService expenseService =  ServiceNowService.GetInstance();
 
         var expenses = expenseService.GetPendingApprovals(ApprovalEmail);
 

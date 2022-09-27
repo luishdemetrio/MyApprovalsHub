@@ -2,9 +2,11 @@
 using Microsoft.Graph;
 using Microsoft.TeamsFx.Conversation;
 using MyApprovalsHub.Components;
+using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
+using ServiceNow.Api;
 using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
 namespace MyApprovalsHub.Services;
@@ -17,7 +19,15 @@ public class ServiceNowService : ApprovalRequestService
     private string _serviceNowClientId;
     private string _serviceNowClientSecret;
 
-    public ServiceNowService()
+    private static readonly ServiceNowService _instance = new ServiceNowService();
+
+    public static ServiceNowService GetInstance()
+    {
+            return _instance;
+        
+    }
+
+    private ServiceNowService()
     {
         _serviceNowInstanceUrl = base._configurationRoot["ServiceNowInstanceURL"];
         _serviceNowUsername = base._configurationRoot["ServiceNowUsername"];
@@ -434,7 +444,7 @@ public class ServiceNowService : ApprovalRequestService
         ServiceNowApprovals approvals = new();
 
         //var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=state%2Csys_created_by%2Csysapproval");
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?approver={sysId}&state=requested&sysparm_exclude_reference_link=true&sysparm_fields=sysapproval,due_date");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver?sysparm_query=approver%3D{sysId}%5EstateNOT%20INapproved%2Crejected%2Ccancelled%2Cnot_required&sysparm_exclude_reference_link=true&sysparm_fields=sysapproval,due_date,state,sys_id");
 
         var request = new RestRequest();
 
@@ -506,6 +516,35 @@ public class ServiceNowService : ApprovalRequestService
         return user;
     }
 
+
+    /*
+    * PUT https://dev52648.service-now.com/api/now/table/sysapproval_approver/00e9c07adba52200a6a2b31be0b8f5ae
+    * Request Body
+    * {"state":"approved","comments":"Approved via Teams","approval_source":"MyApprovalsHub"}
+    */
+    public override bool Approve(string Id, string comments)
+    {
+
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{Id}");
+                
+        var request = new RestRequest();
+
+        request.Method = Method.Put;
+
+        request.AddHeader("Accept", "application/json");
+        request.AddHeader("Content-Type", "application/json");
+        request.AddHeader("Authorization", $"Bearer {GetToken()}");
+
+        
+        var body = @"{""state"":""approved"",""comments"":""" + comments + @""",""approval_source"":""MyApprovalsHub""}";
+
+        request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+        RestResponse response = client.Execute(request);
+
+        return response.StatusCode == System.Net.HttpStatusCode.OK;
+    }
+
     public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
     {
 
@@ -516,16 +555,17 @@ public class ServiceNowService : ApprovalRequestService
         PendingApprovals = approvals.result.Length;
 
         //we need to chunck the pending approvals to avoid getting an exception due the request is too long
-        var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(15);
+        var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(10);
                 
         PendingApprovalDetails approvalDetails = new();
 
-        foreach (var item in chunck)
+        Parallel.ForEach(chunck, p =>
         {
-            approvalDetails.result.AddRange( 
-                GetPendingApprovalDetailsRestAPI(string.Join(",", item)).result 
-                );
-        }
+            approvalDetails.result.AddRange(
+             GetPendingApprovalDetailsRestAPI(string.Join(",", p)).result
+             );
+        });
+
         
         //we need to get the name and email of the user
         var users = GetUserDetail(string.Join(",", approvalDetails.result.Select(u => u.assigned_to).Distinct()));
@@ -545,12 +585,17 @@ public class ServiceNowService : ApprovalRequestService
                          Date = approval.due_date.Date,
                          Source = PendingApprovalSource.ServiceNow.ToString(),
                          SourcePhoto = "servicenow.png",
-                         State = "Requested"
+                         State = approval.state,
+                         Id = approval.sys_id
                      };
 
         return result;
              
     }
+
+
+
+ 
 
     private class ServiceNowApprovals
     {
@@ -560,8 +605,8 @@ public class ServiceNowService : ApprovalRequestService
         {
             public string sysapproval { get; set; }
             public DateTime due_date { get; set; }
-            //public string state { get; set; }
-            //public string sys_created_by { get; set; }
+            public string state { get; set; }
+            public string sys_id { get; set; }
         }
     }
 

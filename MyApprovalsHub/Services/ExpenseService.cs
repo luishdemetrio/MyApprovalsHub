@@ -20,14 +20,16 @@ public abstract class ApprovalRequestService : IPendingApprovalService
     public ApprovalRequestService()
     {
         // Locate the configuration file path at the root of the test project, relative from where these assemblies were deployed
-        var configurationJsonFilePath = Path.Combine(Path.GetDirectoryName(typeof(ApprovalRequestService).GetTypeInfo().Assembly.Location) ?? string.Empty, "../../..");
+        //var configurationJsonFilePath = Path.Combine(Path.GetDirectoryName(typeof(ApprovalRequestService).GetTypeInfo().Assembly.Location) ?? string.Empty, "../../..");
         _configurationRoot = new ConfigurationBuilder()
-            .SetBasePath(configurationJsonFilePath)
+           
+            .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
             .Build();
     }
 
     public abstract IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 
+    public abstract bool Approve(string Id, string comments);
 
 }

@@ -4,8 +4,8 @@
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 
-<div>
-    @*<h2>Get the user's profile photo</h2>*@
+@*<div>
+    @*<h2>Get the user's profile photo</h2>
     @if (NeedConsent)
     {
         <p>Click below to authorize this app to read your profile photo using Microsoft Graph.</p>
@@ -25,7 +25,7 @@
     }
     else
     {
-        <div>
+        <div>*@
             <table class="table">
                     <thead>
                         <tr>
@@ -46,11 +46,11 @@
                            </tbody>
                 </table>
 
-            </div>
+@*         </div>
 
     }
     
-</div>
+</div>*@
 
 @code {
     [Parameter]

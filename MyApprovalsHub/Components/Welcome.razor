@@ -19,7 +19,7 @@ else{
 
         <div class=" page-padding">
 
-        <h3 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h3>
+        <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
 
        
         <div class="welcome page" style="margin-top:40px">
@@ -65,6 +65,8 @@ else{
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+
+        
 
         await base.OnAfterRenderAsync(firstRender);
 
