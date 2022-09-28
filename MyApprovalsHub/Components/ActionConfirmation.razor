@@ -1,4 +1,7 @@
-﻿
+﻿@using MyApprovalsHub.Interfaces
+@using MyApprovalsHub.Models
+@using MyApprovalsHub.Services
+
 
 
 <FluentDialog @ref="ModalAction" Hidden=@ModalHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
@@ -10,14 +13,14 @@
 
             <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
                 <input type="text" class="form-control" id="floatingInput">
-                <label for="floatingInput">Comments</label>
+            <label for="floatingInput">Comments (optional)</label>
             </div>
 
             <div style="margin-top: 20px;">
 
-                <button type="button" class="btn btn-success">Confirm</button>
+                <button type="button" class="btn btn-success" @onclick=OnConfirmApproval >Confirm</button>
 
-                <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=OnCloseModalActionConfirmation>Cancel</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
 
             </div>
 
@@ -30,39 +33,63 @@
     [Parameter]
     public bool ModalHidden { get; set; } = true;
 
-    [Parameter]
-    public string ActionDescription { get; set; }
+
+    private string ActionDescription { get; set; }
 
     [Parameter]
-    public string Id { get; set; }
+    public PendingApproval selectedExpense { get; set; }
 
-    private FluentDialog? ModalAction;
-   
-        private void FilterChanged(ChangeEventArgs args)
+    private FluentDialog ModalAction;
+
+    public delegate void CloseModalParameterButtonClick();
+
+    private CloseModalParameterButtonClick closeModalParameter;
+
+    private void FilterChanged(ChangeEventArgs args)
     {
         var filter = args.Value as string;
 
-
     }
 
-    private void OnCloseModalActionConfirmation()
-    {
-        ModalAction!.Hide();
-        ModalHidden = true;
-    }
 
-    public void Show()
+    public void Approve(CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
+        ActionDescription = "approval";
+
+        closeModalParameter = closeModalParameterButtonClick;
+
         ModalHidden = false;
-        ModalAction!.Show();
     }
 
 
     public void Hide()
     {
-        
-        ModalAction!.Hide();
         ModalHidden = true;
+        StateHasChanged();
+    }
+
+    public void OnConfirmApproval()
+    {
+
+        switch (selectedExpense.Source)
+        {
+            case nameof(SourceDescription.ServiceNow):
+                ApproveServiceNow();
+                break;
+        }
+
+    }
+
+    private void ApproveServiceNow()
+    {
+        IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
+
+        if (_serviceNow.Approve(selectedExpense.Id, selectedExpense.Comments))
+        {
+            
+            closeModalParameter?.Invoke();
+            Hide();
+        }
     }
 
 }

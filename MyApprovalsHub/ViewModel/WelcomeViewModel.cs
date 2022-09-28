@@ -12,27 +12,17 @@ namespace MyApprovalsHub.ViewModel
     public class WelcomeViewModel 
     {
 
-      //  public ConcurrentBag<PendingApproval> PendingApprovals { get; set; } = new();
-
-
         private string _approverEmail;
 
-        public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
-
-        public event NotifyPendingApprovalTotal ServiceNowPendingApprovalsTotal;
-
-
-       
-
-        public void GetPendingApprovals(string approverEmail)
+        public WelcomeViewModel(string approverEmail)
         {
             _approverEmail = approverEmail;
-
-            GetServiceNow();
-
         }
+    
+        public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
 
-        private async void  GetServiceNow()
+     
+        public async void  GetServiceNowPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
         {
           
             var t = Task.Run(() =>
@@ -41,12 +31,7 @@ namespace MyApprovalsHub.ViewModel
 
                var expenses = expenseService.GetPendingApprovals(_approverEmail);
 
-                //foreach (var item in expenses)
-                //{
-                //    PendingApprovals.Add(item); 
-                //}
-
-                ServiceNowPendingApprovalsTotal?.Invoke(expenses);
+                serviceNowPendingApprovalsTotal?.Invoke(expenses);
             });
 
             await t.ConfigureAwait(false);
@@ -54,7 +39,24 @@ namespace MyApprovalsHub.ViewModel
             
         }
 
-        
+
+        public async void GetConcurPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
+        {
+
+            var t = Task.Run(() =>
+            {
+                IPendingApprovalService expenseService = new ConcurService();
+
+                var expenses = expenseService.GetPendingApprovals(_approverEmail);
+
+                serviceNowPendingApprovalsTotal?.Invoke(expenses);
+            });
+
+            await t.ConfigureAwait(false);
+
+
+        }
+
 
     }
 }

@@ -3,9 +3,9 @@
 @using MyApprovalsHub.Services
 
 
-<FluentDialog Hidden="ModalHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 480px;">
+<FluentDialog Hidden="DetailPaneIsHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 480px;">
 
-     @if (@selectedExpense != null && @ModalHidden == false)
+    @if (@selectedExpense != null && @DetailPaneIsHidden == false)
     {
 
         <div class="column" style="margin:30px; width:30px">
@@ -86,30 +86,7 @@
     }
 </FluentDialog>
 
-
-
-<FluentDialog @ref="ModalActionConfirmation" Hidden=@ModalActionConfirmationMode aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
-
-    <div style="margin:20px;vertical-align:central;">
-
-        <h5>Confirm @ActionDescription?</h5>
-
-        <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
-            <input type="text" class="form-control" id="floatingInput" @onchange="CommentsChanged">
-            <label for="floatingInput">Comments (optional)</label>
-        </div>
-
-        <div style="margin-top: 20px;">
-
-            <button type="button" class="btn btn-success" @onclick=OnConfirmApproval>Confirm</button>
-
-            <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=OnCloseModalActionConfirmation>Cancel</button>
-
-        </div>
-
-    </div>
-
-</FluentDialog>
+<ActionConfirmation @ref="ModalActionConfirmation"  ModalHidden=@ConfirmationPaneIsHidden selectedExpense="@selectedExpense" />
 
 
 
@@ -119,61 +96,55 @@
     public PendingApproval selectedExpense { get; set; }
 
     [Parameter]
-    public bool ModalHidden { get; set; } = true;
+    public bool DetailPaneIsHidden { get; set; } = true;
 
 
-    private FluentDialog ModalActionConfirmation;
-    public bool ModalActionConfirmationMode { get; set; } = true;
+    private ActionConfirmation ModalActionConfirmation;
+    public bool ConfirmationPaneIsHidden { get; set; } = true;
 
-    public string ActionDescription { get; set; } 
+    
 
-    //[Parameter]
-    //public EventCallback CloseModalParameterButtonClick { get; set; }
+    public delegate void CloseModalParameterButtonClick();
 
-    //protected async Task OnCloseModalParameterButtonClick()
-    //{
-    //    await CloseModalParameterButtonClick.InvokeAsync(null);
-    //}
+    private CloseModalParameterButtonClick closeModalParameter;
 
-    private void OnCloseModalParameterButtonClick() => ModalHidden = true;
 
-    //private void OnCloseModalActionConfirmation()
-    //{
-    //    ModalActionConfirmation!.Hide(); 
-    //    ModalActionConfirmationHidden = ModalActionConfirmation.Hidden;
-    //}
+    private void OnCloseModalParameterButtonClick()
+    {
+        DetailPaneIsHidden = true;
+        ConfirmationPaneIsHidden = true;
+    }
 
-    private void OnDismiss() => ModalHidden = false;
-
+    
     private void OnApproveClick()
     {
-        ActionDescription = "approval";
-        ModalActionConfirmation.Show();
-        ModalActionConfirmationMode = ModalActionConfirmation.Hidden;
-    }
+        
+        ConfirmationPaneIsHidden = false;
 
-    private void OnConfirmApproval()
-    {
-
-        IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
-
-        if (_serviceNow.Approve(selectedExpense.Id, selectedExpense.Comments))
+        
+        ModalActionConfirmation.Approve( () =>
         {
-            OnCloseModalActionConfirmation();
+
             OnCloseModalParameterButtonClick();
-        }
+
+            closeModalParameter?.Invoke();
+        });
 
     }
-    private void OnCloseModalActionConfirmation()
-    {
 
-        ModalActionConfirmation!.Hide();
-        ModalActionConfirmationMode = true;
-    }
 
-  
+
+
     private void CommentsChanged(ChangeEventArgs args)
     {
         selectedExpense.Comments = args.Value as string;
+    }
+
+    public void Show(CloseModalParameterButtonClick closeModalParameterButtonClick)
+    {
+
+        closeModalParameter = closeModalParameterButtonClick;
+        ConfirmationPaneIsHidden = true;
+       
     }
 }

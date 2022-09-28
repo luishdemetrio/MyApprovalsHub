@@ -3,6 +3,24 @@
 
 <FluentCard style="height: max-content; margin: 0.5em 0; max-width: 300px;">
 
+	@if (IsLoading)
+	{
+		<div class=" mb-3" style="max-width: 800px;">
+			<div class="row g-0">
+
+				<div class="col-md-3">
+					<img class="img-fluid" src="@ApprovalLogoUri" style="width: 64px; height: 64px; margin: 10px;border-radius: 32px" Shape="Shape.Circle" />
+				</div>
+
+				<div class="col-md-8">
+					<div class="card-body">
+						<FluentProgressRing style="text-align:center;margin-top: 35px;margin-left:60px"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	}else{
 	
 	<div class=" mb-3" style="max-width: 800px;">
 		<div class="row g-0">
@@ -12,8 +30,8 @@
 			</div>
 			<div class="col-md-8">
 				<div class="card-body">
-					
-					<h2 class="card-title" style="text-align:center;margin-top: 10px;margin-left:20px">@ApprovalPending</h2>
+
+						<h2 class="card-title" style="text-align:center;margin-top: 10px;margin-left:20px">@PendingApprovals</h2>
 					<p class="card-text" style="text-align:center;margin-left:20px">Pending Approvals</p>
 					
 				</div>
@@ -21,24 +39,40 @@
 		</div>
 	</div>
 
-
+	}
 </FluentCard>
 
 
 @code {
 
 	[Parameter]
-	public string ApprovalLogoUri { get; set; }
+	public bool IsLoading { get; set; }
 
 	[Parameter]
-	public int ApprovalPending { get; set; }
+	public string ApprovalLogoUri { get; set; }
+
+	private int pendingApprovals = 0;
+
+	public int PendingApprovals 
+	{ 
+		get
+		{
+			return pendingApprovals;		
+		}
+		set
+		{
+			pendingApprovals = value;
+			StateHasChanged();
+		}
+	}
 
 	public async Task UpdateApproval(int count)
 	{
 		// InvokeAsync is inherited, it syncs the call back to the render thread
 		await InvokeAsync(() =>
 		{
-			ApprovalPending = count;
+			PendingApprovals = count;
+			IsLoading = false;
 			StateHasChanged();
 		});
 

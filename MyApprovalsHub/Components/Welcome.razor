@@ -27,14 +27,13 @@ else
 
             <div class="column">
 
-            
-                <ConcurApprovals ApprovalEmail=@userEmail />
+                <ApprovalsCard @ref="ConcurApprovalsCard" ApprovalLogoUri="concur.png" IsLoading=true />
+               
             </div>
 
             <div class="column">
-                <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png" ApprovalPending=0 />
+                <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png"  IsLoading=true />
 
-                @*<ServiceNowApprovals ApprovalEmail="luke.wilson@example.com"/>*@
             </div>
 
             <div class="column">
@@ -63,29 +62,14 @@ else
     bool isLoading = true;
 
 
+    private ApprovalsCard ConcurApprovalsCard;
     private ApprovalsCard ServiceNowApprovalsCard;
+
     private ApprovalsList ApprovalsListGrid;
 
 
-    private WelcomeViewModel _vm = new();
+    private WelcomeViewModel _vm = new("luke.wilson@example.com");
 
-    public Welcome()
-    {
-        //to avoid duplicities in case user refreshes the page
-        ExpenseList.ClearExpenseList();
-
-        _vm.ServiceNowPendingApprovalsTotal += TotalServiceNow;
-    }
-
-    public void TotalServiceNow(IEnumerable<PendingApproval> pendingApprovals)
-    {
-
-        ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count());
-
-        ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals);
-
-
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -110,9 +94,35 @@ else
             StateHasChanged();            
         }
 
-        _vm.GetPendingApprovals("luke.wilson@example.com");
+        _vm.GetServiceNowPendingApprovals(pendingApprovals =>
+            {
 
-        
+                ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
+
+                ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
+
+            });
+
+
+        _vm.GetConcurPendingApprovals(pendingApprovals =>
+            {
+
+                ConcurApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
+
+                ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
+
+            });
+
+
+        ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
+        {
+            ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
+
+            ConcurApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.Concur)).Count();
+
+
+        };
+
     }
     
 }

@@ -45,15 +45,12 @@
                 <td>@item.Requestor</td>                
                 <td>
                     <div>
-                        <button type="button" class="btn btn-secondary" @onclick=@(()=>OnOpenModalParameterButtonClick(@item))>Details</button>
+                            <button type="button" class="btn btn-secondary" @onclick=@(()=>OpenDetailsPane(@item))>Details</button>
                     </div>
                         
                 </td>
                 <td>
-                        <button type="button" class="btn btn-success">👍</button>
-
-                        
-                </td>
+                        <button type="button" class="btn btn-success" @onclick=@(()=>QuickApprove(@item))>👍</button>                  </td>
                 <td>
                         <button type="button" class="btn btn-dark">❌</button>
                 </td>
@@ -63,9 +60,9 @@
         </table>
 
 
-    <ServiceNowPendingApprovalsDetails selectedExpense=@selectedExpense ModalHidden=@ModalHidden/>
+    <ServiceNowPendingApprovalsDetails @ref="PendingApprovalDetailsPanel" selectedExpense=@selectedExpense DetailPaneIsHidden=@DetailPaneIsHidden />
 
-
+    <ActionConfirmation @ref="ModalActionConfirmation" ModalHidden=@ConfirmationPaneIsHidden selectedExpense="@selectedExpense" />
    
 </div>
 
@@ -86,32 +83,33 @@
 
     private List<PendingApproval> _rawExpenseGrid = new();
 
+    private ServiceNowPendingApprovalsDetails PendingApprovalDetailsPanel;
+
+    private ActionConfirmation ModalActionConfirmation;
+    public bool ConfirmationPaneIsHidden { get; set; } = true;
+
+    public bool DetailPaneIsHidden { get; set; } = true;
+
+
+    public delegate void PendingApprovalListChanged(List<PendingApproval> pendingApprovals);
+
+    public PendingApprovalListChanged PendingApprovalListChangedEvent;
+
+
     public async Task UpdatePendingApprovalList(IEnumerable<PendingApproval> pendingApprovals)
     {
 
-
-
-       // _rawExpenseGrid.Where(p => p.Source == pendingApprovals.FirstOrDefault().Source).ToList();
-
         _rawExpenseGrid.RemoveAll(p => p.Source == pendingApprovals.FirstOrDefault().Source);
-
-        
 
         // InvokeAsync is inherited, it syncs the call back to the render thread
         await InvokeAsync(() =>
         {
-
             _rawExpenseGrid.AddRange(pendingApprovals);
-        //    foreach (var item in pendingApprovals)
-        //{
-        //        _rawExpenseGrid.Add(item);
-
-        //}   
-           
-
-            // _rawExpenseGrid = ExpenseList.PendingApprovals;
 
             _sortedExpenseGrid = _rawExpenseGrid.ToList();
+
+            DetailPaneIsHidden = true;
+            ConfirmationPaneIsHidden = true;
             StateHasChanged();
         });
     }
@@ -126,23 +124,54 @@
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
-
-       // _rawExpenseGrid = ExpenseList.PendingApprovals;
-
         _sortedExpenseGrid = _rawExpenseGrid.ToList();
 
         base.OnInitialized();
     }
 
-    public bool ModalHidden { get; set; } = true;
-
-    private void OnOpenModalParameterButtonClick(PendingApproval expense)
+    private void OpenDetailsPane(PendingApproval expense)
     {
         selectedExpense = expense;
-        ModalHidden = false;
+        DetailPaneIsHidden = false;
+        ConfirmationPaneIsHidden = true;
+
+        PendingApprovalDetailsPanel.Show(() =>
+        {
+            //when approved
+
+            DetailPaneIsHidden = true;
+            ConfirmationPaneIsHidden = true;
+            RemovePendingApprovalFromList(expense);
+            //StateHasChanged();
+        });
     }
 
-    // private void OnCloseModalParameterButtonClick() => ModalHidden = true;
+    private void QuickApprove(PendingApproval expense)
+    {
+        selectedExpense = expense;
+
+        DetailPaneIsHidden = true;
+        ConfirmationPaneIsHidden = false;
+
+        ModalActionConfirmation.Approve(() =>
+        {
+
+            ConfirmationPaneIsHidden = true;
+            DetailPaneIsHidden = true;
+            RemovePendingApprovalFromList(expense);
+        });
+
+    }
+
+    private void RemovePendingApprovalFromList(PendingApproval expense)
+    {
+        _rawExpenseGrid.Remove(expense);
+        _sortedExpenseGrid = _rawExpenseGrid;
+
+        PendingApprovalListChangedEvent?.Invoke(_rawExpenseGrid);
+
+        StateHasChanged();
+    }
 
     private void FilterChanged(ChangeEventArgs args)
     {
@@ -164,8 +193,7 @@
 
     private void SortColumn(ColumnDefinition<PendingApproval> columnDefinition)
     {
-        //to avoid the details popup to be displayed
-        ModalHidden = true;
+
         if (lastSortColumn?.Title == columnDefinition.Title)
         {
             isAscending = !isAscending;
@@ -195,7 +223,7 @@
             {
                 var xs = (DateTime)_selector(x!) ;
                 var ys = (DateTime)_selector(y!) ;
-                
+
                 if (xs == null || ys == null)
                     return 0;
                 return DateTime.Compare(xs, ys) * (_isAscending ? 1 : -1);
@@ -210,6 +238,8 @@
             }
         }
     }
+
+   
 
   
 }
