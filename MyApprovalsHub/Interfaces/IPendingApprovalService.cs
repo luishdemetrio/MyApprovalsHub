@@ -5,7 +5,7 @@ namespace MyApprovalsHub.Interfaces
 {
     public interface IPendingApprovalService
     {
-        public int PendingApprovals { get; set; }
+        //public int PendingApprovals { get; set; }
 
         IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 

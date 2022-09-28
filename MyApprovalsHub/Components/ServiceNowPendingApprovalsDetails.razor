@@ -68,22 +68,10 @@
 
         </div>
 
-        @*         <div  style="margin-left: 20px;margin-top: 40px;">
-
-                <button type="button" class="btn btn-success">Approve</button>
-
-                <button type="button" class="btn btn-danger"  style="margin-left: 20px">Reject</button>
-
-                <button type="button" class="btn btn-secondary" style="margin-left: 20px">Details</button>
-
-                <button type="button" class="btn btn-dark"  style="margin-left: 20px" @onclick="OnCloseModalParameterButtonClick">Close</button>
-
-
-
-            </div>*@
 
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
-     style="margin-left: 20px;margin-top: 10px;">
+             style="margin-left: 20px;margin-top: 10px;">
+
             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked @onclick="OnApproveClick">
             <label class="btn btn-outline-success" for="btnradio1">Approve</label>
 
@@ -99,23 +87,21 @@
 </FluentDialog>
 
 
-@*<ActionConfirmation @ref=ModalActionConfirmation ModalHidden=@ModalActionConfirmationHidden />*@
 
-
-<FluentDialog @ref="ModalActionConfirmation" Hidden=@ModalActionConfirmationHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
+<FluentDialog @ref="ModalActionConfirmation" Hidden=@ModalActionConfirmationMode aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
 
     <div style="margin:20px;vertical-align:central;">
 
         <h5>Confirm @ActionDescription?</h5>
 
         <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
-            <input type="text" class="form-control" id="floatingInput" >
-            <label for="floatingInput">Comments</label>
+            <input type="text" class="form-control" id="floatingInput" @onchange="CommentsChanged">
+            <label for="floatingInput">Comments (optional)</label>
         </div>
 
         <div style="margin-top: 20px;">
 
-            <button type="button" class="btn btn-success">Confirm</button>
+            <button type="button" class="btn btn-success" @onclick=OnConfirmApproval>Confirm</button>
 
             <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=OnCloseModalActionConfirmation>Cancel</button>
 
@@ -135,9 +121,9 @@
     [Parameter]
     public bool ModalHidden { get; set; } = true;
 
-  //  private ActionConfirmation? ModalActionConfirmation;
-    private FluentDialog? ModalActionConfirmation;
-    public bool ModalActionConfirmationHidden { get; set; } = true;
+
+    private FluentDialog ModalActionConfirmation;
+    public bool ModalActionConfirmationMode { get; set; } = true;
 
     public string ActionDescription { get; set; } 
 
@@ -161,22 +147,33 @@
 
     private void OnApproveClick()
     {
-        //ModalActionConfirmationHidden = false;
         ActionDescription = "approval";
         ModalActionConfirmation.Show();
-
-         ModalActionConfirmationHidden = ModalActionConfirmation.Hidden;
-
-        //IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
-
-        //_serviceNow.Approve(selectedExpense.Id, "test");
-
+        ModalActionConfirmationMode = ModalActionConfirmation.Hidden;
     }
 
+    private void OnConfirmApproval()
+    {
+
+        IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
+
+        if (_serviceNow.Approve(selectedExpense.Id, selectedExpense.Comments))
+        {
+            OnCloseModalActionConfirmation();
+            OnCloseModalParameterButtonClick();
+        }
+
+    }
     private void OnCloseModalActionConfirmation()
     {
+
         ModalActionConfirmation!.Hide();
-        ModalActionConfirmationHidden = true;
+        ModalActionConfirmationMode = true;
     }
 
+  
+    private void CommentsChanged(ChangeEventArgs args)
+    {
+        selectedExpense.Comments = args.Value as string;
+    }
 }

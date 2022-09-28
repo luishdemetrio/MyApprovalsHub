@@ -14,8 +14,9 @@ public abstract class ApprovalRequestService : IPendingApprovalService
     protected string ClientSecret { get; set; }
 
     protected string BaseUrl { get; set; }
-
-    public int PendingApprovals { get; set; }
+    
+    
+    //public int PendingApprovals { get; set; }
 
     public ApprovalRequestService()
     {

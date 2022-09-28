@@ -26,10 +26,21 @@
 
 
 @code {
-	
+
 	[Parameter]
 	public string ApprovalLogoUri { get; set; }
 
 	[Parameter]
 	public int ApprovalPending { get; set; }
+
+	public async Task UpdateApproval(int count)
+	{
+		// InvokeAsync is inherited, it syncs the call back to the render thread
+		await InvokeAsync(() =>
+		{
+			ApprovalPending = count;
+			StateHasChanged();
+		});
+
+	}
 }

@@ -11,6 +11,7 @@ public class PendingApproval
     public string SourcePhoto { get; set; }
     public string State { get; set; }
     public string Id { get; set; }
+    public string Comments { get; set; }
 
 }
 

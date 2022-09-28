@@ -1,7 +1,9 @@
 ﻿@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
+@using MyApprovalsHub.Models
 @using MyApprovalsHub.Services
+@using MyApprovalsHub.ViewModel
 @inject TeamsFx teamsfx
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
@@ -15,21 +17,24 @@
 		<FluentProgressRing/>
 	</div>
 }
-else{
-
-        <div class=" page-padding">
+else
+{
+     <div class=" page-padding">
 
         <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
-
        
         <div class="welcome page" style="margin-top:40px">
 
             <div class="column">
+
+            
                 <ConcurApprovals ApprovalEmail=@userEmail />
             </div>
 
             <div class="column">
-                <ServiceNowApprovals ApprovalEmail="luke.wilson@example.com"/>
+                <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png" ApprovalPending=0 />
+
+                @*<ServiceNowApprovals ApprovalEmail="luke.wilson@example.com"/>*@
             </div>
 
             <div class="column">
@@ -44,7 +49,7 @@ else{
 
         <FluentDivider ></FluentDivider>
         
-        <ApprovalsList />
+        <ApprovalsList @ref=ApprovalsListGrid/>
         
         <p>@errorMessage</p>
     </div>
@@ -55,19 +60,35 @@ else{
     string userEmail;
     string errorMessage;
     bool isInTeams;
-    bool isLoading = true; 
+    bool isLoading = true;
+
+
+    private ApprovalsCard ServiceNowApprovalsCard;
+    private ApprovalsList ApprovalsListGrid;
+
+
+    private WelcomeViewModel _vm = new();
 
     public Welcome()
     {
-        //In case user refreshes the page
+        //to avoid duplicities in case user refreshes the page
         ExpenseList.ClearExpenseList();
+
+        _vm.ServiceNowPendingApprovalsTotal += TotalServiceNow;
+    }
+
+    public void TotalServiceNow(IEnumerable<PendingApproval> pendingApprovals)
+    {
+
+        ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count());
+
+        ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals);
+
+
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-        
-
         await base.OnAfterRenderAsync(firstRender);
 
         if(firstRender)
@@ -88,6 +109,10 @@ else{
             isLoading = false;
             StateHasChanged();            
         }
+
+        _vm.GetPendingApprovals("luke.wilson@example.com");
+
+        
     }
     
 }

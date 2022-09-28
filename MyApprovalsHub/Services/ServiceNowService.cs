@@ -552,8 +552,6 @@ public class ServiceNowService : ApprovalRequestService
 
         var approvals = GetPendingApprovalsRestAPI(sys_id);
 
-        PendingApprovals = approvals.result.Length;
-
         //we need to chunck the pending approvals to avoid getting an exception due the request is too long
         var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(10);
                 

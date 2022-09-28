@@ -1,6 +1,7 @@
 ﻿@using MyApprovalsHub.Interfaces
 @using MyApprovalsHub.Models
 @using MyApprovalsHub.Services
+@using System.Collections.Concurrent
 
 <div id="similar" style="margin-top: 40px;">
        
@@ -32,6 +33,7 @@
             }              
         </tr>
         </thead>
+
         <tbody>
         @foreach (var item in _sortedExpenseGrid)
         {
@@ -84,6 +86,35 @@
 
     private List<PendingApproval> _rawExpenseGrid = new();
 
+    public async Task UpdatePendingApprovalList(IEnumerable<PendingApproval> pendingApprovals)
+    {
+
+
+
+       // _rawExpenseGrid.Where(p => p.Source == pendingApprovals.FirstOrDefault().Source).ToList();
+
+        _rawExpenseGrid.RemoveAll(p => p.Source == pendingApprovals.FirstOrDefault().Source);
+
+        
+
+        // InvokeAsync is inherited, it syncs the call back to the render thread
+        await InvokeAsync(() =>
+        {
+
+            _rawExpenseGrid.AddRange(pendingApprovals);
+        //    foreach (var item in pendingApprovals)
+        //{
+        //        _rawExpenseGrid.Add(item);
+
+        //}   
+           
+
+            // _rawExpenseGrid = ExpenseList.PendingApprovals;
+
+            _sortedExpenseGrid = _rawExpenseGrid.ToList();
+            StateHasChanged();
+        });
+    }
 
     protected override void OnInitialized()
     {
@@ -96,9 +127,9 @@
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
 
-        _rawExpenseGrid = ExpenseList.PendingApprovals;
+       // _rawExpenseGrid = ExpenseList.PendingApprovals;
 
-        _sortedExpenseGrid = _rawExpenseGrid;
+        _sortedExpenseGrid = _rawExpenseGrid.ToList();
 
         base.OnInitialized();
     }
@@ -119,7 +150,7 @@
 
         if (string.IsNullOrWhiteSpace(filter))
         {
-            _sortedExpenseGrid = _rawExpenseGrid;
+            _sortedExpenseGrid = _rawExpenseGrid.ToList();
         }
         else
         {
