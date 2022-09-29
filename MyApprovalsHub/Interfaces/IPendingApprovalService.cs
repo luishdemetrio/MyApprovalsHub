@@ -9,6 +9,8 @@ namespace MyApprovalsHub.Interfaces
 
         IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 
-        bool Approve(string Id, string comments);
+        bool Approve(string id, string comments);
+
+        bool Reject(string id, string comments);
     }
 }

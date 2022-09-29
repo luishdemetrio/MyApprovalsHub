@@ -12,13 +12,21 @@
             <h5>Confirm @ActionDescription?</h5>
 
             <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
-                <input type="text" class="form-control" id="floatingInput">
+                <input type="text" class="form-control" id="floatingInput" @onchange="CommentChanged">
             <label for="floatingInput">Comments (optional)</label>
             </div>
 
             <div style="margin-top: 20px;">
 
-                <button type="button" class="btn btn-success" @onclick=OnConfirmApproval >Confirm</button>
+            @if (ActionDescription == "approval")
+            {
+                <button type="button" class="btn btn-success" @onclick=OnConfirm >Confirm</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" @onclick=OnConfirm>Confirm</button>
+            }
+
 
                 <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
 
@@ -45,17 +53,27 @@
 
     private CloseModalParameterButtonClick closeModalParameter;
 
-    private void FilterChanged(ChangeEventArgs args)
+    
+
+    private void CommentChanged(ChangeEventArgs args)
     {
-        var filter = args.Value as string;
+        selectedExpense.Comments = args.Value as string;
 
     }
-
 
     public void Approve(CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
         ActionDescription = "approval";
 
+        closeModalParameter = closeModalParameterButtonClick;
+
+        ModalHidden = false;
+    }
+
+    public void Reject(CloseModalParameterButtonClick closeModalParameterButtonClick)
+    {
+        ActionDescription = "rejection";
+        
         closeModalParameter = closeModalParameterButtonClick;
 
         ModalHidden = false;
@@ -68,25 +86,29 @@
         StateHasChanged();
     }
 
-    public void OnConfirmApproval()
+    public void OnConfirm()
     {
 
         switch (selectedExpense.Source)
         {
             case nameof(SourceDescription.ServiceNow):
-                ApproveServiceNow();
+                ServiceNowChangeStatus();
                 break;
         }
 
     }
 
-    private void ApproveServiceNow()
+    private void ServiceNowChangeStatus()
     {
         IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
 
-        if (_serviceNow.Approve(selectedExpense.Id, selectedExpense.Comments))
+        var statusChangedSucceed = (ActionDescription == "approval") ? 
+                _serviceNow.Approve(selectedExpense.Id, selectedExpense.Comments) :
+                _serviceNow.Reject(selectedExpense.Id, selectedExpense.Comments);
+
+
+        if (statusChangedSucceed)
         {
-            
             closeModalParameter?.Invoke();
             Hide();
         }

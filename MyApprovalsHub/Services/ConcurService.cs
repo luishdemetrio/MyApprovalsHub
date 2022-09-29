@@ -81,6 +81,10 @@ namespace MyApprovalsHub.Services
             };
         }
 
+        public override bool Reject(string id, string comments)
+        {
+            throw new NotImplementedException();
+        }
 
         private string GetToken()
         {

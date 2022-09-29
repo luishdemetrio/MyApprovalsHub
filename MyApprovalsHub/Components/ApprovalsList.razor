@@ -52,7 +52,7 @@
                 <td>
                         <button type="button" class="btn btn-success" @onclick=@(()=>QuickApprove(@item))>👍</button>                  </td>
                 <td>
-                        <button type="button" class="btn btn-dark">❌</button>
+                        <button type="button" class="btn btn-dark" @onclick=@(()=>QuickReject(@item))>❌</button>
                 </td>
             </tr>
         }
@@ -154,6 +154,24 @@
         ConfirmationPaneIsHidden = false;
 
         ModalActionConfirmation.Approve(() =>
+        {
+
+            ConfirmationPaneIsHidden = true;
+            DetailPaneIsHidden = true;
+            RemovePendingApprovalFromList(expense);
+        });
+
+    }
+
+
+    private void QuickReject(PendingApproval expense)
+    {
+        selectedExpense = expense;
+
+        DetailPaneIsHidden = true;
+        ConfirmationPaneIsHidden = false;
+
+        ModalActionConfirmation.Reject(() =>
         {
 
             ConfirmationPaneIsHidden = true;

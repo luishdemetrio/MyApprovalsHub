@@ -522,7 +522,7 @@ public class ServiceNowService : ApprovalRequestService
     * Request Body
     * {"state":"approved","comments":"Approved via Teams","approval_source":"MyApprovalsHub"}
     */
-    public override bool Approve(string Id, string comments)
+    private bool ChangeApprovalStatus(string Id, string comments, string status)
     {
 
         var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{Id}");
@@ -536,13 +536,22 @@ public class ServiceNowService : ApprovalRequestService
         request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
         
-        var body = @"{""state"":""approved"",""comments"":""" + comments + @""",""approval_source"":""MyApprovalsHub""}";
+        var body = @"{""state"":""" + status + @""",""comments"":""" + comments + @""",""approval_source"":""MyApprovalsHub""}";
 
         request.AddParameter("application/json", body, ParameterType.RequestBody);
 
         RestResponse response = client.Execute(request);
 
         return response.StatusCode == System.Net.HttpStatusCode.OK;
+    }
+
+    public override bool Approve(string id, string comments)
+    {
+        return ChangeApprovalStatus(id, comments, "approved");
+    }
+    public override bool Reject(string id, string comments)
+    {
+        return ChangeApprovalStatus(id, comments, "rejected");
     }
 
     public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)

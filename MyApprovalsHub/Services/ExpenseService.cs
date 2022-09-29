@@ -31,6 +31,8 @@ public abstract class ApprovalRequestService : IPendingApprovalService
 
     public abstract IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 
-    public abstract bool Approve(string Id, string comments);
+    public abstract bool Approve(string id, string comments);
+
+    public abstract bool Reject(string id, string comments);
 
 }

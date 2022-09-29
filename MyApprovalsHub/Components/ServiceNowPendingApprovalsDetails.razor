@@ -75,7 +75,7 @@
             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked @onclick="OnApproveClick">
             <label class="btn btn-outline-success" for="btnradio1">Approve</label>
 
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" @onclick="OnRejectionClick">
             <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
@@ -132,7 +132,21 @@
 
     }
 
+    private void OnRejectionClick()
+    {
+        
+        ConfirmationPaneIsHidden = false;
 
+        
+        ModalActionConfirmation.Reject( () =>
+        {
+
+            OnCloseModalParameterButtonClick();
+
+            closeModalParameter?.Invoke();
+        });
+
+    }
 
 
     private void CommentsChanged(ChangeEventArgs args)
