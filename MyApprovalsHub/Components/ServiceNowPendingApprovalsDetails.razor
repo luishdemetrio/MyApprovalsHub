@@ -86,7 +86,7 @@
     }
 </FluentDialog>
 
-<ActionConfirmation @ref="ModalActionConfirmation"  ModalHidden=@ConfirmationPaneIsHidden selectedExpense="@selectedExpense" />
+<ActionConfirmation @ref="ModalActionConfirmation"  ModalHidden=@ConfirmationPaneIsHidden  />
 
 
 
@@ -122,7 +122,7 @@
         ConfirmationPaneIsHidden = false;
 
         
-        ModalActionConfirmation.Approve( () =>
+        ModalActionConfirmation.Approve(selectedExpense, () =>
         {
 
             OnCloseModalParameterButtonClick();
@@ -138,7 +138,7 @@
         ConfirmationPaneIsHidden = false;
 
         
-        ModalActionConfirmation.Reject( () =>
+        ModalActionConfirmation.Reject(selectedExpense, () =>
         {
 
             OnCloseModalParameterButtonClick();

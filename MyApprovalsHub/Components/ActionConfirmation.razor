@@ -4,48 +4,49 @@
 
 
 
-<FluentDialog @ref="ModalAction" Hidden=@ModalHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
+@if (ActionDescription != null)
+{
+    
+
+    <FluentDialog @ref="ModalAction" Hidden=@ModalHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
 
    
-        <div style="margin:20px;vertical-align:central;">
+            <div style="margin:20px;vertical-align:central;">
 
-            <h5>Confirm @ActionDescription?</h5>
+                <h5>Confirm @ActionDescription?</h5>
 
-            <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
-                <input type="text" class="form-control" id="floatingInput" @onchange="CommentChanged">
-            <label for="floatingInput">Comments (optional)</label>
+                <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
+                    <input type="text" class="form-control" id="floatingInput" @onchange="CommentChanged" value="@selectedExpense.Comments">
+                <label for="floatingInput">Comments (optional)</label>
+                </div>
+
+                <div style="margin-top: 20px;">
+
+                @if (ActionDescription == "approval")
+                {
+                    <button type="button" class="btn btn-success" @onclick=OnConfirm >Confirm</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger" @onclick=OnConfirm>Confirm</button>
+                }
+                    <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
+
+                </div>
+
             </div>
-
-            <div style="margin-top: 20px;">
-
-            @if (ActionDescription == "approval")
-            {
-                <button type="button" class="btn btn-success" @onclick=OnConfirm >Confirm</button>
-            }
-            else
-            {
-                <button type="button" class="btn btn-danger" @onclick=OnConfirm>Confirm</button>
-            }
-
-
-                <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
-
-            </div>
-
-        </div>
    
-</FluentDialog>
+    </FluentDialog>
+}
 
 @code {
 
     [Parameter]
     public bool ModalHidden { get; set; } = true;
 
+    public PendingApproval selectedExpense { get; set; }
 
     private string ActionDescription { get; set; }
-
-    [Parameter]
-    public PendingApproval selectedExpense { get; set; }
 
     private FluentDialog ModalAction;
 
@@ -53,7 +54,6 @@
 
     private CloseModalParameterButtonClick closeModalParameter;
 
-    
 
     private void CommentChanged(ChangeEventArgs args)
     {
@@ -61,22 +61,32 @@
 
     }
 
-    public void Approve(CloseModalParameterButtonClick closeModalParameterButtonClick)
+    public void Approve(PendingApproval expense, CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
+        selectedExpense = expense;
+        selectedExpense.Comments = string.Empty;
         ActionDescription = "approval";
 
         closeModalParameter = closeModalParameterButtonClick;
 
         ModalHidden = false;
+
+        StateHasChanged();
     }
 
-    public void Reject(CloseModalParameterButtonClick closeModalParameterButtonClick)
+    public void Reject(PendingApproval expense, CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
+        selectedExpense = expense;
+
+        selectedExpense.Comments = string.Empty;
+
         ActionDescription = "rejection";
         
         closeModalParameter = closeModalParameterButtonClick;
 
         ModalHidden = false;
+
+        StateHasChanged();
     }
 
 

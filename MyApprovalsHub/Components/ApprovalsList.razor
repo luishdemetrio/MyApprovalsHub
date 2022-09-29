@@ -62,7 +62,7 @@
 
     <ServiceNowPendingApprovalsDetails @ref="PendingApprovalDetailsPanel" selectedExpense=@selectedExpense DetailPaneIsHidden=@DetailPaneIsHidden />
 
-    <ActionConfirmation @ref="ModalActionConfirmation" ModalHidden=@ConfirmationPaneIsHidden selectedExpense="@selectedExpense" />
+    <ActionConfirmation @ref="ModalActionConfirmation" ModalHidden=@ConfirmationPaneIsHidden  />
    
 </div>
 
@@ -101,12 +101,14 @@
 
         _rawExpenseGrid.RemoveAll(p => p.Source == pendingApprovals.FirstOrDefault().Source);
 
-        // InvokeAsync is inherited, it syncs the call back to the render thread
         await InvokeAsync(() =>
         {
             _rawExpenseGrid.AddRange(pendingApprovals);
 
-            _sortedExpenseGrid = _rawExpenseGrid.ToList();
+            _sortedExpenseGrid = _rawExpenseGrid;
+
+            if (string.IsNullOrEmpty(filterValue))
+                ApplyFilterGrid(filterValue);
 
             DetailPaneIsHidden = true;
             ConfirmationPaneIsHidden = true;
@@ -124,7 +126,7 @@
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
-        _sortedExpenseGrid = _rawExpenseGrid.ToList();
+        _sortedExpenseGrid = _rawExpenseGrid;
 
         base.OnInitialized();
     }
@@ -153,7 +155,7 @@
         DetailPaneIsHidden = true;
         ConfirmationPaneIsHidden = false;
 
-        ModalActionConfirmation.Approve(() =>
+        ModalActionConfirmation.Approve(expense, () =>
         {
 
             ConfirmationPaneIsHidden = true;
@@ -171,7 +173,7 @@
         DetailPaneIsHidden = true;
         ConfirmationPaneIsHidden = false;
 
-        ModalActionConfirmation.Reject(() =>
+        ModalActionConfirmation.Reject(expense,() =>
         {
 
             ConfirmationPaneIsHidden = true;
@@ -193,11 +195,19 @@
 
     private void FilterChanged(ChangeEventArgs args)
     {
-        var filter = args.Value as string;
+        filterValue = args.Value as string;
 
-        if (string.IsNullOrWhiteSpace(filter))
+        ApplyFilterGrid(filterValue);
+
+        ConfirmationPaneIsHidden = true;
+        DetailPaneIsHidden = true;
+    }
+
+    private void ApplyFilterGrid(string filter)
+    {
+          if (string.IsNullOrWhiteSpace(filter))
         {
-            _sortedExpenseGrid = _rawExpenseGrid.ToList();
+            _sortedExpenseGrid = _rawExpenseGrid;
         }
         else
         {
