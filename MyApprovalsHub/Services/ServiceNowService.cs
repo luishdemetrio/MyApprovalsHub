@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
+using Microsoft.Graph.CallRecords;
 using Microsoft.TeamsFx.Conversation;
 using MyApprovalsHub.Components;
 using MyApprovalsHub.Interfaces;
@@ -20,6 +21,16 @@ public class ServiceNowService : ApprovalRequestService
     private string _serviceNowClientSecret;
 
     private static readonly ServiceNowService _instance = new ServiceNowService();
+
+    private static Dictionary<int, string> _impacts ;
+
+    public string InstanceUrl {
+        get {
+            return _serviceNowInstanceUrl;
+        }
+        private set { 
+        } 
+    }
 
     public static ServiceNowService GetInstance()
     {
@@ -60,8 +71,21 @@ public class ServiceNowService : ApprovalRequestService
         {
             throw new Exception($"{nameof(_serviceNowClientSecret)} must be set.");
         }
+
+        PopulateImpacts();
     }
 
+    private void PopulateImpacts()
+    {
+        //for now it is hardcoded
+
+        _impacts = new();
+
+        _impacts.Add(1, "High");
+        _impacts.Add(2, "Medium");
+        _impacts.Add(3, "Low");
+
+    }
 
     private string GetToken()
     {
@@ -469,7 +493,7 @@ public class ServiceNowService : ApprovalRequestService
         PendingApprovalDetails details = new();
 
         //var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cdescription%2Cshort_description%2Cstate%2Cpriority%2Curgency%2Cassigned_to");
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cshort_description%2Cassigned_to%2Csys_id");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cshort_description%2Cassigned_to%2Csys_id%2Cimpact");
         var request = new RestRequest();
 
         request.Method = Method.Get;
@@ -583,6 +607,7 @@ public class ServiceNowService : ApprovalRequestService
                         on approval.sysapproval equals approvalDetail.sys_id
                      join user in users.result
                         on approvalDetail.assigned_to equals user.sys_id
+                     
                      select new PendingApproval
                      {
                          Number = approvalDetail.number,
@@ -593,7 +618,8 @@ public class ServiceNowService : ApprovalRequestService
                          Source = PendingApprovalSource.ServiceNow.ToString(),
                          SourcePhoto = "servicenow.png",
                          State = approval.state,
-                         Id = approval.sys_id
+                         Id = approvalDetail.sys_id,
+                         Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty
                      };
 
         return result;
@@ -614,6 +640,7 @@ public class ServiceNowService : ApprovalRequestService
             public DateTime due_date { get; set; }
             public string state { get; set; }
             public string sys_id { get; set; }
+            
         }
     }
 
@@ -629,6 +656,7 @@ public class ServiceNowService : ApprovalRequestService
             public string short_description { get; set; }
             //public string urgency { get; set; }
             public string assigned_to { get; set; }
+            public int impact { get; set; }
             //public string description { get; set; }
             //public string state { get; set; }
             //public string priority { get; set; }

@@ -1,7 +1,7 @@
 ﻿@using MyApprovalsHub.Interfaces
 @using MyApprovalsHub.Models
 @using MyApprovalsHub.Services
-
+@inject IJSRuntime JSRuntime
 
 <FluentDialog Hidden="DetailPaneIsHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 480px;">
 
@@ -35,6 +35,10 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <th scope="row">Number:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Number</td>
+                        </tr>
+                        <tr>
                             <th scope="row">Requestor:</th>
                             <td style="padding-bottom: 10px;">@selectedExpense.Requestor</td>
                         </tr>
@@ -61,6 +65,11 @@
                             <td style="padding-bottom: 10px;">@selectedExpense.Description</td>
                         </tr>
 
+                        <tr>
+                            <th scope="row">Impact:</th>
+                            <td style="padding-bottom: 10px;">@selectedExpense.Impact</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
@@ -68,6 +77,8 @@
 
         </div>
 
+        
+        
 
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
              style="margin-left: 20px;margin-top: 10px;">
@@ -78,8 +89,11 @@
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" @onclick="OnRejectionClick">
             <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
 
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
-            <label class="btn btn-outline-dark" for="btnradio3">Close</label>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick=@(()=>OnDetailsClick(selectedExpense.Id))>
+            <label class="btn btn-outline-secondary" for="btnradio3">Details</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
+            <label class="btn btn-outline-dark" for="btnradio4">Close</label>
         </div>
 
        
@@ -102,12 +116,23 @@
     private ActionConfirmation ModalActionConfirmation;
     public bool ConfirmationPaneIsHidden { get; set; } = true;
 
-    
+
 
     public delegate void CloseModalParameterButtonClick();
 
     private CloseModalParameterButtonClick closeModalParameter;
 
+    private string _serviceNowBaseURL;
+    public void Show(CloseModalParameterButtonClick closeModalParameterButtonClick)
+    {
+
+        closeModalParameter = closeModalParameterButtonClick;
+        ConfirmationPaneIsHidden = true;
+
+
+        _serviceNowBaseURL = ServiceNowService.GetInstance().InstanceUrl;
+
+    }
 
     private void OnCloseModalParameterButtonClick()
     {
@@ -115,13 +140,26 @@
         ConfirmationPaneIsHidden = true;
     }
 
-    
-    private void OnApproveClick()
+    private async void OnDetailsClick(string id)
     {
-        
-        ConfirmationPaneIsHidden = false;
+        try
+        {
+            await JSRuntime.InvokeAsync<object>("open", $"{_serviceNowBaseURL}/sp?id=form&sys_id={id}&table=change_request", "_blank");
+        }
+        catch
+        {
+            
+                }
 
         
+    }
+
+    private void OnApproveClick()
+    {
+
+        ConfirmationPaneIsHidden = false;
+
+
         ModalActionConfirmation.Approve(selectedExpense, () =>
         {
 
@@ -154,11 +192,5 @@
         selectedExpense.Comments = args.Value as string;
     }
 
-    public void Show(CloseModalParameterButtonClick closeModalParameterButtonClick)
-    {
-
-        closeModalParameter = closeModalParameterButtonClick;
-        ConfirmationPaneIsHidden = true;
-       
-    }
+   
 }

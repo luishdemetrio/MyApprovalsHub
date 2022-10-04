@@ -12,6 +12,9 @@ public class PendingApproval
     public string State { get; set; }
     public string Id { get; set; }
     public string Comments { get; set; }
+    public string Impact { get; set; }
 
 }
+
+public record ServiceNowImpact(int id, string impact);
 
