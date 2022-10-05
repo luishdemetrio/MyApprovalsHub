@@ -3,9 +3,11 @@
 | [Documentation](https://github.com/luishdemetrio/MyApprovalsHub/wiki) | [Deployment guide](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Deployment-guide) | [Architecture](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Solution-overview) |
 | ---- | ---- | ---- |
 
-Self-expression is core to Teams culture. This app template is a messaging extension that enables your users to share custom stickers and GIFs within the Teams chat experience. This template provides an easy web-based configuration experience where authorized users can upload and manage the GIFs/stickers/images returned by the app.
+Managers usually have to manage approvals out of a number of systems causing delays in approval actions and excessive context switching. Also, the large volumes of email notifications from these systems cause important approval notifications to sometimes get missed.
 
-![Custom stickers in action](https://github.com/OfficeDev/microsoft-teams-stickers-app/wiki/images/CustomStickers.gif)
+![](Approvals%20Hub%20ServiceNow.gif)
+
+
 
 ## Legal notice
 
