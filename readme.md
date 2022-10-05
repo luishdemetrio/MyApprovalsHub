@@ -5,6 +5,8 @@
 
 Managers usually have to manage approvals out of a number of systems causing delays in approval actions and excessive context switching. Also, the large volumes of email notifications from these systems cause important approval notifications to sometimes get missed.
 
+The “My Approvals Hub” is a Teams application developed to aggregate approvals from the identified outsides systems, for now just implemented for Service Now, providing a list of approvals pending and the option for each manager to approve or reject the item.
+
 ![](Approvals%20Hub%20ServiceNow.gif)
 
 
@@ -33,9 +35,9 @@ When you're ready to try out Custom Stickers, or to use it in your own organizat
 
 ## Feedback
 
-Thoughts? Questions? Ideas? Share them with us on [Teams UserVoice](https://microsoftteams.uservoice.com/forums/555103-public)!
+Thoughts? Questions? Ideas? Share them with us!
 
-Please report bugs and other code issues [here](https://github.com/OfficeDev/microsoft-teams-stickers-app/issues/new).
+Please report bugs and other code issues [here](https://github.com/luishdemetrio/MyApprovalsHub/issues/new).
 
 ## Contributing
 
