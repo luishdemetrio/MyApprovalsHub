@@ -27,12 +27,13 @@ else
 
             <div class="column">
 
+                
                 <ApprovalsCard @ref="ConcurApprovalsCard" ApprovalLogoUri="concur.png" IsLoading=true />
                
             </div>
 
             <div class="column">
-                <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png"  IsLoading=true />
+                <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png" IsLoading=true />
 
             </div>
 
@@ -124,6 +125,11 @@ else
         };
 
     }
-    
+
+    private void OnSourceCardClick(SourceDescription source)
+    {
+        
+    }
+
 }
 
