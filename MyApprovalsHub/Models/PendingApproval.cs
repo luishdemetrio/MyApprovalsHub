@@ -10,9 +10,10 @@ public class PendingApproval
     public string Email { get; set; }
     public string SourcePhoto { get; set; }
     public string State { get; set; }
-    public string Id { get; set; }
+    public string SysId { get; set; }
     public string Comments { get; set; }
     public string Impact { get; set; }
+    public string SysApproval { get; set; }
 
 }
 

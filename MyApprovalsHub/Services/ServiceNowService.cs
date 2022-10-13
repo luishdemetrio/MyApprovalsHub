@@ -546,10 +546,10 @@ public class ServiceNowService : ApprovalRequestService
     * Request Body
     * {"state":"approved","comments":"Approved via Teams","approval_source":"MyApprovalsHub"}
     */
-    private bool ChangeApprovalStatus(string Id, string comments, string status)
+    private bool ChangeApprovalStatus(string SysId, string comments, string status)
     {
 
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{Id}");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{SysId}");
                 
         var request = new RestRequest();
 
@@ -618,8 +618,9 @@ public class ServiceNowService : ApprovalRequestService
                          Source = PendingApprovalSource.ServiceNow.ToString(),
                          SourcePhoto = "servicenow.png",
                          State = approval.state,
-                         Id = approvalDetail.sys_id,
-                         Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty
+                         SysId = approvalDetail.sys_id,
+                         Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty,
+                         SysApproval = approval.sys_id
                      };
 
         return result;

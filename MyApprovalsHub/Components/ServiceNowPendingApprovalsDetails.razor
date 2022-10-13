@@ -89,7 +89,7 @@
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" @onclick="OnRejectionClick">
             <label class="btn btn-outline-danger" for="btnradio2">Reject</label>
 
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick=@(()=>OnDetailsClick(selectedExpense.Id))>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" @onclick=@(()=>OnDetailsClick(selectedExpense.SysId))>
             <label class="btn btn-outline-secondary" for="btnradio3">Details</label>
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" @onclick="OnCloseModalParameterButtonClick">
