@@ -2,17 +2,15 @@
 @inject MicrosoftTeams MicrosoftTeams;
 @inject NavigationManager NavigationManager;
 
-<div class="config page" id ="tab config">
-        <h1>Tab Configuration</h1>
-        <p>
-            This is where you will add your tab configuration options the user 
-            can choose when the tab is added to your team/group chat.
-        </p>
+<div class="config page" id ="tab config" style="margin:20px">
+       
+    <OpenSettings/>
+
 </div>
 
 @code {
 
-    private Guid _entityId = Guid.NewGuid();
+ 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -20,11 +18,10 @@
         {
             var settings = new TeamsInstanceSettings
             {
-                SuggestedDisplayName = "My Tab",
-                EntityId = _entityId.ToString(),
-                ContentUrl = $"{NavigationManager.BaseUri}/tab",
-                WebsiteUrl = $"{NavigationManager.BaseUri}/tab"
-            };
+                SuggestedDisplayName = "Settings",
+                ContentUrl = $"{NavigationManager.BaseUri}/config",
+                    WebsiteUrl = $"{NavigationManager.BaseUri}/config"
+                };
 
             await MicrosoftTeams.InitializeAsync();
             await MicrosoftTeams.RegisterOnSaveHandlerAsync(settings);

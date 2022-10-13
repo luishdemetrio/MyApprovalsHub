@@ -1,3 +1,4 @@
+using Microsoft.Fast.Components.FluentUI;
 using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Interop.TeamsSDK;
 
@@ -13,7 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
 builder.Services.AddHttpContextAccessor();
 
-
+//https://github.com/microsoft/fast-blazor
+builder.Services.AddFluentUIComponents();
 
 var app = builder.Build();
 

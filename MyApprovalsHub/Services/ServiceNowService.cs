@@ -8,6 +8,7 @@ using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using ServiceNow.Api;
+using System.Collections.Concurrent;
 using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
 namespace MyApprovalsHub.Services;
@@ -585,16 +586,20 @@ public class ServiceNowService : ApprovalRequestService
 
         var approvals = GetPendingApprovalsRestAPI(sys_id);
 
+        PendingApprovalDetails approvalDetails = new();
+
         //we need to chunck the pending approvals to avoid getting an exception due the request is too long
         var chunck = approvals.result.Select(p => p.sysapproval).ToList().Chunk(10);
-                
-        PendingApprovalDetails approvalDetails = new();
 
         Parallel.ForEach(chunck, p =>
         {
-            approvalDetails.result.AddRange(
-             GetPendingApprovalDetailsRestAPI(string.Join(",", p)).result
-             );
+            foreach (var item in GetPendingApprovalDetailsRestAPI(string.Join(",", p)).result)
+            {
+                approvalDetails.result.Add(item);
+
+            }
+            
+            
         });
 
         
@@ -648,7 +653,7 @@ public class ServiceNowService : ApprovalRequestService
 
     public class PendingApprovalDetails
     {
-        public List<ApprovalDetail> result { get; set; } = new();
+        public ConcurrentBag<ApprovalDetail> result { get; set; } = new();
 
         public class ApprovalDetail
         {

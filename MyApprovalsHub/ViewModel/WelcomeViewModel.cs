@@ -22,6 +22,7 @@ namespace MyApprovalsHub.ViewModel
         public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
 
      
+
         public async void  GetServiceNowPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
         {
           

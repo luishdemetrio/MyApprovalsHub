@@ -1,0 +1,107 @@
+﻿
+
+
+
+    <h5>External Sources</h5>
+
+  @*  <FluentCheckbox Checked="true">Service Now</FluentCheckbox>
+    <FluentCheckbox Disabled="true">SAP Concur</FluentCheckbox>
+    <FluentCheckbox Disabled=true>Oracle People Soft</FluentCheckbox>
+    <FluentCheckbox Disabled="true">UKG</FluentCheckbox>
+*@
+
+    <div>
+       
+        <FluentTabs Orientation="Orientation.Vertical" style="width:80%">
+
+            <FluentTab>Service Now</FluentTab>
+            <FluentTab Disabled=true>SAP Concur</FluentTab>
+            <FluentTab Disabled=true>Oracle People soft</FluentTab>
+        <FluentTab Disabled=true>UKG</FluentTab>
+
+        <FluentTabPanel style="margin-left:50px; margin-top:10px">
+
+            <p><FluentCheckbox Checked="true">Use Service Now</FluentCheckbox></p>
+
+            <p>
+                <FluentTextField style="min-width:400px">
+                    Base URL
+                    <FluentIcon Name="@FluentIcons.Globe" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
+            </FluentTextField></p>
+
+            <p>
+                <FluentTextField style="min-width:400px">
+                    Username
+                    <FluentIcon Name="@FluentIcons.Person" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
+                </FluentTextField>
+            </p>
+
+            <p>
+                <FluentTextField style="min-width:400px" TextFieldType="TextFieldType.Password">
+                    Password
+                    <FluentIcon Name="@FluentIcons.Key" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
+                </FluentTextField>
+            </p>
+
+            <p>
+                <FluentTextField style="min-width:400px">
+                    ClientId
+                    <FluentIcon Name="@FluentIcons.Key" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
+                </FluentTextField>
+            </p>
+
+            <p>
+                <FluentTextField style="min-width:400px">
+                    Secret
+                    <FluentIcon Name="@FluentIcons.Key" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
+                </FluentTextField>
+            </p>
+
+            </FluentTabPanel>
+
+            <FluentTabPanel>
+                Tab two content. This is for testing.
+            </FluentTabPanel>
+
+            <FluentTabPanel>
+                Tab three content. This is for testing.
+            </FluentTabPanel>
+
+            <FluentTabPanel>
+                Tab four content. This is for testing.
+            </FluentTabPanel>
+
+        </FluentTabs>
+    </div>
+
+    <p style="margin-top:50px">
+    <FluentButton @onclick=@(()=>SaveSettings()) Appearance="Appearance.Accent">
+            Save
+        <FluentIcon Name="@FluentIcons.Save" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor="false" />
+         </FluentButton>
+
+    <FluentButton @onclick=@(()=>SaveSettings()) Appearance="Appearance.Outline">
+        Cancel
+        <FluentIcon Name="@FluentIcons.Dismiss" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor="true" />
+    </FluentButton>
+    </p>
+    
+    
+
+
+@code {
+
+
+
+    private void Close()
+    {
+        
+    }
+
+    private void SaveSettings()
+    {
+        
+    }
+
+    
+}
