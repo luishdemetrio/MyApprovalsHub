@@ -6,12 +6,14 @@
 @using MyApprovalsHub.Pages
 @using MyApprovalsHub.Services
 @using MyApprovalsHub.ViewModel
-@inject TeamsFx teamsfx
+
 @inject TeamsUserCredential teamsUserCredential
 @inject MicrosoftTeams MicrosoftTeams
-@inject IWebHostEnvironment HostEnvironment
-@inject IConfiguration Configuration
 @inject NavigationManager NavigationManager
+
+@using Microsoft.Extensions.Options
+@using MyApprovalsHub.Common
+@inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
 
 @if(isLoading)
 {
@@ -21,41 +23,31 @@
 }
 else
 {
-
-
     <div class=" page-padding">
 
         <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
-
     
             <FluentButton @onclick=@(()=>OpenSettings()) >
                 <FluentIcon Name="@FluentIcons.Globe" Size="@IconSize.Size16" Filled=false  />
-
-            </FluentButton>
-
-        
+            </FluentButton>        
 
         <div class="welcome page" style="margin-top:40px">
 
-            <div class="column">
-
-
+            @*<div class="column">
                 <ApprovalsCard @ref="ConcurApprovalsCard" ApprovalLogoUri="concur.png" IsLoading=true />
-
             </div>
-
+*@
             <div class="column">
                 <ApprovalsCard @ref="ServiceNowApprovalsCard" ApprovalLogoUri="servicenow.png" IsLoading=true />
-
             </div>
 
-            <div class="column">
+       @*     <div class="column">
                 <PeopleSoftApprovals />
             </div>
 
             <div class="column">
                 <UKGApprovals />
-            </div>
+            </div>*@
 
         </div>
 
@@ -81,27 +73,13 @@ else
 
     private ApprovalsList ApprovalsListGrid;
 
+    private WelcomeViewModel _vm ;
 
-    private WelcomeViewModel _vm = new("luke.wilson@example.com");
-
-    
 
     private void OpenSettings()
     {
         //https://docs.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-5.0#uri-and-navigation-state-helpers
-      
         NavigationManager.NavigateTo("/config", true);
-
-       
-        //OpenSettingsModalHidden = false;
-        
-        //OpenSettingsModal.Show(() =>
-        //{
-
-        //    OpenSettingsModalHidden = true;
-            
-        //});
-
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -111,6 +89,8 @@ else
         if(firstRender)
         {
             isInTeams = await MicrosoftTeams.IsInTeams();
+
+            _vm = new("luke.wilson@example.com", ApprovalsHubConfig.CurrentValue);
 
             if (isInTeams)
             { 
@@ -137,14 +117,14 @@ else
             });
 
 
-        _vm.GetConcurPendingApprovals(pendingApprovals =>
-            {
+        //_vm.GetConcurPendingApprovals(pendingApprovals =>
+        //    {
 
-                ConcurApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
+        //        ConcurApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
 
-                ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
+        //        ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
 
-            });
+        //    });
 
 
         ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
@@ -156,11 +136,6 @@ else
 
         };
 
-    }
-
-    private void OnSourceCardClick(SourceDescription source)
-    {
-        
     }
 
 }

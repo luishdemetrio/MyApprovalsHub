@@ -2,6 +2,9 @@
 @using MyApprovalsHub.Models
 @using MyApprovalsHub.Services
 
+@using Microsoft.Extensions.Options
+@using MyApprovalsHub.Common
+@inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
 
 
 @if (ActionDescription != null)
@@ -54,6 +57,12 @@
 
     private CloseModalParameterButtonClick closeModalParameter;
 
+    private IPendingApprovalService _serviceNow;
+
+    protected override void OnInitialized()
+    {
+        _serviceNow = new ServiceNowService(ApprovalsHubConfig.CurrentValue);
+    }
 
     private void CommentChanged(ChangeEventArgs args)
     {
@@ -110,8 +119,7 @@
 
     private void ServiceNowChangeStatus()
     {
-        IPendingApprovalService _serviceNow = ServiceNowService.GetInstance();
-
+        
         var statusChangedSucceed = (ActionDescription == "approval") ? 
                 _serviceNow.Approve(selectedExpense.SysApproval, selectedExpense.Comments) :
                 _serviceNow.Reject(selectedExpense.SysApproval, selectedExpense.Comments);

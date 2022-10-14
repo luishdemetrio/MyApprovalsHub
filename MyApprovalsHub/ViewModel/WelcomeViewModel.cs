@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MyApprovalsHub.Common;
 using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Models;
 using MyApprovalsHub.Services;
@@ -7,57 +8,59 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
-namespace MyApprovalsHub.ViewModel
+namespace MyApprovalsHub.ViewModel;
+
+public class WelcomeViewModel 
 {
-    public class WelcomeViewModel 
+
+    private string _approverEmail;
+    private ApprovalsHubOptions _config;
+    IPendingApprovalService expenseService;
+
+    public WelcomeViewModel(string approverEmail, ApprovalsHubOptions config)
+    {
+        _approverEmail = approverEmail;
+        _config = config;
+        expenseService = new ServiceNowService(_config);
+    }
+
+    public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
+
+ 
+
+    public async void  GetServiceNowPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
+    {
+      
+        var t = Task.Run(() =>
+        {
+           
+           var expenses = expenseService.GetPendingApprovals(_approverEmail);
+
+            serviceNowPendingApprovalsTotal?.Invoke(expenses);
+        });
+
+        await t.ConfigureAwait(false);
+
+        
+    }
+
+
+    public async void GetConcurPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
     {
 
-        private string _approverEmail;
-
-        public WelcomeViewModel(string approverEmail)
+        var t = Task.Run(() =>
         {
-            _approverEmail = approverEmail;
-        }
-    
-        public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
+            IPendingApprovalService expenseService = new ConcurService();
 
-     
+            var expenses = expenseService.GetPendingApprovals(_approverEmail);
 
-        public async void  GetServiceNowPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
-        {
-          
-            var t = Task.Run(() =>
-            {
-                IPendingApprovalService expenseService = ServiceNowService.GetInstance();
+            serviceNowPendingApprovalsTotal?.Invoke(expenses);
+        });
 
-               var expenses = expenseService.GetPendingApprovals(_approverEmail);
-
-                serviceNowPendingApprovalsTotal?.Invoke(expenses);
-            });
-
-            await t.ConfigureAwait(false);
-
-            
-        }
-
-
-        public async void GetConcurPendingApprovals(NotifyPendingApprovalTotal serviceNowPendingApprovalsTotal)
-        {
-
-            var t = Task.Run(() =>
-            {
-                IPendingApprovalService expenseService = new ConcurService();
-
-                var expenses = expenseService.GetPendingApprovals(_approverEmail);
-
-                serviceNowPendingApprovalsTotal?.Invoke(expenses);
-            });
-
-            await t.ConfigureAwait(false);
-
-
-        }
+        await t.ConfigureAwait(false);
 
 
     }
+
+
 }

@@ -3,7 +3,12 @@
 @using MyApprovalsHub.Services
 @inject IJSRuntime JSRuntime
 
-<FluentDialog Hidden="DetailPaneIsHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 480px;">
+@using Microsoft.Extensions.Options
+@using MyApprovalsHub.Common
+@inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
+
+
+<FluentDialog Hidden="DetailPaneIsHidden" aria-label="Simple dialog" Modal="true" style="--dialog-height: 540px;">
 
     @if (@selectedExpense != null && @DetailPaneIsHidden == false)
     {
@@ -54,7 +59,7 @@
                         <tr>
                             <th scope="row">Request State:</th>
                             <td style="padding-bottom: 10px;">
-                                <FluentBadge Circular=true Fill=Fill.Highlight Color=Color.Highlight style="--badge-fill-highlight: #ffd800; --badge-color-highlight: #000">
+                                <FluentBadge Circular=true Fill=Fill.Highlight Color=Color.Highlight  style="--badge-fill-highlight: #ffd800; --badge-color-highlight: #000">
                                     @selectedExpense.State
                                 </FluentBadge>
                             </td>
@@ -123,14 +128,15 @@
     private CloseModalParameterButtonClick closeModalParameter;
 
     private string _serviceNowBaseURL;
+
+    
     public void Show(CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
 
         closeModalParameter = closeModalParameterButtonClick;
         ConfirmationPaneIsHidden = true;
 
-
-        _serviceNowBaseURL = ServiceNowService.GetInstance().InstanceUrl;
+        _serviceNowBaseURL = ApprovalsHubConfig.CurrentValue.ServiceNowBaseUrl;
 
     }
 

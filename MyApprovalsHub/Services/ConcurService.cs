@@ -22,11 +22,11 @@ namespace MyApprovalsHub.Services
 
         public ConcurService()
         {
-            base.ClientId = base._configurationRoot["SAPConcurClientId"];
-            base.ClientSecret = base._configurationRoot["SAPConcurClientSecret"];
-            base.BaseUrl = base._configurationRoot["SAPConcurBaseUrl"];
+            //base.ClientId = base._configurationRoot["SAPConcurClientId"];
+            //base.ClientSecret = base._configurationRoot["SAPConcurClientSecret"];
+            //base.BaseUrl = base._configurationRoot["SAPConcurBaseUrl"];
 
-            _accessTokenUrl = base._configurationRoot["SAPConcurAccessTokenUrl"];
+            //_accessTokenUrl = base._configurationRoot["SAPConcurAccessTokenUrl"];
         }
 
         public override bool Approve(string Id, string comments)

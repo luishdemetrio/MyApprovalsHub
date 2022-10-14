@@ -7,7 +7,7 @@ namespace MyApprovalsHub.Services;
 public abstract class ApprovalRequestService : IPendingApprovalService
 {
 
-    protected IConfigurationRoot _configurationRoot;
+    //protected IConfigurationRoot _configurationRoot;
 
     protected string ClientId { get; set; }
 
@@ -18,16 +18,16 @@ public abstract class ApprovalRequestService : IPendingApprovalService
     
     //public int PendingApprovals { get; set; }
 
-    public ApprovalRequestService()
-    {
-        // Locate the configuration file path at the root of the test project, relative from where these assemblies were deployed
-        //var configurationJsonFilePath = Path.Combine(Path.GetDirectoryName(typeof(ApprovalRequestService).GetTypeInfo().Assembly.Location) ?? string.Empty, "../../..");
-        _configurationRoot = new ConfigurationBuilder()
+    //public ApprovalRequestService()
+    //{
+    //    // Locate the configuration file path at the root of the test project, relative from where these assemblies were deployed
+    //    //var configurationJsonFilePath = Path.Combine(Path.GetDirectoryName(typeof(ApprovalRequestService).GetTypeInfo().Assembly.Location) ?? string.Empty, "../../..");
+    //    _configurationRoot = new ConfigurationBuilder()
            
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-            .Build();
-    }
+    //        .SetBasePath(Directory.GetCurrentDirectory())
+    //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+    //        .Build();
+    //}
 
     public abstract IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 

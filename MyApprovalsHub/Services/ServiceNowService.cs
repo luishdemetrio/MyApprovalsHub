@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Graph;
-using Microsoft.Graph.CallRecords;
-using Microsoft.TeamsFx.Conversation;
-using MyApprovalsHub.Components;
+﻿using Microsoft.AspNetCore.Components;
+using MyApprovalsHub.Common;
 using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
-using ServiceNow.Api;
 using System.Collections.Concurrent;
 using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
 namespace MyApprovalsHub.Services;
 
-public class ServiceNowService : ApprovalRequestService
+public class ServiceNowService : IPendingApprovalService
 {
     private string _serviceNowInstanceUrl;
     private string _serviceNowUsername;
@@ -21,9 +17,11 @@ public class ServiceNowService : ApprovalRequestService
     private string _serviceNowClientId;
     private string _serviceNowClientSecret;
 
-    private static readonly ServiceNowService _instance = new ServiceNowService();
+   // private static readonly ServiceNowService _instance = new ServiceNowService();
 
     private static Dictionary<int, string> _impacts ;
+
+    //private static ApprovalsHubOptions _config ;
 
     public string InstanceUrl {
         get {
@@ -33,20 +31,23 @@ public class ServiceNowService : ApprovalRequestService
         } 
     }
 
-    public static ServiceNowService GetInstance()
-    {
-            return _instance;
-        
-    }
+    //public static ServiceNowService GetInstance(ApprovalsHubOptions config)
+    //{
+    //    _config = config;
 
-    private ServiceNowService()
-    {
-        _serviceNowInstanceUrl = base._configurationRoot["ServiceNowInstanceURL"];
-        _serviceNowUsername = base._configurationRoot["ServiceNowUsername"];
-        _serviceNowPassword = base._configurationRoot["ServiceNowPassword"];
+    //    return _instance;
 
-        _serviceNowClientId = base._configurationRoot["ServiceNowClientId"];
-        _serviceNowClientSecret = base._configurationRoot["ServiceNowClientSecret"];
+    //}
+
+    public ServiceNowService(ApprovalsHubOptions config)
+    {
+
+        _serviceNowInstanceUrl = config.ServiceNowBaseUrl;
+        _serviceNowUsername = config.ServiceNowUsername;
+        _serviceNowPassword = config.ServiceNowPassword;
+
+        _serviceNowClientId = config.ServiceNowClientId;
+        _serviceNowClientSecret = config.ServiceNowClientSecret;
 
         if (string.IsNullOrWhiteSpace(_serviceNowInstanceUrl))
         {
@@ -570,16 +571,16 @@ public class ServiceNowService : ApprovalRequestService
         return response.StatusCode == System.Net.HttpStatusCode.OK;
     }
 
-    public override bool Approve(string id, string comments)
+    public bool Approve(string id, string comments)
     {
         return ChangeApprovalStatus(id, comments, "approved");
     }
-    public override bool Reject(string id, string comments)
+    public bool Reject(string id, string comments)
     {
         return ChangeApprovalStatus(id, comments, "rejected");
     }
 
-    public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
+    public IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
     {
 
         var sys_id = GetServiceNowUser(approverEmail);

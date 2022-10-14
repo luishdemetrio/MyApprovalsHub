@@ -145,7 +145,7 @@
             DetailPaneIsHidden = true;
             ConfirmationPaneIsHidden = true;
             RemovePendingApprovalFromList(expense);
-            //StateHasChanged();
+           // StateHasChanged();
         });
     }
 
@@ -222,6 +222,8 @@
 
     private void SortColumn(ColumnDefinition<PendingApproval> columnDefinition)
     {
+        ConfirmationPaneIsHidden = true;
+        DetailPaneIsHidden = true;
 
         if (lastSortColumn?.Title == columnDefinition.Title)
         {

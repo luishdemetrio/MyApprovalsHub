@@ -1,6 +1,9 @@
 @page "/config"
+@using Microsoft.Extensions.Options
+@using MyApprovalsHub.Common
 @inject MicrosoftTeams MicrosoftTeams;
 @inject NavigationManager NavigationManager;
+
 
 <div class="config page" id ="tab config" style="margin:20px">
        
@@ -10,6 +13,7 @@
 
 @code {
 
+    
  
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
