@@ -51,7 +51,7 @@ export function getTabInstances(tabInstanceParameters) {
         try {
             microsoftTeams.getTabInstances((tabInfo) => {
                 resolve(tabInfo);
-        ***REMOVED*** tabInstanceParameters);
+            }, tabInstanceParameters);
         } catch (e) {
             reject(e);
         }
@@ -63,7 +63,7 @@ export function getMruTabInstances(tabInstanceParameters) {
         try {
             microsoftTeams.getMruTabInstances((tabInfo) => {
                 resolve(tabInfo);
-        ***REMOVED*** tabInstanceParameters);
+            }, tabInstanceParameters);
         } catch (e) {
             reject(e);
         }

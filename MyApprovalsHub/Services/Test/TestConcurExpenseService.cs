@@ -22,7 +22,7 @@ namespace MyApprovalsHub.Services
                     Email = "granger@luisdemetrio.com",
                     SourcePhoto = "concur.png",
                     State = "Requested"
-            ***REMOVED***
+                },
                 new PendingApproval
                 {
                     Number ="2",

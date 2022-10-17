@@ -9,19 +9,19 @@
         "websiteUrl": "{{state.fx-resource-frontend-hosting.endpoint}}",
         "privacyUrl": "{{state.fx-resource-frontend-hosting.endpoint}}{{state.fx-resource-frontend-hosting.indexPath}}/privacy",
         "termsOfUseUrl": "{{state.fx-resource-frontend-hosting.endpoint}}{{state.fx-resource-frontend-hosting.indexPath}}/termsofuse"
-***REMOVED***
+    },
     "icons": {
         "color": "resources/color.png",
         "outline": "resources/outline.png"
-***REMOVED***
+    },
     "name": {
         "short": "{{config.manifest.appName.short}}",
         "full": "{{config.manifest.appName.full}}"
-***REMOVED***
+    },
     "description": {
         "short": "Short description of {{config.manifest.appName.short}}",
         "full": "Full description of {{config.manifest.appName.short}}"
-***REMOVED***
+    },
     "accentColor": "#FFFFFF",
     "bots": [],
     "composeExtensions": [],

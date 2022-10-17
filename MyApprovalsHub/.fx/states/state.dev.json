@@ -1,41 +1,41 @@
 {
     "solution": {
-        ***REMOVED***
-        ***REMOVED***
-        ***REMOVED***
-        ***REMOVED***
+        "teamsAppTenantId": "",
+        "subscriptionId": "",
+        "subscriptionName": "",
+        "tenantId": "",
         "needCreateResourceGroup": false,
         "resourceGroupName": "MyApprovalsHub-dev-rg",
         "location": "eastus",
         "resourceNameSuffix": "3a0afc",
         "provisionSucceeded": true
-***REMOVED***
+    },
     "fx-resource-appstudio": {
-        ***REMOVED***
-        "teamsAppId": "0e8d2def-92b0-463a-abcd-d601804ff7e4",
+        "tenantId": "",
+        "teamsAppId": "",
         "teamsAppUpdatedAt": 1664392796551
-***REMOVED***
+    },
     "fx-resource-identity": {
         "identityName": "myapprovaldev49baaa",
-        ***REMOVED***
-        ***REMOVED***
-***REMOVED***
+        "identityResourceId": "/subscriptions//resourceGroups/MyApprovalsHub-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myapprovaldev49baaa",
+        "identityClientId": ""
+    },
     "fx-resource-aad-app-for-teams": {
-      ***REMOVED***
-***REMOVED***
-***REMOVED***
-        ***REMOVED***
+        "clientId": "",
+        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}",
+        "oauth2PermissionScopeId": "",
+        "tenantId": "",
         "oauthHost": "https://login.microsoftonline.com",
-       ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+        "oauthAuthority": "https://login.microsoftonline.com/",
+        "applicationIdUris": "api://myapprovaldev49baaawebapp.azurewebsites.net/",
+        "objectId": ""
+    },
+    "fx-resource-frontend-hosting": {
+        "domain": ".azurewebsites.net",
+        "endpoint": "https://.azurewebsites.net",
+        "indexPath": "",
+        "webAppResourceId": "/subscriptions/-eccc-4e9f-ab96-edef050aeb51/resourceGroups/MyApprovalsHub-dev-rg/providers/Microsoft.Web/sites/myapprovaldev49baaawebapp"
+    },
     "fx-resource-cicd": {},
     "fx-resource-api-connector": {}
 }

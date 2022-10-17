@@ -165,7 +165,7 @@ To begin, you will need:
                 }
             ],
             "saml2Token": []
-    ***REMOVED***
+        },
     ```
 
     2. Click **Save** to commit your changes.

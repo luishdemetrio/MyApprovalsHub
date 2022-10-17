@@ -20,10 +20,10 @@
             "fx-resource-cicd",
             "fx-resource-api-connector"
         ]
-***REMOVED***
+    },
     "programmingLanguage": "csharp",
     "pluginSettings": {
         "projectFilePath": "C:\\Users\\luisdem\\source\\repos\\MyApprovalsHub\\MyApprovalsHub\\MyApprovalsHub.csproj"
-***REMOVED***
+    },
     "isFirstTimeOpenProject": false
 }
