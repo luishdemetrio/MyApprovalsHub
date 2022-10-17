@@ -12,9 +12,9 @@
     <FluentTabs Orientation="Orientation.Vertical" style="width:80%">
 
         <FluentTab>Service Now</FluentTab>
-        <FluentTab Disabled=true>SAP Concur</FluentTab>
-        <FluentTab Disabled=true>Oracle People soft</FluentTab>
-    <FluentTab Disabled=true>UKG</FluentTab>
+        <FluentTab>SAP Concur</FluentTab>
+        <FluentTab>Oracle People Soft</FluentTab>
+        <FluentTab>UKG</FluentTab>
 
     <FluentTabPanel style="margin-left:50px; margin-top:10px">
 
@@ -48,24 +48,32 @@
         </p>
 
         <p>
-                <FluentTextField style="min-width:400px" Value=@ApprovalsHubConfig.CurrentValue.ServiceNowClientSecret>
+                <FluentTextField style="min-width:400px" Value=@ApprovalsHubConfig.CurrentValue.ServiceNowClientSecret TextFieldType="TextFieldType.Password">
                 Secret
                 <FluentIcon Name="@FluentIcons.Key" Slot="start" Size="@IconSize.Size16" Filled=false UseAccentColor=false />
             </FluentTextField>
         </p>
 
+    </FluentTabPanel>
+
+    <FluentTabPanel style="margin-left:50px; margin-top:10px">
+            
+            <p><FluentCheckbox Checked="false" Disabled=true>Use SAP Concur </FluentCheckbox></p>
+
+            <p>SAP Concur is not implemented yet.</p>
+
+    </FluentTabPanel>
+
+        <FluentTabPanel style="margin-left:50px; margin-top:10px">
+            <p><FluentCheckbox Checked="false" Disabled=true>Use Oracle People Soft </FluentCheckbox></p>
+
+            <p>Oracle People Soft is not implemented yet.</p>
         </FluentTabPanel>
 
-        <FluentTabPanel>
-            SAP Concur is not implemented yet.
-        </FluentTabPanel>
+        <FluentTabPanel style="margin-left:50px; margin-top:10px">
+             <p><FluentCheckbox Checked="false" Disabled=true>Use UKG </FluentCheckbox></p>
 
-        <FluentTabPanel>
-            Tab three content. This is for testing.
-        </FluentTabPanel>
-
-        <FluentTabPanel>
-            Tab four content. This is for testing.
+            <p>UKG is not implemented yet.</p>
         </FluentTabPanel>
 
     </FluentTabs>
