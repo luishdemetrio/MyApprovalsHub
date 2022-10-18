@@ -151,8 +151,6 @@
         try
         {
 
-            await JSRuntime.InvokeAsync<object>("open", "https://luisdemstickers-config.azurewebsites.net", "_blank");
-
             await JSRuntime.InvokeAsync<object>("open", $"{_serviceNowBaseURL}/sp?id=form&sys_id={id}&table=change_request", "_blank");
         }
         catch
