@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApprovalsHub", "MyApprovalsHub\MyApprovalsHub.csproj", "{7A481FCA-11FA-4BA8-AB9B-498085A0E45A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApprovalsHub.Bot", "MyApprovalsHub.Bot\MyApprovalsHub.Bot.csproj", "{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,12 @@ Global
 		{7A481FCA-11FA-4BA8-AB9B-498085A0E45A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A481FCA-11FA-4BA8-AB9B-498085A0E45A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A481FCA-11FA-4BA8-AB9B-498085A0E45A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43DA092A-A6D3-470C-A7D6-A569E9F05F6A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

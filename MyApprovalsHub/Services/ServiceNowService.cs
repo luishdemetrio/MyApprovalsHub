@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-using MyApprovalsHub.Common;
+﻿using MyApprovalsHub.Common;
 using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Concurrent;
-using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
 
 namespace MyApprovalsHub.Services;
 
@@ -17,11 +15,7 @@ public class ServiceNowService : IPendingApprovalService
     private string _serviceNowClientId;
     private string _serviceNowClientSecret;
 
-   // private static readonly ServiceNowService _instance = new ServiceNowService();
-
     private static Dictionary<int, string> _impacts ;
-
-    //private static ApprovalsHubOptions _config ;
 
     public string InstanceUrl {
         get {
@@ -30,14 +24,6 @@ public class ServiceNowService : IPendingApprovalService
         private set { 
         } 
     }
-
-    //public static ServiceNowService GetInstance(ApprovalsHubOptions config)
-    //{
-    //    _config = config;
-
-    //    return _instance;
-
-    //}
 
     public ServiceNowService(ApprovalsHubOptions config)
     {
