@@ -1,16 +1,13 @@
-﻿using Microsoft.Graph;
-using MyApprovalsHub.Models;
+﻿using MyApprovalsHub.Common;
 
-namespace MyApprovalsHub.Interfaces
+namespace MyApprovalsHub.Interfaces;
+
+public interface IPendingApprovalService
 {
-    public interface IPendingApprovalService
-    {
-        //public int PendingApprovals { get; set; }
 
-        IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
+    IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail);
 
-        bool Approve(string id, string comments);
+    bool Approve( PendingApproval pendingApproval);
 
-        bool Reject(string id, string comments);
-    }
+    bool Reject( PendingApproval pendingApproval);
 }

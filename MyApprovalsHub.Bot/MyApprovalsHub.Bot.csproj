@@ -29,4 +29,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyApprovalsHub.Common\MyApprovalsHub.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include=".fx\states\" />
+  </ItemGroup>
+
 </Project>

@@ -1,21 +1,20 @@
-﻿using MyApprovalsHub.Models;
+﻿using MyApprovalsHub.Common;
 
-namespace MyApprovalsHub.Services
+namespace MyApprovalsHub.Services;
+
+public class ExpenseList
 {
-    public class ExpenseList
+
+    public static List<PendingApproval> PendingApprovals { get; private set; } = new();
+
+    public static void AddRange(IEnumerable<PendingApproval> approvals)
     {
-
-        public static List<PendingApproval> PendingApprovals { get; private set; } = new();
-
-        public static void AddRange(IEnumerable<PendingApproval> approvals)
-        {
-            PendingApprovals.AddRange(approvals);
-        }
-
-        public static void ClearExpenseList()
-        {
-            PendingApprovals.Clear();
-        }
-
+        PendingApprovals.AddRange(approvals);
     }
+
+    public static void ClearExpenseList()
+    {
+        PendingApprovals.Clear();
+    }
+
 }

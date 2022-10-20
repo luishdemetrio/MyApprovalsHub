@@ -534,10 +534,10 @@ public class ServiceNowService : IPendingApprovalService
     * Request Body
     * {"state":"approved","comments":"Approved via Teams","approval_source":"MyApprovalsHub"}
     */
-    private bool ChangeApprovalStatus(string SysId, string comments, string status)
+    private bool ChangeApprovalStatus(  PendingApproval pendingApproval)
     {
 
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{SysId}");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/sysapproval_approver/{pendingApproval.SysApproval}");
                 
         var request = new RestRequest();
 
@@ -548,22 +548,29 @@ public class ServiceNowService : IPendingApprovalService
         request.AddHeader("Authorization", $"Bearer {GetToken()}");
 
         
-        var body = @"{""state"":""" + status + @""",""comments"":""" + comments + @""",""approval_source"":""MyApprovalsHub""}";
+        var body = @"{""state"":""" + pendingApproval.State + @""",""comments"":""" + pendingApproval.Comments + @""",""approval_source"":""MyApprovalsHub""}";
 
         request.AddParameter("application/json", body, ParameterType.RequestBody);
 
         RestResponse response = client.Execute(request);
 
-        return response.StatusCode == System.Net.HttpStatusCode.OK;
+        bool statusCode = response.StatusCode == System.Net.HttpStatusCode.OK;
+
+        ApprovalsHubNotification.NotifyUser(pendingApproval);
+
+        return statusCode;
     }
 
-    public bool Approve(string id, string comments)
+    public bool Approve( PendingApproval pendingApproval)
     {
-        return ChangeApprovalStatus(id, comments, "approved");
+        pendingApproval.State = "approved";
+        
+        return ChangeApprovalStatus(  pendingApproval);
     }
-    public bool Reject(string id, string comments)
+    public bool Reject(PendingApproval pendingApproval)
     {
-        return ChangeApprovalStatus(id, comments, "rejected");
+        pendingApproval.State = "rejected";
+        return ChangeApprovalStatus(  pendingApproval);
     }
 
     public IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
@@ -612,7 +619,8 @@ public class ServiceNowService : IPendingApprovalService
                          State = approval.state,
                          SysId = approvalDetail.sys_id,
                          Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty,
-                         SysApproval = approval.sys_id
+                         SysApproval = approval.sys_id,
+                         DetailsUrl = $"{_serviceNowInstanceUrl}/sp?id=form&sys_id={approvalDetail.sys_id}&table=change_request"
                      };
 
         return result;

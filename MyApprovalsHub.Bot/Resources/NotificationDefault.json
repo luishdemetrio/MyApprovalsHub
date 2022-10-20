@@ -24,6 +24,12 @@
       "text": "${description}",
       "isSubtle": true,
       "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "${impact}",
+      "isSubtle": true,
+      "wrap": true
     }
   ],
   "actions": [

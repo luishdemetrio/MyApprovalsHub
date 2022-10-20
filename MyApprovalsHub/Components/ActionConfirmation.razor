@@ -121,8 +121,8 @@
     {
         
         var statusChangedSucceed = (ActionDescription == "approval") ? 
-                _serviceNow.Approve(selectedExpense.SysApproval, selectedExpense.Comments) :
-                _serviceNow.Reject(selectedExpense.SysApproval, selectedExpense.Comments);
+                _serviceNow.Approve(selectedExpense) :
+                _serviceNow.Reject(selectedExpense);
 
 
         if (statusChangedSucceed)
