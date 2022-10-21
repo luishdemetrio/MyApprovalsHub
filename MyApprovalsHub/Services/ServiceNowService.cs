@@ -17,6 +17,8 @@ public class ServiceNowService : IPendingApprovalService
 
     private static Dictionary<int, string> _impacts ;
 
+    private static Dictionary<int, string> _priorities;
+
     public string InstanceUrl {
         get {
             return _serviceNowInstanceUrl;
@@ -61,12 +63,12 @@ public class ServiceNowService : IPendingApprovalService
         }
 
         PopulateImpacts();
+
+        PopulatePriorities();
     }
 
     private void PopulateImpacts()
     {
-        //for now it is hardcoded
-
         _impacts = new();
 
         _impacts.Add(1, "High");
@@ -75,11 +77,23 @@ public class ServiceNowService : IPendingApprovalService
 
     }
 
+    private void PopulatePriorities()
+    {
+        _priorities = new();
+
+        _priorities.Add(1, "Critical");
+        _priorities.Add(2, "High");
+        _priorities.Add(3, "Moderate");
+        _priorities.Add(4, "Low");
+
+    }
+
     private string GetToken()
     {
         string token = string.Empty;
 
         var client = new RestClient($"{_serviceNowInstanceUrl}/oauth_token.do");
+
         var request = new RestRequest();
         request.Method = Method.Post;
 
@@ -481,7 +495,7 @@ public class ServiceNowService : IPendingApprovalService
         PendingApprovalDetails details = new();
 
         //var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cdescription%2Cshort_description%2Cstate%2Cpriority%2Curgency%2Cassigned_to");
-        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cshort_description%2Cassigned_to%2Csys_id%2Cimpact");
+        var client = new RestClient($"{_serviceNowInstanceUrl}/api/now/table/task?sysparm_query=sys_idIN{approvalId}&sysparm_exclude_reference_link=true&sysparm_fields=number%2Cshort_description%2Cassigned_to%2Csys_id%2Cimpact%2Copened_at%2Cpriority%2Cdescription");
         var request = new RestRequest();
 
         request.Method = Method.Get;
@@ -573,7 +587,7 @@ public class ServiceNowService : IPendingApprovalService
         return ChangeApprovalStatus(  pendingApproval);
     }
 
-    public IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
+    public IEnumerable<PendingApproval> GetPendingApprovals(string approverName, string approverEmail)
     {
 
         var sys_id = GetServiceNowUser(approverEmail);
@@ -592,8 +606,6 @@ public class ServiceNowService : IPendingApprovalService
                 approvalDetails.result.Add(item);
 
             }
-            
-            
         });
 
         
@@ -610,15 +622,20 @@ public class ServiceNowService : IPendingApprovalService
                      select new PendingApproval
                      {
                          Number = approvalDetail.number,
-                         Description = approvalDetail.short_description,
-                         Requestor = user.name,
-                         Email = user.email,
+                         ShortDescription = approvalDetail.short_description,
+                         Description = approvalDetail.description,
+                         ApproverName = approverName,
+                         ApproverEmail = approverEmail,
+                         RequestorName = user.name,
+                         RequestorEmail = user.email,
+                         OpenedAt = approvalDetail.opened_at.Date,
                          Date = approval.due_date.Date,
                          Source = PendingApprovalSource.ServiceNow.ToString(),
                          SourcePhoto = "servicenow.png",
                          State = approval.state,
                          SysId = approvalDetail.sys_id,
                          Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty,
+                         Priority= _priorities.ContainsKey(approvalDetail.priority) ? _priorities[approvalDetail.priority] : string.Empty,
                          SysApproval = approval.sys_id,
                          DetailsUrl = $"{_serviceNowInstanceUrl}/sp?id=form&sys_id={approvalDetail.sys_id}&table=change_request"
                      };
@@ -658,7 +675,9 @@ public class ServiceNowService : IPendingApprovalService
             //public string urgency { get; set; }
             public string assigned_to { get; set; }
             public int impact { get; set; }
-            //public string description { get; set; }
+            public int priority { get; set; }
+            public DateTime opened_at{ get; set; }
+            public string description { get; set; }
             //public string state { get; set; }
             //public string priority { get; set; }
         }

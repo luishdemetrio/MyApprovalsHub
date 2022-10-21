@@ -27,10 +27,7 @@ namespace MyApprovalsHub.Bot.Controllers
 
             int membersCount = 0;
             string users = string.Empty;
-
-            // Read adaptive card template
-            var cardTemplate = await System.IO.File.ReadAllTextAsync(_adaptiveCardFilePath, cancellationToken);
-
+           
             var installations = await this._conversation.Notification.GetInstallationsAsync(cancellationToken);
 
             if (installations.Count() == 0)
@@ -55,6 +52,9 @@ namespace MyApprovalsHub.Bot.Controllers
                 }
             }
 
+            // Read adaptive card template
+            var cardTemplate = await System.IO.File.ReadAllTextAsync(_adaptiveCardFilePath, cancellationToken);
+
             foreach (var installation in installations)
             {
                 // "Person" means this bot is installed as Personal app
@@ -71,7 +71,7 @@ namespace MyApprovalsHub.Bot.Controllers
 
 
                     // find the person
-                    var member = members.ToList().Find(m => m.Account.UserPrincipalName == pendingApproval.Email);
+                    var member = members.ToList().Find(m => m.Account.UserPrincipalName == pendingApproval.RequestorEmail);
 
 
                     for (int i = 0; i < members.Length; i++)
@@ -88,10 +88,16 @@ namespace MyApprovalsHub.Bot.Controllers
                         (
                             new NotificationDefaultModel
                             {
-                                Title = $"Service Now {pendingApproval.State}!",
-                                AppName = pendingApproval.Number,
+                                ShortDescription = pendingApproval.ShortDescription,
                                 Description = pendingApproval.Description,
-                                Impact = pendingApproval.Impact,
+                                Number = pendingApproval.Number,
+                                Status = pendingApproval.State,
+                                RequestorEmail = pendingApproval.RequestorEmail,
+                                RequestorName = pendingApproval.RequestorName,
+                                OpenedAt = pendingApproval.OpenedAt,
+                                ApproverName = pendingApproval.ApproverName,
+                                ApproverEmail = pendingApproval.ApproverEmail,
+                                ApprovedOnDate = pendingApproval.ApprovedOnDate,
                                 NotificationUrl = pendingApproval.DetailsUrl
                             }
                         );

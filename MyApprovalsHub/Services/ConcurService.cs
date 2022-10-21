@@ -1,24 +1,22 @@
 ﻿using MyApprovalsHub.Common;
+using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Models;
 using RestSharp;
 
 namespace MyApprovalsHub.Services;
 
-public class ConcurService : ApprovalRequestService
+public class ConcurService : IPendingApprovalService
 {
-
-   
 
     
     private readonly string _accessTokenUrl;
 
-
-    public override bool Approve( PendingApproval pendingApproval)
+    public bool Approve(PendingApproval pendingApproval)
     {
         throw new NotImplementedException();
     }
 
-    public override IEnumerable<PendingApproval> GetPendingApprovals(string approverEmail)
+    public IEnumerable<PendingApproval> GetPendingApprovals(string approverName, string approverEmail)
     {
 
         //var client = new RestClient("https://www.concursolutions.com/api/v3.0/expense/reports?approverLoginID=luisdem&approvalStatusCode=A_FILE");
@@ -45,9 +43,9 @@ public class ConcurService : ApprovalRequestService
                 Number ="1", 
                 Description = "London Sales Conference",
                 Source =nameof(PendingApprovalSource.Concur),
-                Requestor = "Hermione Granger",
+                RequestorName = "Hermione Granger",
                 Date = new DateTime(2022, 09, 02),
-                Email = "granger@luisdemetrio.com",
+                RequestorEmail = "granger@luisdemetrio.com",
                 SourcePhoto = "concur.png",
                 State = "Requested"
             },
@@ -56,16 +54,16 @@ public class ConcurService : ApprovalRequestService
                 Number ="2",
                 Description = "Internet May 2022",
                 Source =nameof(PendingApprovalSource.Concur),
-                Requestor = "Draco Malfoy",
+                RequestorName = "Draco Malfoy",
                 Date = new DateTime(2022, 09, 02),
-                Email = "malfoy@luisdemetrio.com",
+                RequestorEmail = "malfoy@luisdemetrio.com",
                 SourcePhoto = "concur.png",
                 State = "Requested"
             }
         };
     }
 
-    public override bool Reject( PendingApproval pendingApproval)
+    public bool Reject( PendingApproval pendingApproval)
     {
         throw new NotImplementedException();
     }

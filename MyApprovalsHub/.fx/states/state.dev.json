@@ -4,37 +4,37 @@
         "subscriptionId": "066535a0-eccc-4e9f-ab96-edef050aeb51",
         "subscriptionName": "CSR-CUSPOC-NMST-luisdem",
         "tenantId": "b690fbd8-801a-47ad-8280-c2c247538c82",
-        "needCreateResourceGroup": false,
-        "resourceGroupName": "MyApprovalsHub-dev-rg",
-        "location": "eastus",
-        "resourceNameSuffix": "3a0afc",
+        "needCreateResourceGroup": true,
+        "resourceGroupName": "rg-ApprovalsHub",
+        "location": "centralus",
+        "resourceNameSuffix": "4132e6",
         "provisionSucceeded": true
     },
     "fx-resource-appstudio": {
         "tenantId": "b690fbd8-801a-47ad-8280-c2c247538c82",
-        "teamsAppId": "0e8d2def-92b0-463a-abcd-d601804ff7e4",
-        "teamsAppUpdatedAt": 1666098853268
+        "teamsAppId": "17ca6b05-cfb9-495d-829a-1755896ef443",
+        "teamsAppUpdatedAt": 1666358114430
     },
     "fx-resource-identity": {
-        "identityName": "myapprovaldev49baaa",
-        "identityResourceId": "/subscriptions/066535a0-eccc-4e9f-ab96-edef050aeb51/resourceGroups/MyApprovalsHub-dev-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myapprovaldev49baaa",
-        "identityClientId": "9a67d259-6a85-40d0-aca8-e09964225018"
+        "identityName": "approvalshub",
+        "identityResourceId": "/subscriptions/066535a0-eccc-4e9f-ab96-edef050aeb51/resourceGroups/rg-ApprovalsHub/providers/Microsoft.ManagedIdentity/userAssignedIdentities/approvalshub",
+        "identityClientId": "fde93a18-53c7-40ad-b4f7-583e5e294376"
     },
     "fx-resource-aad-app-for-teams": {
-        "clientId": "13be6842-4509-49d0-9240-fb33d77b5d9a",
+        "clientId": "d8d75501-f591-4a05-a09b-fb10a6d255d9",
         "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}",
-        "oauth2PermissionScopeId": "90dc763e-090b-47e0-96b7-e506f1bc8009",
+        "objectId": "dd0dac50-38ed-40f0-abe2-41f40fcb315c",
+        "oauth2PermissionScopeId": "fcaa91fe-72e8-4e61-9c5c-b10968d61045",
         "tenantId": "b690fbd8-801a-47ad-8280-c2c247538c82",
         "oauthHost": "https://login.microsoftonline.com",
         "oauthAuthority": "https://login.microsoftonline.com/b690fbd8-801a-47ad-8280-c2c247538c82",
-        "applicationIdUris": "api://myapprovaldev49baaawebapp.azurewebsites.net/13be6842-4509-49d0-9240-fb33d77b5d9a",
-        "objectId": "629b86c7-337a-4113-8603-bcb44bd4246e"
+        "applicationIdUris": "api://approvalshubwebapp.azurewebsites.net/d8d75501-f591-4a05-a09b-fb10a6d255d9"
     },
     "fx-resource-frontend-hosting": {
-        "domain": "myapprovaldev49baaawebapp.azurewebsites.net",
-        "endpoint": "https://myapprovaldev49baaawebapp.azurewebsites.net",
+        "domain": "approvalshubwebapp.azurewebsites.net",
+        "endpoint": "https://approvalshubwebapp.azurewebsites.net",
         "indexPath": "",
-        "webAppResourceId": "/subscriptions/066535a0-eccc-4e9f-ab96-edef050aeb51/resourceGroups/MyApprovalsHub-dev-rg/providers/Microsoft.Web/sites/myapprovaldev49baaawebapp"
+        "webAppResourceId": "/subscriptions/066535a0-eccc-4e9f-ab96-edef050aeb51/resourceGroups/rg-ApprovalsHub/providers/Microsoft.Web/sites/approvalshubwebapp"
     },
     "fx-resource-cicd": {},
     "fx-resource-api-connector": {}

@@ -12,13 +12,16 @@ namespace MyApprovalsHub.ViewModel;
 
 public class WelcomeViewModel 
 {
-
+    private string _approverName;
     private string _approverEmail;
+
     private ApprovalsHubOptions _config;
+
     IPendingApprovalService expenseService;
 
-    public WelcomeViewModel(string approverEmail, ApprovalsHubOptions config)
+    public WelcomeViewModel(string approverName, string approverEmail, ApprovalsHubOptions config)
     {
+        _approverName = approverName;
         _approverEmail = approverEmail;
         _config = config;
         expenseService = new ServiceNowService(_config);
@@ -34,7 +37,7 @@ public class WelcomeViewModel
         var t = Task.Run(() =>
         {
            
-           var expenses = expenseService.GetPendingApprovals(_approverEmail);
+           var expenses = expenseService.GetPendingApprovals(_approverName, _approverEmail);
 
             serviceNowPendingApprovalsTotal?.Invoke(expenses);
         });
@@ -52,7 +55,7 @@ public class WelcomeViewModel
         {
             IPendingApprovalService expenseService = new ConcurService();
 
-            var expenses = expenseService.GetPendingApprovals(_approverEmail);
+            var expenses = expenseService.GetPendingApprovals(_approverName, _approverEmail);
 
             serviceNowPendingApprovalsTotal?.Invoke(expenses);
         });

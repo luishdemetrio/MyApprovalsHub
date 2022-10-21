@@ -27,9 +27,9 @@ else
 
         <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
     
-            <FluentButton @onclick=@(()=>OpenSettings()) >
+       @*     <FluentButton @onclick=@(()=>OpenSettings()) >
                 <FluentIcon Name="@FluentIcons.Globe" Size="@IconSize.Size16" Filled=false  />
-            </FluentButton>        
+            </FluentButton>     *@   
 
         <div class="welcome page" style="margin-top:40px">
 
@@ -90,7 +90,6 @@ else
         {
             isInTeams = await MicrosoftTeams.IsInTeams();
 
-            _vm = new("luke.wilson@example.com", ApprovalsHubConfig.CurrentValue);
 
             if (isInTeams)
             { 
@@ -102,6 +101,8 @@ else
             {
                 errorMessage = "Not running in Microsoft Teams.";
             }
+
+            _vm = new(userName, "luke.wilson@example.com", ApprovalsHubConfig.CurrentValue);
 
             isLoading = false;
             StateHasChanged();            
@@ -117,22 +118,18 @@ else
             });
 
 
-        //_vm.GetConcurPendingApprovals(pendingApprovals =>
-        //    {
-
-        //        ConcurApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
-
-        //        ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
-
-        //    });
-
-
         ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
         {
-            ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
 
-          //  ConcurApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.Concur)).Count();
-
+            if (items == null)
+            {
+                ServiceNowApprovalsCard.PendingApprovals = 0;
+            }
+            else
+            {
+                ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
+            }
+          
 
         };
 
