@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyApprovalsHub.Common\MyApprovalsHub.Common.csproj" />
+    <ProjectReference Include="..\MyApprovalsHub.Mock\MyApprovalsHub.Mock.csproj" />
   </ItemGroup>
 
   <ItemGroup>

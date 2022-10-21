@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
-using Microsoft.TeamsFx.Helper;
-using Microsoft.TeamsFx;
-using MyApprovalsHub.Common;
+﻿using MyApprovalsHub.Common;
+using MyApprovalsHub.Common.Interfaces;
+using MyApprovalsHub.Mock.Services.ServiceNow;
 
 namespace MyApprovalsHub.DependencyInjection;
 
@@ -18,9 +16,11 @@ public static class ServiceNowConfigurationMethods
                                       approvalsHubOptions.ServiceNowPassword = configuration.GetValue<string>("ServiceNowPassword");
                                       approvalsHubOptions.ServiceNowClientId = configuration.GetValue<string>("ServiceNowClientId");
                                       approvalsHubOptions.ServiceNowClientSecret = configuration.GetValue<string>("ServiceNowClientSecret");
+                                      approvalsHubOptions.ApprovalsHubBotNotificationUrl = configuration.GetValue<string>("ApprovalsHubBotNotificationUrl");
                                   });
 
-        
+        services.AddScoped<IServiceNowService, ServiceNowMock>();
+
         return services;
     }
 }

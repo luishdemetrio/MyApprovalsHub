@@ -3,8 +3,7 @@ using AdaptiveCards.Templating;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.TeamsFx.Conversation;
 using Newtonsoft.Json;
-using System.Text;
-using MyApprovalsHub.Common;
+using MyApprovalsHub.Common.Models;
 
 namespace MyApprovalsHub.Bot.Controllers
 {

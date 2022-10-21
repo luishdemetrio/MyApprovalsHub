@@ -1,0 +1,104 @@
+{
+  "result": [
+    {
+      "number": "CHG0000076",
+      "short_description": "Change default router on unix201",
+      "sys_id": "02cd7552db252200a6a2b31be0b8f5e0",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000081",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "06cdb552db252200a6a2b31be0b8f53e",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000053",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "29cdf152db252200a6a2b31be0b8f58b",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000071",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "31cd7552db252200a6a2b31be0b8f55c",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000037",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "41cdb152db252200a6a2b31be0b8f527",
+      "opened_at": "2022-03-14 08:21:31",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000051",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "55cdf152db252200a6a2b31be0b8f540",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000052",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "5dcdf152db252200a6a2b31be0b8f546",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000094",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "66cdf552db252200a6a2b31be0b8f559",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000045",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "99cdb152db252200a6a2b31be0b8f5e7",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000091",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "9acdf552db252200a6a2b31be0b8f507",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿namespace MyApprovalsHub.Models
+﻿namespace MyApprovalsHub.Common.Models
 {
     public enum PendingApprovalSource
     {

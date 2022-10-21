@@ -1,11 +1,11 @@
-﻿@using MyApprovalsHub.Interfaces
-@using MyApprovalsHub.Models
+﻿@using MyApprovalsHub.Common.Interfaces
+@using MyApprovalsHub.Common.Models
 @using MyApprovalsHub.Services
 
 @using Microsoft.Extensions.Options
 @using MyApprovalsHub.Common
 @inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
-
+@inject IServiceNowService ServiceNowService;
 
 @if (ActionDescription != null)
 {
@@ -57,12 +57,12 @@
 
     private CloseModalParameterButtonClick closeModalParameter;
 
-    private IPendingApprovalService _serviceNow;
+    //private IExternalService _serviceNow;
 
-    protected override void OnInitialized()
-    {
-        _serviceNow = new ServiceNowService(ApprovalsHubConfig.CurrentValue);
-    }
+    //protected override void OnInitialized()
+    //{
+    //    _serviceNow = new ServiceNowService(ApprovalsHubConfig.CurrentValue);
+    //}
 
     private void CommentChanged(ChangeEventArgs args)
     {
@@ -121,8 +121,8 @@
     {
         
         var statusChangedSucceed = (ActionDescription == "approval") ? 
-                _serviceNow.Approve(selectedExpense) :
-                _serviceNow.Reject(selectedExpense);
+                ServiceNowService.Approve(selectedExpense) :
+                ServiceNowService.Reject(selectedExpense);
 
 
         if (statusChangedSucceed)

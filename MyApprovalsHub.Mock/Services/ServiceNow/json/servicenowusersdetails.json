@@ -1,0 +1,20 @@
+{
+  "result": [
+    {
+      "sys_id": "5137153cc611227c000bbd1bd8cd2005",
+      "name": "Monkey D. Luffy",
+      "email": "luffy@luisdemetrio.com"
+    },
+    {
+      "sys_id": "5137153cc611227c000bbd1bd8cd2007",
+      "name": "Nami Cat Burglar",
+      "email": "nami@luisdemetrio.com"
+    },
+    {
+      "sys_id": "f298d2d2c611227b0106c6be7f154bc8",
+      "name": "Roronoa Zoro",
+      "email": "zoro@luisdemetrio.com"
+    }
+  ]
+}
+

@@ -2,7 +2,8 @@
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
-@using MyApprovalsHub.Models
+@using MyApprovalsHub.Common.Interfaces
+@using MyApprovalsHub.Common.Models
 @using MyApprovalsHub.Pages
 @using MyApprovalsHub.Services
 @using MyApprovalsHub.ViewModel
@@ -14,6 +15,7 @@
 @using Microsoft.Extensions.Options
 @using MyApprovalsHub.Common
 @inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
+@inject IServiceNowService ServiceNowService;
 
 @if(isLoading)
 {
@@ -102,37 +104,39 @@ else
                 errorMessage = "Not running in Microsoft Teams.";
             }
 
-            _vm = new(userName, "luke.wilson@example.com", ApprovalsHubConfig.CurrentValue);
+            _vm = new(userName, "luke.wilson@example.com", ApprovalsHubConfig.CurrentValue, ServiceNowService);
 
             isLoading = false;
-            StateHasChanged();            
+            StateHasChanged();         
+            
+            _vm.GetServiceNowPendingApprovals(pendingApprovals =>
+           {
+
+               ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
+
+               ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
+
+           });
+
+
+            ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
+            {
+
+                if (items == null)
+                {
+                    ServiceNowApprovalsCard.PendingApprovals = 0;
+                }
+                else
+                {
+                    ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
+                }
+
+
+            };
+
         }
 
-        _vm.GetServiceNowPendingApprovals(pendingApprovals =>
-            {
-
-                ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
-
-                ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
-
-            });
-
-
-        ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
-        {
-
-            if (items == null)
-            {
-                ServiceNowApprovalsCard.PendingApprovals = 0;
-            }
-            else
-            {
-                ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
-            }
-          
-
-        };
-
+       
     }
 
 }

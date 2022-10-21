@@ -1,4 +1,4 @@
-﻿namespace MyApprovalsHub.Common;
+﻿namespace MyApprovalsHub.Common.Models;
 
 public class PendingApproval
 {
@@ -18,7 +18,7 @@ public class PendingApproval
     public string? SysApproval { get; set; }
     public string? DetailsUrl { get; set; }
     public string? ApproverName { get; set; }
-    public string Priority { get; set; }
-    public string ShortDescription { get; set; }
-    public string ApproverEmail { get; set; }
+    public string? Priority { get; set; }
+    public string? ShortDescription { get; set; }
+    public string? ApproverEmail { get; set; }
 }
