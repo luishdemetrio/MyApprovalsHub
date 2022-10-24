@@ -1,4 +1,5 @@
-﻿using MyApprovalsHub.Common.ExternalSources.ServiceNow;
+﻿using Microsoft.Extensions.Configuration;
+using MyApprovalsHub.Common.ExternalSources.ServiceNow;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Common.Models;
 using Newtonsoft.Json;
@@ -9,23 +10,27 @@ namespace MyApprovalsHub.Mock.Services.ServiceNow;
 public class ServiceNowMock : IServiceNowService
 {
 
+    private string _serviceNowInstanceUrl;
+    
+    private string _ApprovalsHubBotNotificationUrl;
+
     private string _currentDirectory;
 
-    private string _serviceNowInstanceUrl;
-
+    
     private static Dictionary<int, string> _impacts;
 
     private static Dictionary<int, string> _priorities;
-
-    private string _ApprovalsHubBotNotificationUrl;
+        
 
     public ServiceNowMock()
     {
 
-        _currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
+        _serviceNowInstanceUrl = "https://dev52648.service-now.com/";
         _ApprovalsHubBotNotificationUrl = "https://myapprovaldev978325bot.azurewebsites.net/api/notification";// "http://localhost:5130/api/notification";
 
+        _currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        
         PopulateImpacts();
 
         PopulatePriorities();
@@ -67,7 +72,7 @@ public class ServiceNowMock : IServiceNowService
         return r;
     }
 
-    private ServiceNowPendingApprovalDetails GetPendingApprovalDetailsRestAPI(string approvalId)
+    private ServiceNowPendingApprovalDetails GetPendingApprovalDetailsRestAPI()
     {
         ServiceNowPendingApprovalDetails details = new();
 
@@ -97,23 +102,21 @@ public class ServiceNowMock : IServiceNowService
 
     public IEnumerable<PendingApproval> GetPendingApprovals(string approverName, string approverEmail)
     {
+
+
         var sys_id = GetServiceNowUser(approverEmail);
 
         var approvals = GetPendingApprovalsRestAPI(sys_id);
 
         ServiceNowPendingApprovalDetails approvalDetails = new();
 
-        //we need to chunck the pending approvals to avoid getting an exception due the request is too long
-        var chunck = approvals.result?.Select(p => p.sysapproval).ToList().Chunk(10);
 
-        Parallel.ForEach(chunck, p =>
+        foreach (var item in GetPendingApprovalDetailsRestAPI().result)
         {
-            foreach (var item in GetPendingApprovalDetailsRestAPI(string.Join(",", p)).result)
-            {
-                approvalDetails.result.Add(item);
+            approvalDetails.result.Add(item);
 
-            }
-        });
+        }
+
 
         //we need to get the name and email of the user
         var users = GetUserDetail(string.Join(",", approvalDetails.result.Select(u => u.assigned_to).Distinct()));
@@ -172,4 +175,14 @@ public class ServiceNowMock : IServiceNowService
 
         return true;
     }
+
+    public class PendingApprovalCollection
+    {
+
+        public List<PendingApproval> result { get; set; } 
+
+
+
+    }
+
 }

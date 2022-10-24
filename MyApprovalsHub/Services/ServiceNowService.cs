@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using MyApprovalsHub.Common;
-using MyApprovalsHub.Common.ExternalSources.ServiceNow;
+﻿using MyApprovalsHub.Common.ExternalSources.ServiceNow;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Common.Models;
 using Newtonsoft.Json;
@@ -22,31 +20,17 @@ public class ServiceNowService : IServiceNowService
 
     private static Dictionary<int, string> _priorities;
 
-    public string InstanceUrl {
-        get {
-            return _serviceNowInstanceUrl;
-        }
-        private set { 
-        } 
-    }
-
-    public ServiceNowService()
-    {
-        IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
-
-
-    }
-    public ServiceNowService(ApprovalsHubOptions config)
+    public ServiceNowService(IConfiguration config)
     {
 
-        _serviceNowInstanceUrl = config.ServiceNowBaseUrl;
-        _serviceNowUsername = config.ServiceNowUsername;
-        _serviceNowPassword = config.ServiceNowPassword;
+        _serviceNowInstanceUrl = config.GetValue<string>("ServiceNowBaseUrl");
+        _serviceNowUsername = config.GetValue<string>("ServiceNowUsername");
+        _serviceNowPassword = config.GetValue<string>("ServiceNowPassword");
 
-        _serviceNowClientId = config.ServiceNowClientId;
-        _serviceNowClientSecret = config.ServiceNowClientSecret;
+        _serviceNowClientId = config.GetValue<string>("ServiceNowClientId");
+        _serviceNowClientSecret = config.GetValue<string>("ServiceNowClientSecret");
 
-        _ApprovalsHubBotNotificationUrl = config.ApprovalsHubBotNotificationUrl;
+        _ApprovalsHubBotNotificationUrl = config.GetValue<string>("ApprovalsHubBotNotificationUrl");
 
         AppSettingsValidation();
 
@@ -341,6 +325,7 @@ public class ServiceNowService : IServiceNowService
                          SysApproval = approval.sys_id,
                          DetailsUrl = $"{_serviceNowInstanceUrl}/sp?id=form&sys_id={approvalDetail.sys_id}&table=change_request"
                      };
+
 
         return result;
              
