@@ -1,27 +1,26 @@
-﻿using Microsoft.AspNetCore.Components;
-using MyApprovalsHub.Common;
-using MyApprovalsHub.Interfaces;
-using MyApprovalsHub.Models;
+﻿using MyApprovalsHub.Common;
+using MyApprovalsHub.Common.Interfaces;
+using MyApprovalsHub.Common.Models;
 using MyApprovalsHub.Services;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
-using static MyApprovalsHub.Services.ServiceNowService.PendingApprovalDetails;
+
 
 namespace MyApprovalsHub.ViewModel;
 
 public class WelcomeViewModel 
 {
-
+    private string _approverName;
     private string _approverEmail;
-    private ApprovalsHubOptions _config;
-    IPendingApprovalService expenseService;
 
-    public WelcomeViewModel(string approverEmail, ApprovalsHubOptions config)
+    private ApprovalsHubOptions _config;
+
+    IExternalService expenseService;
+
+    public WelcomeViewModel(string approverName, string approverEmail, ApprovalsHubOptions config, IServiceNowService serviceNowService)
     {
+        _approverName = approverName;
         _approverEmail = approverEmail;
         _config = config;
-        expenseService = new ServiceNowService(_config);
+        expenseService = serviceNowService; // new ServiceNowService(_config);
     }
 
     public delegate void NotifyPendingApprovalTotal(IEnumerable<PendingApproval> pendingApprovals);
@@ -34,7 +33,7 @@ public class WelcomeViewModel
         var t = Task.Run(() =>
         {
            
-           var expenses = expenseService.GetPendingApprovals(_approverEmail);
+           var expenses = expenseService.GetPendingApprovals(_approverName, _approverEmail);
 
             serviceNowPendingApprovalsTotal?.Invoke(expenses);
         });
@@ -50,9 +49,9 @@ public class WelcomeViewModel
 
         var t = Task.Run(() =>
         {
-            IPendingApprovalService expenseService = new ConcurService();
+            IExternalService expenseService = new ConcurService();
 
-            var expenses = expenseService.GetPendingApprovals(_approverEmail);
+            var expenses = expenseService.GetPendingApprovals(_approverName, _approverEmail);
 
             serviceNowPendingApprovalsTotal?.Invoke(expenses);
         });

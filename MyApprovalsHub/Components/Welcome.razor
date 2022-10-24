@@ -2,7 +2,8 @@
 @using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Hosting
-@using MyApprovalsHub.Models
+@using MyApprovalsHub.Common.Interfaces
+@using MyApprovalsHub.Common.Models
 @using MyApprovalsHub.Pages
 @using MyApprovalsHub.Services
 @using MyApprovalsHub.ViewModel
@@ -14,6 +15,7 @@
 @using Microsoft.Extensions.Options
 @using MyApprovalsHub.Common
 @inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
+@inject IServiceNowService ServiceNowService;
 
 @if(isLoading)
 {
@@ -27,9 +29,9 @@ else
 
         <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
     
-            <FluentButton @onclick=@(()=>OpenSettings()) >
+       @*     <FluentButton @onclick=@(()=>OpenSettings()) >
                 <FluentIcon Name="@FluentIcons.Globe" Size="@IconSize.Size16" Filled=false  />
-            </FluentButton>        
+            </FluentButton>     *@   
 
         <div class="welcome page" style="margin-top:40px">
 
@@ -90,7 +92,6 @@ else
         {
             isInTeams = await MicrosoftTeams.IsInTeams();
 
-            _vm = new("luke.wilson@example.com", ApprovalsHubConfig.CurrentValue);
 
             if (isInTeams)
             { 
@@ -103,39 +104,39 @@ else
                 errorMessage = "Not running in Microsoft Teams.";
             }
 
-            isLoading = false;
-            StateHasChanged();            
-        }
+            _vm = new(userName, "luke.wilson@example.com", ApprovalsHubConfig.CurrentValue, ServiceNowService);
 
-        _vm.GetServiceNowPendingApprovals(pendingApprovals =>
+            isLoading = false;
+            StateHasChanged();         
+            
+            _vm.GetServiceNowPendingApprovals(pendingApprovals =>
+           {
+
+               ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
+
+               ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
+
+           });
+
+
+            ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
             {
 
-                ServiceNowApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
-
-                ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
-
-            });
-
-
-        //_vm.GetConcurPendingApprovals(pendingApprovals =>
-        //    {
-
-        //        ConcurApprovalsCard.UpdateApproval(pendingApprovals.Count()).ConfigureAwait(false);
-
-        //        ApprovalsListGrid.UpdatePendingApprovalList(pendingApprovals).ConfigureAwait(false);
-
-        //    });
+                if (items == null)
+                {
+                    ServiceNowApprovalsCard.PendingApprovals = 0;
+                }
+                else
+                {
+                    ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
+                }
 
 
-        ApprovalsListGrid.PendingApprovalListChangedEvent = (List<PendingApproval> items) =>
-        {
-            ServiceNowApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.ServiceNow)).Count();
+            };
 
-          //  ConcurApprovalsCard.PendingApprovals = items.Where(p => p.Source == nameof(SourceDescription.Concur)).Count();
+        }
 
-
-        };
-
+       
     }
 
 }

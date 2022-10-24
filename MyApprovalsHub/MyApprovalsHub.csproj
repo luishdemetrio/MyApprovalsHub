@@ -32,4 +32,13 @@
     <PackageReference Include="ServiceNow.Api" Version="1.2.36" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyApprovalsHub.Common\MyApprovalsHub.Common.csproj" />
+    <ProjectReference Include="..\MyApprovalsHub.Mock\MyApprovalsHub.Mock.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include=".fx\states\" />
+  </ItemGroup>
+
 </Project>

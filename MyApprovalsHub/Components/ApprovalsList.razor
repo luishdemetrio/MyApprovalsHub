@@ -1,5 +1,5 @@
-﻿@using MyApprovalsHub.Interfaces
-@using MyApprovalsHub.Models
+﻿@using MyApprovalsHub.Common
+@using MyApprovalsHub.Common.Models
 @using MyApprovalsHub.Services
 @using System.Collections.Concurrent
 
@@ -40,9 +40,9 @@
             <tr>
                 <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
                 <td>@item.Number</td>
-                <td>@item.Description</td>
+                    <td>@item.ShortDescription</td>
                     <td>@item.Date.ToShortDateString()</td>
-                <td>@item.Requestor</td>                
+                <td>@item.RequestorName</td>                
                 <td>
                     <div>
                             
@@ -122,9 +122,9 @@
 
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Number", x => x.Number));
-        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.Description));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.ShortDescription));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Date", x => x.Date));
-        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.Requestor));
+        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.RequestorName));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("", x => x.Number));
 
         _sortedExpenseGrid = _rawExpenseGrid;
@@ -189,7 +189,8 @@
         _rawExpenseGrid.Remove(expense);
         _sortedExpenseGrid = _rawExpenseGrid;
 
-        PendingApprovalListChangedEvent?.Invoke(_rawExpenseGrid);
+        
+            PendingApprovalListChangedEvent?.Invoke(_rawExpenseGrid);
 
         StateHasChanged();
     }
@@ -212,7 +213,7 @@
         }
         else
         {
-            _sortedExpenseGrid = _rawExpenseGrid.Where(x => x.Requestor.Contains(filter, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            _sortedExpenseGrid = _rawExpenseGrid.Where(x => x.RequestorName.Contains(filter, StringComparison.CurrentCultureIgnoreCase)).ToList();
         }
         if (lastSortColumn != null)
         {

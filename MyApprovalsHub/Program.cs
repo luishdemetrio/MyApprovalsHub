@@ -1,9 +1,8 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.Fast.Components.FluentUI;
-using MyApprovalsHub.Common;
+using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.DependencyInjection;
-using MyApprovalsHub.Interfaces;
 using MyApprovalsHub.Interop.TeamsSDK;
+using MyApprovalsHub.Services;
 using ServiceNow.Api.Tables;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,21 +12,9 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddTeamsFx(builder.Configuration.GetSection("TeamsFx"));
 
-
-
 builder.Services.AddServiceNow();
 
 
-
-//builder.Services.AddOptions<ApprovalsHubOptions>()
-//              .Configure<IConfiguration>((approvalsHubOptions, configuration) =>
-//              {
-//                  approvalsHubOptions.serviceNow.BaseUrl = configuration.GetValue<string>("InstanceURL");
-//                  approvalsHubOptions.serviceNow.Username = configuration.GetValue<string>("ServiceNow.Username");
-//                  approvalsHubOptions.serviceNow.Password = configuration.GetValue<string>("ServiceNow.Password");
-//                  approvalsHubOptions.serviceNow.ClientId = configuration.GetValue<string>("ServiceNow.ClientId");
-//                  approvalsHubOptions.serviceNow.ClientSecret = configuration.GetValue<string>("ServiceNow.ClientSecret");                  
-//              });
 
 builder.Services.AddScoped<MicrosoftTeams>();
 

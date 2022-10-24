@@ -12,7 +12,8 @@ public class ApprovalsHubOptions
 
     public string ServiceNowClientSecret { get; set; }
 
-
+    public string ApprovalsHubBotNotificationUrl { get; set; }
+    public bool ServiceNowUseMockService { get; internal set; }
 }
 
 

@@ -1,0 +1,584 @@
+{
+  "result": [
+    {
+      "number": "CHG0000080",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "0ecdb552db252200a6a2b31be0b8f537",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000084",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "1acdb552db252200a6a2b31be0b8f583",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000055",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "25cdf152db252200a6a2b31be0b8f5ca",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000065",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "35cd3552db252200a6a2b31be0b8f5de",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000057",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "6dcdf152db252200a6a2b31be0b8f5fc",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000047",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "91cdf152db252200a6a2b31be0b8f50e",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000082",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "9acdb552db252200a6a2b31be0b8f55d",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000049",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "9dcdf152db252200a6a2b31be0b8f526",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000078",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "c6cdb552db252200a6a2b31be0b8f505",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000074",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "cacd7552db252200a6a2b31be0b8f5ad",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000077",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "0ecd7552db252200a6a2b31be0b8f5e6",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000059",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "21cd3552db252200a6a2b31be0b8f522",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000060",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "29cd3552db252200a6a2b31be0b8f528",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000067",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "35cd7552db252200a6a2b31be0b8f51d",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000083",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "92cdb552db252200a6a2b31be0b8f564",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000075",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "c2cd7552db252200a6a2b31be0b8f5b4",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000089",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "d2cdb552db252200a6a2b31be0b8f5ee",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000088",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "dacdb552db252200a6a2b31be0b8f5e7",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000096",
+      "short_description": "Change default router on unix201",
+      "sys_id": "e2cdf552db252200a6a2b31be0b8f57f",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000093",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "eecdf552db252200a6a2b31be0b8f539",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000039",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "0dcdb152db252200a6a2b31be0b8f54f",
+      "opened_at": "2022-03-14 08:21:31",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000043",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "0dcdb152db252200a6a2b31be0b8f58f",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000066",
+      "short_description": "Change default router on unix201",
+      "sys_id": "3dcd3552db252200a6a2b31be0b8f5e4",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000041",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "49cdb152db252200a6a2b31be0b8f569",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000042",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "81cdb152db252200a6a2b31be0b8f589",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000061",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "a9cd3552db252200a6a2b31be0b8f579",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000062",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "b1cd3552db252200a6a2b31be0b8f580",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000048",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "ddcdf152db252200a6a2b31be0b8f513",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000068",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "f1cd7552db252200a6a2b31be0b8f523",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000063",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "fdcd3552db252200a6a2b31be0b8f5ab",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000054",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "21cdf152db252200a6a2b31be0b8f592",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000070",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "39cd7552db252200a6a2b31be0b8f555",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000087",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "5acdb552db252200a6a2b31be0b8f5bc",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000086",
+      "short_description": "Change default router on unix201",
+      "sys_id": "5ecdb552db252200a6a2b31be0b8f5b5",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000040",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "8dcdb152db252200a6a2b31be0b8f562",
+      "opened_at": "2022-03-14 08:21:31",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000058",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "a9cd3552db252200a6a2b31be0b8f502",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000069",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "b1cd7552db252200a6a2b31be0b8f536",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000072",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "b5cd7552db252200a6a2b31be0b8f57b",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000044",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "c9cdb152db252200a6a2b31be0b8f5bb",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000064",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "f5cd3552db252200a6a2b31be0b8f5b2",
+      "opened_at": "2022-03-14 08:21:34",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000076",
+      "short_description": "Change default router on unix201",
+      "sys_id": "02cd7552db252200a6a2b31be0b8f5e0",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000081",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "06cdb552db252200a6a2b31be0b8f53e",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000037",
+      "short_description": "A failed RAID controller card needs to be replaced on PSORA1",
+      "sys_id": "41cdb152db252200a6a2b31be0b8f527",
+      "opened_at": "2022-03-14 08:21:31",
+      "impact": "2",
+      "description": "01:00.0 RAID bus controller: Adaptec AAC-RAID has failed on PSORA1 and needs to be replaced immediately.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000051",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "55cdf152db252200a6a2b31be0b8f540",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000052",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "5dcdf152db252200a6a2b31be0b8f546",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000094",
+      "short_description": "Increase db_block_buffers from 5000 to 7500",
+      "sys_id": "66cdf552db252200a6a2b31be0b8f559",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "The database size has increased and the cache hit rate is at the low end of an acceptable rate. The Database team needss to increase the amount of memory allocated to the Oracle SGA to increase the cache hit rate.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000073",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "8ecd7552db252200a6a2b31be0b8f581",
+      "opened_at": "2022-03-14 08:21:35",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000090",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "92cdf552db252200a6a2b31be0b8f501",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000045",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "99cdb152db252200a6a2b31be0b8f5e7",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000091",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "9acdf552db252200a6a2b31be0b8f507",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000085",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "12cdb552db252200a6a2b31be0b8f58a",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000056",
+      "short_description": "Change default router on unix201",
+      "sys_id": "2dcdf152db252200a6a2b31be0b8f5d0",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000038",
+      "short_description": "Upgrade NY RAC to Oracle 12c",
+      "sys_id": "49cdb152db252200a6a2b31be0b8f548",
+      "opened_at": "2022-03-14 08:21:31",
+      "impact": "3",
+      "description": "NY RAC instance needs to be upgraded from Oracle 11g to Oracle 12c",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2005"
+    },
+    {
+      "number": "CHG0000046",
+      "short_description": "Change default router on unix201",
+      "sys_id": "55cdb152db252200a6a2b31be0b8f5ee",
+      "opened_at": "2022-03-14 08:21:32",
+      "impact": "3",
+      "description": "",
+      "priority": "3",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000050",
+      "short_description": "Update default support group on all Oracle CI's to Database group",
+      "sys_id": "95cdf152db252200a6a2b31be0b8f52d",
+      "opened_at": "2022-03-14 08:21:33",
+      "impact": "3",
+      "description": "The default support group for all Oracle CI's is being transitioned to the Database group",
+      "priority": "4",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000079",
+      "short_description": "Deploy new Cisco Catalyst 4500",
+      "sys_id": "cecdb552db252200a6a2b31be0b8f50b",
+      "opened_at": "2022-03-14 08:21:36",
+      "impact": "2",
+      "description": "The existing Cisco 2900 is being decommissioned and replaced with a Cisco 4500 that supports additional services and is still supported by Cisco.",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    },
+    {
+      "number": "CHG0000092",
+      "short_description": "Update /etc/network/interfaces to include name servers 8.8.8.8 & 8.8.4.4",
+      "sys_id": "e6cdf552db252200a6a2b31be0b8f533",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "We need to add additional redundant name servers to lnux100, lnux101 and PS LinuxApp01",
+      "priority": "3",
+      "assigned_to": "f298d2d2c611227b0106c6be7f154bc8"
+    },
+    {
+      "number": "CHG0000095",
+      "short_description": "Upgrade OWA-SD-01 to MS Windows Server 2016",
+      "sys_id": "eacdf552db252200a6a2b31be0b8f578",
+      "opened_at": "2022-03-14 08:21:37",
+      "impact": "2",
+      "description": "",
+      "priority": "2",
+      "assigned_to": "5137153cc611227c000bbd1bd8cd2007"
+    }
+  ]
+}

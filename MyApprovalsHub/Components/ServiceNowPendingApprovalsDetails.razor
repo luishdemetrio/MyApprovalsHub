@@ -1,5 +1,4 @@
-﻿@using MyApprovalsHub.Interfaces
-@using MyApprovalsHub.Models
+﻿@using MyApprovalsHub.Common.Models
 @using MyApprovalsHub.Services
 @inject IJSRuntime JSRuntime
 
@@ -23,7 +22,7 @@
         <div class="modal-header" style="margin: 20px;">
 
             <div class="row">
-                <h5>@selectedExpense.Description</h5>
+                <h5>@selectedExpense.ShortDescription</h5>
             </div>
         </div>
 
@@ -34,7 +33,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col"></th>
+                            <th scope="col" style="min-width:150px"></th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -45,11 +44,11 @@
                         </tr>
                         <tr>
                             <th scope="row">Requestor:</th>
-                            <td style="padding-bottom: 10px;">@selectedExpense.Requestor</td>
+                            <td style="padding-bottom: 10px;">@selectedExpense.RequestorName</td>
                         </tr>
                         <tr>
                             <th scope="row">Email:</th>
-                            <td style="padding-bottom: 10px;">@selectedExpense.Email</td>
+                            <td style="padding-bottom: 10px;">@selectedExpense.RequestorEmail</td>
                         </tr>
                         <tr>
                             <th scope="row">Request Date:</th>
@@ -151,7 +150,7 @@
         try
         {
 
-            await JSRuntime.InvokeAsync<object>("open", $"{_serviceNowBaseURL}/sp?id=form&sys_id={id}&table=change_request", "_blank");
+            await JSRuntime.InvokeAsync<object>("open", selectedExpense.DetailsUrl, "_blank");
         }
         catch
         {
