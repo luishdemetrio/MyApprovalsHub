@@ -1,6 +1,7 @@
 ﻿using MyApprovalsHub.Common;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Mock.Services.ServiceNow;
+using MyApprovalsHub.Services;
 
 namespace MyApprovalsHub.DependencyInjection;
 
@@ -19,7 +20,8 @@ public static class ServiceNowConfigurationMethods
                                       approvalsHubOptions.ApprovalsHubBotNotificationUrl = configuration.GetValue<string>("ApprovalsHubBotNotificationUrl");
                                   });
 
-        services.AddScoped<IServiceNowService, ServiceNowMock>();
+
+        services.AddScoped<IServiceNowService, ServiceNowService>();
 
         return services;
     }

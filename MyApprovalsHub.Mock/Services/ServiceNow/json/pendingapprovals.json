@@ -1,12 +1,6 @@
 {
   "result": [
     {
-      "sys_id": "00e9c07adba52200a6a2b31be0b8f5ae",
-      "sysapproval": "31cd7552db252200a6a2b31be0b8f55c",
-      "due_date": "2022-03-17 13:12:10",
-      "state": "requested"
-    },
-    {
       "sys_id": "013808b6dba52200a6a2b31be0b8f506",
       "sysapproval": "41cdb152db252200a6a2b31be0b8f527",
       "due_date": "2022-03-17 13:04:51",
@@ -22,12 +16,6 @@
       "sys_id": "079ac8badba52200a6a2b31be0b8f5fa",
       "sysapproval": "66cdf552db252200a6a2b31be0b8f559",
       "due_date": "2022-03-17 13:15:21",
-      "state": "requested"
-    },
-    {
-      "sys_id": "0f49403adba52200a6a2b31be0b8f509",
-      "sysapproval": "29cdf152db252200a6a2b31be0b8f58b",
-      "due_date": "2022-03-17 13:09:38",
       "state": "requested"
     },
     {

@@ -1,34 +1,34 @@
 {
-    "appName": "MyApprovalsHub.Bot",
-    "projectId": "8f903004-5612-4d64-89b6-b75c3852deb0",
-    "version": "2.1.0",
-    "isFromSample": false,
-    "solutionSettings": {
-        "name": "fx-solution-azure",
-        "version": "1.0.0",
-        "hostType": "Azure",
-        "azureResources": [],
-        "capabilities": [
-            "Bot"
-        ],
-        "activeResourcePlugins": [
-            "fx-resource-identity",
-            "fx-resource-bot",
-            "fx-resource-aad-app-for-teams",
-            "fx-resource-local-debug",
-            "fx-resource-appstudio",
-            "fx-resource-cicd",
-            "fx-resource-api-connector"
-        ]
-    },
-    "programmingLanguage": "csharp",
-    "pluginSettings": {
-        "fx-resource-bot": {
-            "host-type": "app-service",
-            "capabilities": [
-                "notification"
-            ]
-        }
-    },
-    "isFirstTimeOpenProject": false
+  "appName": "MyApprovalsHub.Bot",
+  "projectId": "a5372cff-a2fa-4b4e-85ca-90bdd0a2b86c",
+  "version": "2.1.0",
+  "isFromSample": false,
+  "solutionSettings": {
+    "name": "fx-solution-azure",
+    "version": "1.0.0",
+    "hostType": "Azure",
+    "azureResources": [],
+    "capabilities": [
+      "Bot"
+    ],
+    "activeResourcePlugins": [
+      "fx-resource-identity",
+      "fx-resource-bot",
+      "fx-resource-aad-app-for-teams",
+      "fx-resource-local-debug",
+      "fx-resource-appstudio",
+      "fx-resource-cicd",
+      "fx-resource-api-connector"
+    ]
+  },
+  "programmingLanguage": "csharp",
+  "pluginSettings": {
+    "fx-resource-bot": {
+      "host-type": "app-service",
+      "capabilities": [
+        "notification"
+      ]
+    }
+  },
+  "isFirstTimeOpenProject": false
 }

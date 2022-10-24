@@ -1,4 +1,5 @@
-﻿using MyApprovalsHub.Common;
+﻿using Microsoft.Extensions.Options;
+using MyApprovalsHub.Common;
 using MyApprovalsHub.Common.ExternalSources.ServiceNow;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Common.Models;
@@ -7,7 +8,7 @@ using RestSharp;
 
 namespace MyApprovalsHub.Services;
 
-public class ServiceNowService : IExternalService
+public class ServiceNowService : IServiceNowService
 {
     private string _serviceNowInstanceUrl;
     private string _serviceNowUsername;
@@ -29,6 +30,12 @@ public class ServiceNowService : IExternalService
         } 
     }
 
+    public ServiceNowService()
+    {
+        IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
+
+
+    }
     public ServiceNowService(ApprovalsHubOptions config)
     {
 
@@ -39,7 +46,7 @@ public class ServiceNowService : IExternalService
         _serviceNowClientId = config.ServiceNowClientId;
         _serviceNowClientSecret = config.ServiceNowClientSecret;
 
-        _ApprovalsHubBotNotificationUrl = config.ServiceNowBaseUrl;
+        _ApprovalsHubBotNotificationUrl = config.ApprovalsHubBotNotificationUrl;
 
         AppSettingsValidation();
 

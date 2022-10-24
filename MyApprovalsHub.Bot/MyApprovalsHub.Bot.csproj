@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -31,10 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyApprovalsHub.Common\MyApprovalsHub.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include=".fx\states\" />
   </ItemGroup>
 
 </Project>
