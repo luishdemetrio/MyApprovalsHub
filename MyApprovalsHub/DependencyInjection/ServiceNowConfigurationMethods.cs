@@ -28,7 +28,7 @@ public static class ServiceNowConfigurationMethods
 
 
 
-        services.AddScoped<IServiceNowService, ServiceNowService>();
+        services.AddScoped<IServiceNowService, ServiceNowMock>();
 
         return services;
     }

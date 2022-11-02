@@ -7,38 +7,55 @@
 @inject IOptionsMonitor<ApprovalsHubOptions> ApprovalsHubConfig;
 @inject IServiceNowService ServiceNowService;
 
+
+
+
 @if (ActionDescription != null)
 {
     
+   
 
     <FluentDialog @ref="ModalAction" Hidden=@ModalHidden aria-label="Simple dialog" Modal="true" style="--dialog-height: 200px;--dialog-width: 480px;">
 
-   
-            <div style="margin:20px;vertical-align:central;">
+        <div style="margin:20px;vertical-align:central;">
 
-                <h5>Confirm @ActionDescription?</h5>
+            
+            <h5>Confirm @ActionDescription?</h5>
 
-                <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
-                    <input type="text" class="form-control" id="floatingInput" @onchange="CommentChanged" value="@selectedExpense.Comments">
-                <label for="floatingInput">Comments (optional)</label>
-                </div>
+            <div class="form-floating mb-3" style="margin-top: 20px;width:100%;">
+                <input type="text" class="form-control" id="floatingInput" @onchange="CommentChanged" value="@selectedExpense.Comments">
+            <label for="floatingInput">Comments (optional)</label>
+            </div>
 
-                <div style="margin-top: 20px;">
+            <div style="margin-top: 20px;">
 
-                @if (ActionDescription == "approval")
-                {
-                    <button type="button" class="btn btn-success" @onclick=OnConfirm >Confirm</button>
-                }
-                else
-                {
-                    <button type="button" class="btn btn-danger" @onclick=OnConfirm>Confirm</button>
-                }
-                    <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
-
-                </div>
+            @if (ActionDescription == "approval")
+            {
+                    <button type="button" class="btn btn-success" @onclick=OnConfirm disabled=@btnConfirmDisabled>
+                        @if (isLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        }
+                        Confirm
+                    </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" @onclick=OnConfirm disabled=@btnConfirmDisabled>
+                        @if (isLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        }
+                        Confirm
+                </button>
+            }
+                <button type="button" class="btn btn-secondary" style="margin-left: 20px" @onclick=Hide>Cancel</button>
 
             </div>
-   
+
+        </div>
+            
+        
     </FluentDialog>
 }
 
@@ -46,6 +63,9 @@
 
     [Parameter]
     public bool ModalHidden { get; set; } = true;
+
+    private bool btnConfirmDisabled = false;
+    private bool isLoading = false;
 
     public PendingApproval selectedExpense { get; set; }
 
@@ -57,13 +77,6 @@
 
     private CloseModalParameterButtonClick closeModalParameter;
 
-    //private IExternalService _serviceNow;
-
-    //protected override void OnInitialized()
-    //{
-    //    _serviceNow = new ServiceNowService(ApprovalsHubConfig.CurrentValue);
-    //}
-
     private void CommentChanged(ChangeEventArgs args)
     {
         selectedExpense.Comments = args.Value as string;
@@ -72,6 +85,9 @@
 
     public void Approve(PendingApproval expense, CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
+
+        isLoading = false;
+
         selectedExpense = expense;
         selectedExpense.Comments = string.Empty;
         ActionDescription = "approval";
@@ -85,12 +101,14 @@
 
     public void Reject(PendingApproval expense, CloseModalParameterButtonClick closeModalParameterButtonClick)
     {
+
+        isLoading = false;
         selectedExpense = expense;
 
         selectedExpense.Comments = string.Empty;
 
         ActionDescription = "rejection";
-        
+
         closeModalParameter = closeModalParameterButtonClick;
 
         ModalHidden = false;
@@ -108,6 +126,10 @@
     public void OnConfirm()
     {
 
+        isLoading = true;
+        btnConfirmDisabled = true;
+        StateHasChanged();
+
         switch (selectedExpense.Source)
         {
             case nameof(SourceDescription.ServiceNow):
@@ -117,19 +139,30 @@
 
     }
 
-    private void ServiceNowChangeStatus()
+    private async void ServiceNowChangeStatus()
     {
-        
-        var statusChangedSucceed = (ActionDescription == "approval") ? 
-                ServiceNowService.Approve(selectedExpense) :
-                ServiceNowService.Reject(selectedExpense);
 
+        bool statusChangedSucceed = false;
 
-        if (statusChangedSucceed)
+        var t = Task.Run(() =>
+                    {
+                        statusChangedSucceed = (ActionDescription == "approval") ?
+                        ServiceNowService.Approve(selectedExpense) :
+                        ServiceNowService.Reject(selectedExpense);
+
+                    });
+
+        await t;
+
+        if (t.IsCompleted && statusChangedSucceed)
         {
-            closeModalParameter?.Invoke();
-            Hide();
-        }
+            isLoading = false;
+            btnConfirmDisabled = false;
+            StateHasChanged();
+              closeModalParameter?.Invoke();
+              Hide();
+          }
+    
     }
 
 }
