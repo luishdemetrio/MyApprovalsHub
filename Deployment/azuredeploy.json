@@ -147,7 +147,7 @@
     "webAppName": "[concat(parameters('baseResourceName'), 'webapp')]",
     "serverfarms_externalid": "[concat(subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
     "userAssignedIdentities_externalid": "[concat(subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('teamsTabName') )]",
-    "botAppDomain": "[concat( variables('botAppName'), '.azurewebsites.net' )]",
+    "botAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
@@ -404,21 +404,9 @@
 
   ],
   "outputs": {
-    "keyVaultName": {
+    "appClientId": {
       "type": "string",
-      "value": "[variables('keyvaultName')]"
-    },
-    "authorBotId": {
-      "type": "string",
-      "value": "[parameters('authorClientId')]"
-    },
-    "userBotId": {
-      "type": "string",
-      "value": "[parameters('userClientId')]"
-    },
-    "appDomain": {
-      "type": "string",
-      "value": "[if(variables('useFrontDoor'), variables('frontDoorDomain'), concat('Please create a custom domain name for ', variables('botAppDomain'), ' and use that in the manifest'))]"
+      "value": "[parameters('appClientId')]"
     }
   }
 }
