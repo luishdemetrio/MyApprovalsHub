@@ -203,6 +203,12 @@
       "name": "[variables('webAppName')]",
       "location": "[parameters('location')]",
       "kind": "app",
+
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
+      ],
+
       "identity": {
         "type": "UserAssigned",
         "userAssignedIdentities": {
