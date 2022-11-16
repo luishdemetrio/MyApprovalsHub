@@ -145,9 +145,9 @@
     "teamsTabName": "[parameters('baseResourceName')]",
     "agentBotName": "[concat(parameters('baseResourceName'), '-agent')]",
     "webAppName": "[concat(parameters('baseResourceName'), 'webapp')]",
-    "serverfarms_externalid": "[concat( subscription().subscriptionId, '/resourcegroups/', 'resourceGroup().name', 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
-    "userAssignedIdentities_externalid": "[concat([subscription().subscriptionId], '/resourcegroups/', '[resourceGroup().name]/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', [variables('teamsTabName')]]",
-    "botAppDomain": "[concat(variables('botAppName'), '.azurewebsites.net')]",
+    "serverfarms_externalid": "[concat(subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
+    "userAssignedIdentities_externalid": "[concat(subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('teamsTabName') )]",
+    "botAppDomain": "[concat( variables('botAppName'), '.azurewebsites.net' )]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
