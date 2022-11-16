@@ -79,79 +79,55 @@ iv. Client secret for the Approvals Hub agent.
 We recommend that you copy the values, we will need them later.
 
 ## 2. Deploy to your Azure subscription
+
 1. Click on the **Deploy to Azure** button below.
    
-   ![Deploy to Azure](Images/deploybutton.png)(https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcristianoag%2Fmicrosoft-teams-apps-company-communicator%2Fmaster%2FDeployment%2Fazuredeploy.json)
+   [![Deploy to Azure](Images/deploybutton.png)](https://github.com/luishdemetrio/MyApprovalsHub/blob/master/Deployment/azuredeploy.json)
 
-1. When prompted, log in to your Azure subscription.
+2. When prompted, log in to your Azure subscription.
 
-1. Azure will create a "Custom deployment" based on the Company Communicator ARM template and ask you to fill in the template parameters.
+3. Azure will create a "Custom deployment" based on the Company Communicator ARM template and ask you to fill in the template parameters.
 
     > **Note:** Please ensure that you don't use underscore (_) or space in any of the field values otherwise the deployment may fail.
 
-1. Select a subscription and a resource group.
+4. Select a subscription and a resource group.
    * We recommend creating a new resource group.
    * The resource group location MUST be in a datacenter that supports all the following:
      * Storage Accounts
      * Application Insights
-     * Azure Functions
-     * Service Bus
      * App Service
 
     For an up-to-date list of datacenters that support the above, click [here](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=storage,app-service,monitor,service-bus,functions)
 
-1. Enter a **Base Resource Name**, which the template uses to generate names for the other resources.
-   * The `[Base Resource Name]` must be available. For example, if you select `contosocommunicator` as the base name, the name `contosocommunicator` must be available (not taken); otherwise, the deployment will fail with a Conflict error.
+5. Enter a **Base Resource Name**, which the template uses to generate names for the other resources.
+   * The `[Base Resource Name]` must be available. For example, if you select `approvalshub` as the base name, the name `approvalshub` must be available (not taken); otherwise, the deployment will fail with a Conflict error.
    * Please make sure to limit the base resource name with maximum of 18 characters.
    * Remember the base resource name that you selected. We will need it later.
 
-1. Update the following fields in the template:
-    1. **User Client ID**: The application (client) ID of the Microsoft Teams user bot app. (from Step 1)
-    2. **User Client Secret**: The client secret of the Microsoft Teams user bot app. (from Step 1)
-    3. **Tenant Id**: The tenant ID. (from Step 1)
-    4. **Author Client ID**: The application (client) ID of the Microsoft Teams author bot app. (from Step 1)
-    5. **Author Client Secret**: The client secret of the Microsoft Teams author bot app. (from Step 1)
-    6. **Microsoft Graph App Client ID**: The application (client) ID of the Microsoft Graph Azure AD app. (from Step 1)
-    7. **Microsoft Graph App Secret**: The client secret of the Microsoft Graph Azure AD app. (from Step 1)
-    8. **Proactively Install User App [Optional]**: Default value is `true`. You may set it to `false` if you want to disable the feature.
+6. Update the following fields in the template:
+    i. **App Client ID**: The application (client) ID of the Microsoft Teams Approvals Hub tab application. (from Step 1)
+    ii. **App Client Secret**: The client secret of the Microsoft Teams Approvals Hub tab app. (from Step 1)
+    iii. **Agent Client ID**: The application (client) ID of the Microsoft Teams Agent bot app. (from Step 1)
+    iv. **Agent Client Secret**: The client secret of the Microsoft Teams Agent bot app. (from Step 1)
+    
     9. **User App ExternalId [Optional]**: Default value is `148a66bb-e83d-425a-927d-09f4299a9274`. This **MUST** be the same `id` that is in the Teams app manifest for the user app.
-    10. **Service Bus Web App Role Name Guid [Optional]**: Default value is `958380b3-630d-4823-b933-f59d92cdcada`. This **MUST** be the same `id` per app deployment.
-   
+    
         > **Note:** Make sure to keep the same values for an upgrade. Please change the role name GUIDs in case of another Company Communicator Deployment in same subscription.
 
-    11. **Service Bus Prep Func Role Name Guid [Optional]**: Default value is `ce6ca916-08e9-4639-bfbe-9d098baf42ca`. This **MUST** be the same `id` per app deployment.
-    12. **Service Bus Send Func Role Name Guid [Optional]**: Default value is `960365a2-c7bf-4ff3-8887-efa86fe4a163`. This **MUST** be the same `id` per app deployment.
-    13. **Service Bus Data Func Role Name Guid [Optional]**: Default value is `d42703bc-421d-4d98-bc4d-cd2bb16e5b0a`. This **MUST** be the same `id` per app deployment.
-    14. **Storage Account Web App Role Name Guid [Optional]**: Default value is `edd0cc48-2cf7-490e-99e8-131311e42030`. This **MUST** be the same `id` per app deployment.
-    15. **Storage Account Prep Func Role Name Guid [Optional]**: Default value is `9332a9e9-93f4-48d9-8121-d279f30a732e`. This **MUST** be the same `id` per app deployment.
-    16. **Storage Account Data Func Role Name Guid [Optional]**: Default value is `5b67af51-4a98-47e1-9d22-745069f51a13`. This **MUST** be the same `id` per app deployment.
-    17. **DefaultCulture [Optional]**: By default the application uses `en-US` locale. You can choose the locale from the list, if you wish to use the app in different locale.Also, you may add/update the resources for other locales and update this configuration if desired.
-    18. **SupportedCultures [Optional]**: This is the list of locales that application supports currently.You may add/update the resources for other locales and update this configuration if desired.
+7. Agree to the Azure terms and conditions by clicking on the check box "I agree to the terms and conditions stated above" located at the bottom of the page.
 
-    > **Note:** Make sure that the values are copied as-is, with no extra spaces. The template checks that GUIDs are exactly 36 characters.
+8. Click on "Purchase" to start the deployment.
 
-    > **Note:** If your Azure subscription is in a different tenant than the tenant where you want to install the Teams App, please update the `Tenant Id` field with the tenant where you want to install the Teams App.
-
-1. Update the "Sender UPN List", which is a semicolon-delimited list of users (Authors) who will be allowed to send messages using the Company Communicator.
-    * For example, to allow Megan Bowen (meganb@contoso.com) and Adele Vance (adelev@contoso.com) to send messages, set this parameter to `meganb@contoso.com;adelev@contoso.com`.
-    * You can change this list later by going to the App Service's "Configuration" blade.
-
-1. If you wish to change the app name, description, and icon from the defaults, modify the corresponding template parameters.
-
-1. Agree to the Azure terms and conditions by clicking on the check box "I agree to the terms and conditions stated above" located at the bottom of the page.
-
-1. Click on "Purchase" to start the deployment.
-
-1. Wait for the deployment to finish. You can check the progress of the deployment from the "Notifications" pane of the Azure Portal. It may take **up to an hour** for the deployment to finish.
+9. Wait for the deployment to finish. You can check the progress of the deployment from the "Notifications" pane of the Azure Portal. It may take **up to an hour** for the deployment to finish.
 
     > If the deployment fails, see [this section](https://github.com/OfficeDev/microsoft-teams-company-communicator-app/wiki/Troubleshooting#1-code-deployment-failure) of the Troubleshooting guide.
 
-1. Once the deployment is successfully completed, go to the deployment's "Outputs" tab, and note down the follwing values. We will need them later.
-    * **authorBotId:** This is the Microsoft Application ID for the Company Communicator app. For the following steps, it will be referred to as `%authorBotId%`.
-    * **userBotId:** This is the Microsoft Application ID for the Company Communicator app. For the following steps, it will be referred to as `%userBotId%`.
+1. Once the deployment is successfully completed, go to the deployment's "Outputs" tab, and note down the following values. We will need them later.
+    * **appClientId:** This is the Microsoft Application ID for the Approvals Hub app. For the following steps, it will be referred to as `%appClientId%`.
+    * **agentBotId:** This is the Microsoft Application ID for the Approvals Hub Agent bot app. For the following steps, it will be referred to as `%agentBotId%`.
     * **appDomain:** This is the base domain for the Company Communicator app. For the following steps, it will be referred to as `%appDomain%`.
 
-> **IMPORTANT:** If you plan to use a custom domain name instead of relying on Azure Front Door, read the instructions [here](Custom-domain-option) before continuing any further.
+
 
 ## 3. Set-up Authentication
 
