@@ -1,0 +1,61 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+          "type": "TextBlock",
+          "size": "Medium",
+          "weight": "Bolder",
+          "text": "${title}"
+        },
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "items": [
+                {
+                  "type": "Image",
+                  "style": "Default",
+                  "url": "https://th.bing.com/th/id/OIP.0y-SzGZgQfhOAAVaWMkCUAHaCB?pid=ImgDet&rs=1",
+                  "size": "Medium"
+                }
+              ],
+              "width": "auto"
+            },
+            {
+              "type": "Column",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "weight": "Bolder",
+                  "text": "${requestor}",
+                  "wrap": true
+                },
+                {
+                  "type": "TextBlock",
+                  "spacing": "None",
+                  "text": "${OpenedAt}",
+                  "isSubtle": true,
+                  "wrap": true
+                }
+              ],
+              "width": "stretch"
+            }
+          ]
+        },
+    {
+      "type": "TextBlock",
+      "text": "${longdescription}",
+      "wrap": true
+    }
+      ],
+      "actions": [
+        {
+          "type": "Action.OpenUrl",
+          "title": "View Details",
+          "url": "${ViewDetailsUrl}"
+        }
+      ]
+    }

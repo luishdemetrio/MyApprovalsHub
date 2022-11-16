@@ -1,11 +1,11 @@
 {
     "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.13/MicrosoftTeams.schema.json",
     "manifestVersion": "1.13",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "id": "{{state.fx-resource-appstudio.teamsAppId}}",
     "packageName": "com.microsoft.teams.extension",
     "developer": {
-        "name": "Teams App, Inc.",
+        "name": "Luis Demetrio",
         "websiteUrl": "{{state.fx-resource-frontend-hosting.endpoint}}",
         "privacyUrl": "{{state.fx-resource-frontend-hosting.endpoint}}{{state.fx-resource-frontend-hosting.indexPath}}/privacy",
         "termsOfUseUrl": "{{state.fx-resource-frontend-hosting.endpoint}}{{state.fx-resource-frontend-hosting.indexPath}}/termsofuse"

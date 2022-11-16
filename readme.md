@@ -27,12 +27,6 @@ This app template is provided under the [MIT License](https://github.com/OfficeD
 
 - Use of this template does not guarantee acceptance of your app to the Teams app store. To make this app available in the Teams app store, you will have to comply with the [submission and validation process](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/deploy-and-publish/appsource/publish), and all associated requirements such as including your own privacy statement and terms of use for your app.
 
-## Get started
-
-Begin with the [Solution overview](https://github.com/OfficeDev/microsoft-teams-stickers-app/wiki/Solution-overview) to read about what the app does and how it works.
-
-When you're ready to try out Custom Stickers, or to use it in your own organization, follow the steps in the [Deployment guide](https://github.com/OfficeDev/microsoft-teams-stickers-app/wiki/Deployment-guide).
-
 ## Feedback
 
 Thoughts? Questions? Ideas? Share them with us!

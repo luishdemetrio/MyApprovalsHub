@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.Graph;
-using MyApprovalsHub.Common;
+﻿using MyApprovalsHub.Common;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Mock.Services.ServiceNow;
 using MyApprovalsHub.Services;
@@ -28,7 +25,7 @@ public static class ServiceNowConfigurationMethods
 
 
 
-        services.AddScoped<IServiceNowService, ServiceNowMock>();
+        services.AddScoped<IServiceNowService, ServiceNowService>();
 
         return services;
     }

@@ -26,7 +26,7 @@ public class ServiceNowMock : IServiceNowService
     {
 
         _serviceNowInstanceUrl = "https://dev52648.service-now.com/";
-        _ApprovalsHubBotNotificationUrl = "https://myapprovaldev978325bot.azurewebsites.net/api/notification";// "http://localhost:5130/api/notification";
+        _ApprovalsHubBotNotificationUrl = "https://myapprovaldev978325bot.azurewebsites.net/api/notification"; // "http://localhost:5130/api/notification";
 
         _currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 

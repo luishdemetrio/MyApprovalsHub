@@ -1,9 +1,6 @@
 using Microsoft.Fast.Components.FluentUI;
-using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.DependencyInjection;
 using MyApprovalsHub.Interop.TeamsSDK;
-using MyApprovalsHub.Services;
-using ServiceNow.Api.Tables;
 
 var builder = WebApplication.CreateBuilder(args);
 
