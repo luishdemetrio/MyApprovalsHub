@@ -213,12 +213,12 @@
         "enabled": true,
         "hostNameSslStates": [
           {
-            "name": "[concat(parameters('webAppName'), '.azurewebsites.net')]",
+            "name": "[concat(variables('webAppName'), '.azurewebsites.net')]",
             "sslState": "Disabled",
             "hostType": "Standard"
           },
           {
-            "name": "[concat(parameters('webAppName'), '.scm.azurewebsites.net')]",
+            "name": "[concat(variables('webAppName'), '.scm.azurewebsites.net')]",
             "sslState": "Disabled",
             "hostType": "Repository"
           }
@@ -295,10 +295,10 @@
     {
       "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
       "apiVersion": "2022-03-01",
-      "name": "[concat(parameters('webAppName'), '/ftp')]",
+      "name": "[concat(variables('webAppName'), '/ftp')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
       ],
       "properties": {
         "allow": true
@@ -308,10 +308,10 @@
     {
       "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
       "apiVersion": "2022-03-01",
-      "name": "[concat(parameters('webAppName'), '/scm')]",
+      "name": "[concat(variables('webAppName'), '/scm')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
       ],
       "properties": {
         "allow": true
@@ -321,10 +321,10 @@
     {
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2022-03-01",
-      "name": "[concat(parameters('webAppName'), '/web')]",
+      "name": "[concat(variables('webAppName'), '/web')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
       ],
       "properties": {
         "numberOfWorkers": 1,
