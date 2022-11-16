@@ -198,107 +198,6 @@
     },
 
     {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2022-03-01",
-      "name": "[variables('webAppName')]",
-      "location": "[parameters('location')]",
-      "kind": "app",
-
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('webAppName'))]",
-        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
-      ],
-
-      "identity": {
-        "type": "UserAssigned",
-        "userAssignedIdentities": {
-          "[variables('userAssignedIdentities_externalid')]": {}
-        }
-      },
-      "properties": {
-        "enabled": true,
-        "hostNameSslStates": [
-          {
-            "name": "[concat(variables('webAppName'), '.azurewebsites.net')]",
-            "sslState": "Disabled",
-            "hostType": "Standard"
-          },
-          {
-            "name": "[concat(variables('webAppName'), '.scm.azurewebsites.net')]",
-            "sslState": "Disabled",
-            "hostType": "Repository"
-          }
-        ],
-        "serverFarmId": "[variables('serverfarms_externalid')]",
-        "reserved": false,
-        "isXenon": false,
-        "hyperV": false,
-        "vnetRouteAllEnabled": false,
-        "vnetImagePullEnabled": false,
-        "vnetContentShareEnabled": false,
-        "siteConfig": {
-          "numberOfWorkers": 1,
-          "acrUseManagedIdentityCreds": false,
-          "alwaysOn": false,
-          "http20Enabled": false,
-          "functionAppScaleLimit": 0,
-          "minimumElasticInstanceCount": 0
-        },
-        "scmSiteAlsoStopped": false,
-        "clientAffinityEnabled": true,
-        "clientCertEnabled": false,
-        "clientCertMode": "Required",
-        "hostNamesDisabled": false,
-        "customDomainVerificationId": "C4D5B1C8EC9500A78A17DAB7A6A43A07B1BEC54EA34C21231227CA8832F463CA",
-        "containerSize": 0,
-        "dailyMemoryTimeQuota": 0,
-        "httpsOnly": true,
-        "redundancyMode": "None",
-        "storageAccountRequired": false,
-        "keyVaultReferenceIdentity": "[variables('userAssignedIdentities_externalid')]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2015-08-01",
-          "name": "appsettings",
-          "type": "config",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
-          ],
-          "properties": {
-            "PROJECT": "MyApprovalsHub/MyApprovalsHub.csproj",
-            "SITE_ROLE": "app",
-            "i18n:DefaultCulture": "[variables('i18n:DefaultCulture')]",
-            "i18n:SupportedCultures": "[variables('i18n:SupportedCultures')]",
-            "ProactivelyInstallUserApp": "[variables('ProactivelyInstallUserApp')]",
-
-            "ServiceNowBaseURL": "[parameters('ServiceNowBaseURL')]",
-            "ServiceNowClientId": "[parameters('ServiceNowClientId')]",
-            "ServiceNowClientSecret": "[parameters('ServiceNowClientSecret')]",
-            "ServiceNowPassword": "[parameters('ServiceNowPassword')]",
-            "ServiceNowUsername": "[parameters('ServiceNowUsername')]"
-
-          }
-        },
-        {
-          "apiVersion": "2016-08-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "condition": "[not(empty(parameters('gitRepoUrl')))]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', variables('webAppName'))]",
-            "[resourceId('Microsoft.Web/sites/config', variables('webAppName'), 'appsettings')]"
-          ],
-          "properties": {
-            "RepoUrl": "[parameters('gitRepoUrl')]",
-            "branch": "[parameters('gitBranch')]",
-            "IsManualIntegration": true
-          }
-        }
-      ]
-    },
-
-    {
       "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
       "apiVersion": "2022-03-01",
       "name": "[concat(variables('webAppName'), '/ftp')]",
@@ -324,19 +223,6 @@
       }
     },
 
-    {
-      "type": "Microsoft.Web/sites/hostNameBindings",
-      "apiVersion": "2022-03-01",
-      "name": "[concat(variables('webAppName'), '/', variables('webAppName'), '.azurewebsites.net')]",
-      "location": "Central US",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
-      ],
-      "properties": {
-        "siteName": "variables('webAppName')",
-        "hostNameType": "Verified"
-      }
-    },
     {
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2022-03-01",
@@ -417,7 +303,100 @@
         "minimumElasticInstanceCount": 0,
         "azureStorageAccounts": {}
       }
+    },
+
+    {
+      "type": "Microsoft.Web/sites/deployments",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('webAppName'), '/c19eccfd2c56481c0520c819fc32a7a07d766317')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ],
+      "properties": {
+        "status": 3,
+        "author_email": "luisdem@microsoft.com",
+        "author": "luishdemetrio",
+        "deployer": "GitHub",
+        "message": "updated readme.md\n",
+        "start_time": "2022-11-16T17:50:10.5494111Z",
+        "end_time": "2022-11-16T17:58:05.8921897Z",
+        "active": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('webAppName'), '/', variables('webAppName'), '.azurewebsites.net')]",
+      "location": "Central US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ],
+      "properties": {
+        "siteName": "approvalshubwebapp",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('webAppName')]",
+      "location": "[parameters('location')]",
+      "kind": "app",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "[variables('userAssignedIdentities_externalid')]": {}
+        }
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(variables('webAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(variables('webAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[variables('serverfarms_externalid')]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "vnetRouteAllEnabled": false,
+        "vnetImagePullEnabled": false,
+        "vnetContentShareEnabled": false,
+        "siteConfig": {
+          "numberOfWorkers": 1,
+          "acrUseManagedIdentityCreds": false,
+          "alwaysOn": false,
+          "http20Enabled": false,
+          "functionAppScaleLimit": 0,
+          "minimumElasticInstanceCount": 0
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "clientCertMode": "Required",
+        "hostNamesDisabled": false,
+        "customDomainVerificationId": "C4D5B1C8EC9500A78A17DAB7A6A43A07B1BEC54EA34C21231227CA8832F463CA",
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None",
+        "storageAccountRequired": false,
+        "keyVaultReferenceIdentity": "[variables('userAssignedIdentities_externalid')]"
+      }
     }
+
+
+
+
+
 
   ],
   "outputs": {
