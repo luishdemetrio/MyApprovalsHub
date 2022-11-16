@@ -143,11 +143,11 @@
   },
   "variables": {
     "teamsTabName": "[parameters('baseResourceName')]",
-    "agentBotName": "[concat(parameters('baseResourceName'), '-agent')]",
     "webAppName": "[concat(parameters('baseResourceName'), 'webapp')]",
-    "serverfarms_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('teamsTabName') )]",
+    "serverfarms_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
     "userAssignedIdentities_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('teamsTabName') )]",
     "botAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
+    "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
@@ -173,7 +173,7 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2022-03-01",
-      "name": "[variables('hostingPlanName')]",
+      "name": "[variables('webAppName')]",
       "location": "[parameters('location')]",
       "sku": {
         "name": "[if(variables('isSharedPlan'), concat(variables('skuFamily'), '1'), concat(variables('skuFamily'), parameters('hostingPlanSize')))]",
@@ -205,7 +205,7 @@
       "kind": "app",
 
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('webAppName'))]",
         "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
       ],
 
@@ -325,6 +325,19 @@
     },
 
     {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('webAppName'), '/', variables('webAppName'), '.azurewebsites.net')]",
+      "location": "Central US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ],
+      "properties": {
+        "siteName": "variables('webAppName')",
+        "hostNameType": "Verified"
+      }
+    },
+    {
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2022-03-01",
       "name": "[concat(variables('webAppName'), '/web')]",
@@ -354,7 +367,7 @@
         "acrUseManagedIdentityCreds": false,
         "logsDirectorySizeLimit": 35,
         "detailedErrorLoggingEnabled": false,
-        "publishingUsername": "$approvalshubwebapp",
+        "publishingUsername": "[concat('$',variables('webAppName'))",
         "scmType": "ExternalGit",
         "use32BitWorkerProcess": true,
         "webSocketsEnabled": false,
