@@ -342,6 +342,10 @@
       "apiVersion": "2022-03-01",
       "name": "[variables('webAppName')]",
       "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('webAppName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
+      ],
       "kind": "app",
       "identity": {
         "type": "UserAssigned",
@@ -389,15 +393,9 @@
         "httpsOnly": true,
         "redundancyMode": "None",
         "storageAccountRequired": false,
-        "keyVaultReferenceIdentity": "[variables('userAssignedIdentities_externalid')]"
+        "keyVaultReferenceIdentity": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
       }
     }
-
-
-
-
-
-
   ],
   "outputs": {
     "appClientId": {
