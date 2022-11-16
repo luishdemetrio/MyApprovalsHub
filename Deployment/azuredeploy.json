@@ -158,9 +158,7 @@
     "skuFamily": "[if(equals(parameters('hostingPlanSku'), 'Shared'), 'D', take(parameters('hostingPlanSku'), 1))]",
     "i18n:DefaultCulture": "[parameters('DefaultCulture')]",
     "i18n:SupportedCultures": "[parameters('SupportedCultures')]",
-    "subscriptionTenantId": "[subscription().tenantId]",
-    "UserAppSecretResourceId": "[resourceId(resourceGroup().name, 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), variables('UserAppSecretName'))]",
-    "AuthorAppSecretResourceId": "[resourceId(resourceGroup().name, 'Microsoft.KeyVault/vaults/secrets', variables('keyVaultName'), variables('AuthorAppSecretName'))]"
+    "subscriptionTenantId": "[subscription().tenantId]"
 
   },
   "resources": [
