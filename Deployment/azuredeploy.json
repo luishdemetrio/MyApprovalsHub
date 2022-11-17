@@ -254,7 +254,6 @@
         "logsDirectorySizeLimit": 35,
         "detailedErrorLoggingEnabled": false,
         "publishingUsername": "[concat('$',variables('webAppName'))",
-        "scmType": "ExternalGit",
         "use32BitWorkerProcess": true,
         "webSocketsEnabled": false,
         "alwaysOn": false,
