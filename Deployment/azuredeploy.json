@@ -343,7 +343,9 @@
           "properties": {
             "PROJECT": "MyApprovalsHub/MyApprovalsHub.csproj"
 
-          },
+          }
+        }
+      ],
       "kind": "app",
       "identity": {
         "type": "UserAssigned",
