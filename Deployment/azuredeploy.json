@@ -388,8 +388,8 @@
             "ServiceNowClientSecret": "[parameters('ServiceNowClientSecret')]",
             "ServiceNowUseMockService": "[parameters('ServiceNowUseMockService')]",
             "ApprovalsHubBotNotificationUrl": "[variables('ApprovalsHubBotNotificationUrl')]",
-            "TeamsFx__Authentication__ClientId": "parameters('appClientId')]",
-            "TeamsFx__Authentication__ClientSecret": "parameters('appClientSecret')]",
+            "TeamsFx__Authentication__ClientId": "[parameters('appClientId')]",
+            "TeamsFx__Authentication__ClientSecret": "[parameters('appClientSecret')]",
             "TeamsFx__Authentication__InitiateLoginEndpoint": "[concat(variables('agentBotAppUrl'), '/auth-start.html')]",
             "TeamsFx__Authentication__OAuthAuthority": "[concat('https://login.microsoftonline.com/', variables('subscriptionTenantId'))]"
 
