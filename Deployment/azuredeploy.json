@@ -150,8 +150,6 @@
     "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
     "hostingPlanName": "[parameters('baseResourceName')]",
-    "basicPublishingCredentialsPolicies_ftp": "[concat( variables('webAppName'), '/ftp' )]",
-    "basicPublishingCredentialsPolicies_scm": "[concat( variables('webAppName'), '/scm' )]",
     "sharedSkus": [
       "Free",
       "Shared"
@@ -202,7 +200,7 @@
     {
       "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
       "apiVersion": "2022-03-01",
-      "name": "[variables('basicPublishingCredentialsPolicies_ftp')]",
+      "name": "[concat(variables('webAppName'), '/ftp')]",
       "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
@@ -215,7 +213,7 @@
     {
       "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
       "apiVersion": "2022-03-01",
-      "name": "variables('basicPublishingCredentialsPolicies_scm')]",
+      "name": "[concat(variables('webAppName'), '/scm')]",
       "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
@@ -326,7 +324,6 @@
         "active": false
       }
     },
-
     {
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2022-03-01",
@@ -340,7 +337,6 @@
         "hostNameType": "Verified"
       }
     },
-
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2022-03-01",
