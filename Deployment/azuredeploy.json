@@ -32,7 +32,7 @@
         "description": "The application (client) ID of the Microsoft Teams Agent bot app, e.g., 123e4567-e89b-12d3-a456-426655440000."
       }
     },
-    "authorClientSecret": {
+    "agentClientSecret": {
       "type": "securestring",
       "minLength": 1,
       "metadata": {
@@ -82,14 +82,6 @@
       "type": "bool",
       "metadata": {
         "description": "Inform True in case you want to mock the Service Now REST API data."
-      }
-    },
-    "ApprovalsHubBotNotificationUrl": {
-      "type": "string",
-      "minLength": 36,
-      "maxLength": 36,
-      "metadata": {
-        "description": "The URL for the Approvals Hub Agent bot, e.g., https://myapprovalhubbotbot.azurewebsites.net/api/notification"
       }
     },
     "DefaultCulture": {
@@ -202,6 +194,7 @@
     "botAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
     "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
+    "ApprovalsHubBotNotificationUrl": "[concat(variables('agentBotAppUrl'), '/api/notification' )]",
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
       "Free",
@@ -397,7 +390,12 @@
             "ServiceNowClientId": [ "parameters('ServiceNowClientId')" ],
             "ServiceNowClientSecret": [ "parameters('ServiceNowClientSecret')" ],
             "ServiceNowUseMockService": [ "parameters('ServiceNowUseMockService')" ],
-            "ApprovalsHubBotNotificationUrl": [ "parameters('ApprovalsHubBotNotificationUrl')" ]
+            "ApprovalsHubBotNotificationUrl": [ "variables('ApprovalsHubBotNotificationUrl')" ],
+            "TeamsFx__Authentication__ClientId": [ "parameters('appClientId')" ],
+            "TeamsFx__Authentication__ClientSecret": [ "parameters('appClientSecret')" ],
+            "TeamsFx__Authentication__InitiateLoginEndpoint": [ "concat(variables('botAppDomain')", "'/auth-start.html')" ],
+            "TeamsFx__Authentication__OAuthAuthority": [ "concat('https://login.microsoftonline.com/'", "[subscription().tenantId]" ]
+
           }
         },
         {
