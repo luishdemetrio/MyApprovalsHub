@@ -381,6 +381,7 @@
           ],
           "properties": {
             "PROJECT": "MyApprovalsHub/MyApprovalsHub.csproj",
+            "SCM_COMMAND_IDLE_TIMEOUT": "120",
             "ServiceNowBaseURL": "[parameters('ServiceNowBaseURL')]",
             "ServiceNowUsername": "[parameters('ServiceNowUsername')]",
             "ServiceNowPassword": "[parameters('ServiceNowPassword')]",

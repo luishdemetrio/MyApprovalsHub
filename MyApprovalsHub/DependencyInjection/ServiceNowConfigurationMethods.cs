@@ -1,7 +1,9 @@
-﻿using MyApprovalsHub.Common;
+﻿using Microsoft.Extensions.Options;
+using MyApprovalsHub.Common;
 using MyApprovalsHub.Common.Interfaces;
 using MyApprovalsHub.Mock.Services.ServiceNow;
 using MyApprovalsHub.Services;
+using ServiceNow.Api.Tables;
 
 namespace MyApprovalsHub.DependencyInjection;
 
@@ -21,12 +23,33 @@ public static class ServiceNowConfigurationMethods
                                       approvalsHubOptions.ServiceNowClientSecret = configuration.GetValue<string>("ServiceNowClientSecret");
                                       approvalsHubOptions.ApprovalsHubBotNotificationUrl = configuration.GetValue<string>("ApprovalsHubBotNotificationUrl");
                                       approvalsHubOptions.ServiceNowUseMockService = configuration.GetValue<bool>("ServiceNowUseMockService");
+
+
                                   });
 
+        
 
+        
+            
+        
+        return services;
 
-        services.AddScoped<IServiceNowService, ServiceNowService>();
+    }
+
+    public static IServiceCollection SetServiceNowEnvironment(this IServiceCollection services, bool useMock)
+    {
+        
+        if (useMock)
+        {
+            services.AddScoped<IServiceNowService, ServiceNowMock>();
+        }
+        else
+        {
+            services.AddScoped<IServiceNowService, ServiceNowService>();
+        }
+
 
         return services;
+
     }
 }

@@ -10,7 +10,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddTeamsFx(builder.Configuration.GetSection("TeamsFx"));
 
 builder.Services.AddServiceNow();
-
+builder.Services.SetServiceNowEnvironment(builder.Configuration.GetValue<bool>("ServiceNowUseMockService"));
 
 
 builder.Services.AddScoped<MicrosoftTeams>();
