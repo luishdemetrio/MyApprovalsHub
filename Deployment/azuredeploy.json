@@ -481,7 +481,7 @@
         "displayName": "[variables('agentBotName')]",
         "iconUrl": "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png",
         "endpoint": "[concat('https://', variables('agentBotName'), 'bot.azurewebsites.net/api/messages')]",
-        "msaAppId": "f33518c6-bf1d-43da-b4e9-7ef5dd7d702a",
+        "msaAppId": "[parameters('agentClientId')]",
         "luisAppIds": [],
         "isStreamingSupported": false,
         "schemaTransformationVersion": "1.3",
