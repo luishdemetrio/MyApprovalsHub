@@ -188,10 +188,15 @@
     "webAppName": "[concat(parameters('baseResourceName'), 'webapp')]",
     "serverfarms_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
     "userAssignedIdentities_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('teamsTabName') )]",
+
     "botAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
+
     "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
     "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
+    "userAssignedIdentitiesAgent_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('agentBotName') )]",
+
     "ApprovalsHubBotNotificationUrl": "[concat(variables('agentBotAppUrl'), '/api/notification' )]",
+
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
       "Free",
@@ -347,7 +352,7 @@
       }
     },
 
-  
+
     {
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2022-03-01",
@@ -361,7 +366,7 @@
         "hostNameType": "Verified"
       }
     },
-   
+
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2022-03-01",
@@ -461,7 +466,272 @@
         "storageAccountRequired": false,
         "keyVaultReferenceIdentity": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]"
       }
+    },
+
+    {
+      "type": "Microsoft.BotService/botServices",
+      "apiVersion": "2022-06-15-preview",
+      "name": "[variables('agentBotName')]",
+      "location": "global",
+      "sku": {
+        "name": "F0"
+      },
+      "kind": "azurebot",
+      "properties": {
+        "displayName": "[variables('agentBotName')]",
+        "iconUrl": "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png",
+        "endpoint": "[concat('https://', variables('agentBotName'), 'bot.azurewebsites.net/api/messages')]",
+        "msaAppId": "f33518c6-bf1d-43da-b4e9-7ef5dd7d702a",
+        "luisAppIds": [],
+        "isStreamingSupported": false,
+        "schemaTransformationVersion": "1.3",
+        "tenantId": "[variables('subscriptionTenantId')]",
+        "isCmekEnabled": false,
+        "disableLocalAuth": false
+      }
+    },
+
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2022-01-31-preview",
+      "name": "[variables('agentBotName')]",
+      "location": "[parameters('location')]"
+    },
+
+    {
+      "type": "Microsoft.BotService/botServices/channels",
+      "apiVersion": "2022-06-15-preview",
+      "name": "[concat(variables('agentBotName'), '/MsTeamsChannel')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.BotService/botServices', variables('agentBotName'))]"
+      ],
+      "properties": {
+        "properties": {
+          "enableCalling": false,
+          "isEnabled": true,
+          "deploymentEnvironment": "CommercialDeployment",
+          "acceptedTerms": false
+        },
+        "etag": "W/\"7bdfb872f95de0268023338b25a9a16111/18/2022 1:23:43 PM\"",
+        "channelName": "MsTeamsChannel",
+        "location": "global"
+      }
+    },
+
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('agentBotName'), '/ftp')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]"
+      ],
+      "properties": {
+        "allow": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('agentBotName'), '/scm')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]"
+      ],
+      "properties": {
+        "allow": true
+      }
+    },
+
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('agentBotName'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "phpVersion": "5.6",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": false,
+        "acrUseManagedIdentityCreds": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$myapprovaldev978325bot",
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "vnetRouteAllEnabled": false,
+        "vnetPrivatePortsCount": 0,
+        "localMySqlEnabled": false,
+        "xManagedServiceIdentityId": 1211,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 2147483647,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 2147483647,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "scmMinTlsVersion": "1.2",
+        "ftpsState": "FtpsOnly",
+        "preWarmedInstanceCount": 0,
+        "functionsRuntimeScaleMonitoringEnabled": false,
+        "minimumElasticInstanceCount": 0,
+        "azureStorageAccounts": {}
+      }
+    },
+
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('agentBotName'), '/', variables('agentBotName'), '.azurewebsites.net')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]"
+      ],
+      "properties": {
+        "siteName": "[variables('agentBotName')]",
+        "hostNameType": "Verified"
+      }
+    },
+
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('agentBotName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('agentBotName'))]"
+      ],
+
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "appsettings",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]"
+          ],
+          "properties": {
+            "PROJECT": "MyApprovalsHub.Agent/MyApprovalsHub.Agent.csproj",
+            "SCM_COMMAND_IDLE_TIMEOUT": "120",
+            "BOT_ID": "[parameters('agentClientId')]",
+            "BOT_PASSWORD": "[parameters('agentClientSecret')]"
+          }
+        },
+        {
+          "apiVersion": "2016-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "condition": "[not(empty(parameters('gitRepoUrl')))]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('agentBotName'))]",
+            "[resourceId('Microsoft.Web/sites/config', variables('agentBotName'), 'appsettings')]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('gitRepoUrl')]",
+            "branch": "[parameters('gitBranch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ],
+      "kind": "app",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "[variables('userAssignedIdentitiesAgent_externalid')]": {}
+        }
+      },
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(variables('agentBotName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(variables('agentBotName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webAppName'))]",
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "vnetRouteAllEnabled": false,
+        "vnetImagePullEnabled": false,
+        "vnetContentShareEnabled": false,
+        "siteConfig": {
+          "numberOfWorkers": 1,
+          "acrUseManagedIdentityCreds": false,
+          "alwaysOn": true,
+          "http20Enabled": false,
+          "functionAppScaleLimit": 0,
+          "minimumElasticInstanceCount": 0
+        },
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "clientCertMode": "Required",
+        "hostNamesDisabled": false,
+        "customDomainVerificationId": "C4D5B1C8EC9500A78A17DAB7A6A43A07B1BEC54EA34C21231227CA8832F463CA",
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None",
+        "storageAccountRequired": false,
+        "keyVaultReferenceIdentity": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('agentBotName'))]"
+      }
     }
+
+
   ],
   "outputs": {
     "appClientId": {
