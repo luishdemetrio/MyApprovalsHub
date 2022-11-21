@@ -208,7 +208,8 @@
     "tabAppUrl": "[concat('https://', variables('tabAppDomain'))]",
 
     "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
-    "agentBotAppUrl": "[concat('https://', variables('agentBotName'))]",
+    "agentAppDomain": "[concat( variables('agentBotName'), '.azurewebsites.net' )]",
+    "agentBotAppUrl": "[concat('https://', variables('agentAppDomain'))]",
     "userAssignedIdentitiesAgent_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('agentBotName') )]",
 
     "ApprovalsHubBotNotificationUrl": "[concat(variables('agentBotAppUrl'), '/api/notification' )]",
@@ -402,7 +403,7 @@
           ],
           "properties": {
             "PROJECT": "MyApprovalsHub/MyApprovalsHub.csproj",
-            "IDENTITY_ID": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]",
+            "IDENTITY_ID": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('TeamsTabName') )).clientId]",
             "SCM_COMMAND_IDLE_TIMEOUT": "120",
             "ServiceNowBaseURL": "[parameters('ServiceNowBaseURL')]",
             "ServiceNowUsername": "[parameters('ServiceNowUsername')]",
@@ -679,7 +680,7 @@
             "SCM_COMMAND_IDLE_TIMEOUT": "120",
             "BOT_ID": "[parameters('agentClientId')]",
             "BOT_PASSWORD": "[parameters('agentClientSecret')]",
-            "IDENTITY_ID": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('agentBotName'))]",
+            "IDENTITY_ID": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('agentBotName') )).clientId]",
             "INITIATE_LOGIN_ENDPOINT": "[concat(variables('agentBotAppUrl'), '/auth-start.html')]",
             "M365_APPLICATION_ID_URI": "[concat('api://botid-', parameters('agentClientId'))]",
             "M365_AUTHORITY_HOST": "https://login.microsoftonline.com",
