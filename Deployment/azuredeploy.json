@@ -39,6 +39,21 @@
         "description": "The client secret of the Microsoft Teams Agent bot app."
       }
     },
+    "M365ClientId": {
+      "type": "string",
+      "minLength": 36,
+      "maxLength": 36,
+      "metadata": {
+        "description": "The application (client) ID of the Microsoft 365 app, e.g., 123e4567-e89b-12d3-a456-426655440000."
+      }
+    },
+    "M365ClientSecret": {
+      "type": "securestring",
+      "minLength": 1,
+      "metadata": {
+        "description": "The client secret of the Microsoft 365 app."
+      }
+    },
     "serviceNowBaseURL": {
       "type": "string",
       "minLength": 8,
@@ -189,10 +204,11 @@
     "serverfarms_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, 'providers/Microsoft.Web/serverfarms/', variables('webAppName') )]",
     "userAssignedIdentities_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('teamsTabName') )]",
 
-    "botAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
+    "tabAppDomain": "[concat( variables('webAppName'), '.azurewebsites.net' )]",
+    "tabAppUrl": "[concat('https://', variables('tabAppDomain'))]",
 
     "agentBotName": "[concat(parameters('baseResourceName'), 'agent')]",
-    "agentBotAppUrl": "[concat('https://', variables('botAppDomain'))]",
+    "agentBotAppUrl": "[concat('https://', variables('agentBotName'))]",
     "userAssignedIdentitiesAgent_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('agentBotName') )]",
 
     "ApprovalsHubBotNotificationUrl": "[concat(variables('agentBotAppUrl'), '/api/notification' )]",
@@ -386,6 +402,7 @@
           ],
           "properties": {
             "PROJECT": "MyApprovalsHub/MyApprovalsHub.csproj",
+            "IDENTITY_ID": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('teamsTabName'))]",
             "SCM_COMMAND_IDLE_TIMEOUT": "120",
             "ServiceNowBaseURL": "[parameters('ServiceNowBaseURL')]",
             "ServiceNowUsername": "[parameters('ServiceNowUsername')]",
@@ -396,7 +413,7 @@
             "ApprovalsHubBotNotificationUrl": "[variables('ApprovalsHubBotNotificationUrl')]",
             "TeamsFx__Authentication__ClientId": "[parameters('appClientId')]",
             "TeamsFx__Authentication__ClientSecret": "[parameters('appClientSecret')]",
-            "TeamsFx__Authentication__InitiateLoginEndpoint": "[concat(variables('agentBotAppUrl'), '/auth-start.html')]",
+            "TeamsFx__Authentication__InitiateLoginEndpoint": "[concat(variables('tabAppUrl'), '/auth-start.html')]",
             "TeamsFx__Authentication__OAuthAuthority": "[concat('https://login.microsoftonline.com/', variables('subscriptionTenantId'))]"
 
           }
@@ -661,7 +678,17 @@
             "PROJECT": "MyApprovalsHub.Agent/MyApprovalsHub.Agent.csproj",
             "SCM_COMMAND_IDLE_TIMEOUT": "120",
             "BOT_ID": "[parameters('agentClientId')]",
-            "BOT_PASSWORD": "[parameters('agentClientSecret')]"
+            "BOT_PASSWORD": "[parameters('agentClientSecret')]",
+            "IDENTITY_ID": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('agentBotName'))]",
+            "INITIATE_LOGIN_ENDPOINT": "[concat(variables('agentBotAppUrl'), '/auth-start.html')]",
+            "M365_APPLICATION_ID_URI": "[concat('api://botid-', parameters('agentClientId'))]",
+            "M365_AUTHORITY_HOST": "https://login.microsoftonline.com",
+            "M365_CLIENT_ID": "[parameters('M365ClientId')]",
+            "M365_CLIENT_SECRET": "[parameters('M365ClientSecret')]",
+            "M365_TENANT_ID": "[subscription().tenantId]",
+            "RUNNING_ON_AZURE": "1",
+            "SCM_DO_BUILD_DURING_DEPLOYMENT": "True"
+
           }
         },
         {

@@ -8,17 +8,15 @@
         "version": "1.0.0",
         "hostType": "Azure",
         "azureResources": [],
-        "capabilities": [
-            "Bot"
-        ],
+        "capabilities": [],
         "activeResourcePlugins": [
-            "fx-resource-identity",
-            "fx-resource-bot",
-            "fx-resource-aad-app-for-teams",
             "fx-resource-local-debug",
             "fx-resource-appstudio",
             "fx-resource-cicd",
-            "fx-resource-api-connector"
+            "fx-resource-api-connector",
+            "fx-resource-aad-app-for-teams",
+            "fx-resource-bot",
+            "fx-resource-identity"
         ]
     },
     "programmingLanguage": "csharp",
@@ -30,5 +28,42 @@
             ]
         }
     },
-    "isFirstTimeOpenProject": false
+    "isFirstTimeOpenProject": false,
+    "components": [
+        {
+            "name": "aad-app",
+            "provision": true,
+            "deploy": true
+        },
+        {
+            "name": "teams-bot",
+            "hosting": "azure-web-app",
+            "build": true,
+            "provision": true,
+            "folder": "",
+            "artifactFolder": "bin\\Release\\net6.0\\win-x86\\publish",
+            "capabilities": [
+                "notification"
+            ],
+            "sso": false,
+            "deploy": true
+        },
+        {
+            "name": "azure-web-app",
+            "connections": [
+                "identity",
+                "aad-app",
+                "teams-bot"
+            ],
+            "provision": true,
+            "scenario": "Bot"
+        },
+        {
+            "name": "bot-service",
+            "provision": true
+        },
+        {
+            "name": "identity"
+        }
+    ]
 }
