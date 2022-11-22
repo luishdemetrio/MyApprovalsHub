@@ -1,7 +1,9 @@
 ﻿using AdaptiveCards.Templating;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.TeamsFx;
 using Microsoft.TeamsFx.Conversation;
 using MyApprovalsHub.Agent.Models;
+using MyApprovalsHub.Common.ExternalSources.ServiceNow;
 using Newtonsoft.Json;
 
 namespace MyApprovalsHub.Agent.Controllers
@@ -83,6 +85,7 @@ namespace MyApprovalsHub.Agent.Controllers
 
                     if (member != null)
                     {
+                        SNowCodeValueHelper snowList = new();
 
                         // Build and send adaptive card
                         var cardContent = new AdaptiveCardTemplate(cardTemplate).Expand
@@ -97,10 +100,10 @@ namespace MyApprovalsHub.Agent.Controllers
                                 LongDescription = snowIncidentModel.LongDescription,
                                 Title = snowIncidentModel.Title,
                                 ViewDetailsUrl = snowIncidentModel.ViewDetailsUrl,
-                                Impact = snowIncidentModel?.Impact,
-                                Urgency = snowIncidentModel?.Urgency,
-                                Priority = snowIncidentModel?.Priority,
-                                State = snowIncidentModel?.State,
+                                Impact = snowList.Impact.ContainsKey(snowIncidentModel.Impact) ? snowList.Impact[snowIncidentModel.Impact] : snowIncidentModel.Impact,
+                                Urgency = snowList.Urgency.ContainsKey(snowIncidentModel.Urgency) ? snowList.Urgency[snowIncidentModel.Urgency] : snowIncidentModel.Urgency,
+                                Priority = snowList.Priority.ContainsKey(snowIncidentModel.Priority) ? snowList.Priority[snowIncidentModel.Priority] : snowIncidentModel.Priority,
+                                State = snowList.State.ContainsKey(snowIncidentModel.State) ? snowList.State[snowIncidentModel.State] : snowIncidentModel.State,
                             }
                         );
 
