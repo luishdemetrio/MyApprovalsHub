@@ -9,7 +9,7 @@ namespace MyApprovalsHub.Mock.Services.ServiceNow;
 
 public class ServiceNowMock : IServiceNowService
 {
-
+    
     private string _serviceNowInstanceUrl;
     
     private string _ApprovalsHubBotNotificationUrl;
@@ -20,17 +20,21 @@ public class ServiceNowMock : IServiceNowService
     private static Dictionary<int, string> _impacts;
 
     private static Dictionary<int, string> _priorities;
-        
 
-    public ServiceNowMock()
+    private ServiceNowMock()
+    {
+            
+    }
+    public ServiceNowMock(IConfiguration configuration)
     {
 
-        _serviceNowInstanceUrl = "https://dev52648.service-now.com/";
-        _ApprovalsHubBotNotificationUrl = "https://myapprovaldev978325bot.azurewebsites.net/api/notification"; // "http://localhost:5130/api/notification";
+        _serviceNowInstanceUrl = configuration.GetSection("ServiceNowBaseURL")?.Value;
+        _ApprovalsHubBotNotificationUrl = configuration.GetSection("ApprovalsHubBotNotificationUrl")?.Value;
 
         _currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
         
+        
+
         PopulateImpacts();
 
         PopulatePriorities();
