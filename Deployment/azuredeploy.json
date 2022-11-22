@@ -212,7 +212,7 @@
     "agentBotAppUrl": "[concat('https://', variables('agentAppDomain'))]",
     "userAssignedIdentitiesAgent_externalid": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.ManagedIdentity/userAssignedIdentities/', variables('agentBotName') )]",
 
-    "ApprovalsHubBotNotificationUrl": "[concat(variables('agentBotAppUrl'), '/api/notification' )]",
+    "ApprovalsHubBotNotificationUrl": "[concat(variables('tabAppUrl'), '/api/notification' )]",
 
     "hostingPlanName": "[parameters('baseResourceName')]",
     "sharedSkus": [
