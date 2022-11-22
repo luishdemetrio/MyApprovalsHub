@@ -1,10 +1,7 @@
 ﻿using AdaptiveCards.Templating;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder;
-using Microsoft.Graph.Ediscovery;
 using Microsoft.TeamsFx.Conversation;
 using MyApprovalsHub.Agent.Models;
-using MyApprovalsHub.Common.Models;
 using Newtonsoft.Json;
 
 namespace MyApprovalsHub.Agent.Controllers
@@ -99,7 +96,11 @@ namespace MyApprovalsHub.Agent.Controllers
                                 ShortDescription = snowIncidentModel.ShortDescription,
                                 LongDescription = snowIncidentModel.LongDescription,
                                 Title = snowIncidentModel.Title,
-                                ViewDetailsUrl = snowIncidentModel.ViewDetailsUrl
+                                ViewDetailsUrl = snowIncidentModel.ViewDetailsUrl,
+                                Impact = snowIncidentModel?.Impact,
+                                Urgency = snowIncidentModel?.Urgency,
+                                Priority = snowIncidentModel?.Priority,
+                                State = snowIncidentModel?.State,
                             }
                         );
 

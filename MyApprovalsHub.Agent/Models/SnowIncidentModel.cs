@@ -11,8 +11,6 @@ public class SnowIncidentModel {
     public string ViewDetailsUrl { get; set; }
     public string Impact { get; set; }
     public string Urgency { get; set; }
-    public string Category { get;}
     public string Priority { get; set; }
-    public string Subcategory { get; set; }
     public string State { get; set; }
 }

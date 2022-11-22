@@ -63,16 +63,8 @@
           "value": "${urgency}"
         },
         {
-          "title": "Category:",
-          "value": "${category}"
-        },
-        {
           "title": "Priority:",
           "value": "${priority}"
-        },
-        {
-          "title": "Subcategory:",
-          "value": "${subcategory}"
         },
         {
           "title": "State:",
