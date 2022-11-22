@@ -51,29 +51,72 @@
       "wrap": true
     },
     {
-      "type": "FactSet",
-      "spacing": "Large",
-      "facts": [
+      "type": "ColumnSet",
+      "columns": [
         {
-          "title": "Impact:",
-          "value": "${impact}"
-        },
-        {
-          "title": "Urgency:",
-          "value": "${urgency}"
-        },
-        {
-          "title": "Priority:",
-          "value": "${priority}"
-        },
-        {
-          "title": "State:",
-          "value": "${state}"
-        }
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "Impact:",
+              "size": "Default"
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "Urgency:",
+              "size": "Default"
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "Priority:",
+              "size": "Default"
 
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "State:",
+              "size": "Default"
+            }
+          ],
+          "width": "auto"
+        },
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "${impact}",
+              "size": "Default"
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "${urgency}",
+              "size": "Default"
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "${priority}",
+              "size": "Default"
+
+            },
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "${state}",
+              "size": "Default"
+            }
+          ],
+          "width": "auto"
+        }
       ]
     }
-
   ],
   "actions": [
     {
