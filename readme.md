@@ -1,6 +1,6 @@
 # My Approvals Hub
 
-[Deployment guide](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Deployment-guide) | [Service Now Webhook](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Service-Now-webhook) |
+[Deployment guide](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Deployment-guide) | [Service Now Webhook](https://github.com/luishdemetrio/MyApprovalsHub/wiki/Service-Now-Webhook) |
 | ---- | ---- | ---- |
 
 Managers usually have to manage approvals out of a number of systems causing delays in approval actions and excessive context switching. Also, the large volumes of email notifications from these systems cause important approval notifications to sometimes get missed.
