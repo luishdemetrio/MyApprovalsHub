@@ -9,17 +9,12 @@ namespace MyApprovalsHub.Mock.Services.ServiceNow;
 
 public class ServiceNowMock : IServiceNowService
 {
-    
-    private string _serviceNowInstanceUrl;
-    
-    private string _ApprovalsHubBotNotificationUrl;
 
-    private string _currentDirectory;
-
+    private string _serviceNowInstanceUrl = string.Empty;
     
-    private static Dictionary<int, string> _impacts;
+    private string _ApprovalsHubBotNotificationUrl = string.Empty;
 
-    private static Dictionary<int, string> _priorities;
+    private string? _currentDirectory = string.Empty ;
 
     private ServiceNowMock()
     {
@@ -27,38 +22,11 @@ public class ServiceNowMock : IServiceNowService
     }
     public ServiceNowMock(IConfiguration configuration)
     {
-
-        _serviceNowInstanceUrl = configuration.GetSection("ServiceNowBaseURL")?.Value;
-        _ApprovalsHubBotNotificationUrl = configuration.GetSection("ApprovalsHubBotNotificationUrl")?.Value;
+        _serviceNowInstanceUrl = configuration.GetSection("ServiceNowBaseURL").Value;
+        _ApprovalsHubBotNotificationUrl = configuration.GetSection("ApprovalsHubBotNotificationUrl").Value;
 
         _currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         
-        
-
-        PopulateImpacts();
-
-        PopulatePriorities();
-    }
-
-    private void PopulateImpacts()
-    {
-        _impacts = new();
-
-        _impacts.Add(1, "High");
-        _impacts.Add(2, "Medium");
-        _impacts.Add(3, "Low");
-
-    }
-
-    private void PopulatePriorities()
-    {
-        _priorities = new();
-
-        _priorities.Add(1, "Critical");
-        _priorities.Add(2, "High");
-        _priorities.Add(3, "Moderate");
-        _priorities.Add(4, "Low");
-
     }
 
     private string GetServiceNowUser(string email)
@@ -121,6 +89,7 @@ public class ServiceNowMock : IServiceNowService
 
         }
 
+        SNowCodeValueHelper snowList = new();
 
         //we need to get the name and email of the user
         var users = GetUserDetail(string.Join(",", approvalDetails.result.Select(u => u.assigned_to).Distinct()));
@@ -130,7 +99,6 @@ public class ServiceNowMock : IServiceNowService
                         on approval.sysapproval equals approvalDetail.sys_id
                      join user in users.result
                         on approvalDetail.assigned_to equals user.sys_id
-
                      select new PendingApproval
                      {
                          Number = approvalDetail.number,
@@ -146,11 +114,11 @@ public class ServiceNowMock : IServiceNowService
                          SourcePhoto = "servicenow.png",
                          State = approval.state,
                          SysId = approvalDetail.sys_id,
-                         Impact = _impacts.ContainsKey(approvalDetail.impact) ? _impacts[approvalDetail.impact] : string.Empty,
-                         Priority = _priorities.ContainsKey(approvalDetail.priority) ? _priorities[approvalDetail.priority] : string.Empty,
-                         SysApproval = approval.sys_id,
-                         DetailsUrl = $"{_serviceNowInstanceUrl}/sp?id=form&sys_id={approvalDetail.sys_id}&table=change_request"
-                     };
+                         Impact = snowList.Impact.ContainsKey(approvalDetail.impact.ToString()) ? snowList.Impact[approvalDetail.impact.ToString()] : string.Empty,
+                         Priority = snowList.Priority.ContainsKey(approvalDetail.priority.ToString()) ? snowList.Priority[approvalDetail.priority.ToString()] : string.Empty,
+                        SysApproval = approval.sys_id,
+                        DetailsUrl = $"{_serviceNowInstanceUrl}/sp?id=form&sys_id={approvalDetail.sys_id}&table=change_request"
+                    };
 
         return result;
 
@@ -183,7 +151,7 @@ public class ServiceNowMock : IServiceNowService
     public class PendingApprovalCollection
     {
 
-        public List<PendingApproval> result { get; set; } 
+        public List<PendingApproval>? result { get; set; } 
 
 
 

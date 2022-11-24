@@ -25,9 +25,9 @@
 }
 else
 {
-    <div class=" page-padding">
+    <div class=" page-padding" style="padding-top: 0px">
 
-        <h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>
+        @*<h5 class="left">Follows your approvals dashboard@(!String.IsNullOrEmpty(userName) ? ", " + userName : "")!</h5>*@
     
        @*     <FluentButton @onclick=@(()=>OpenSettings()) >
                 <FluentIcon Name="@FluentIcons.Globe" Size="@IconSize.Size16" Filled=false  />
@@ -69,8 +69,6 @@ else
     bool isInTeams;
     bool isLoading = true;
 
-
-    private ApprovalsCard ConcurApprovalsCard;
     private ApprovalsCard ServiceNowApprovalsCard;
 
     private ApprovalsList ApprovalsListGrid;
@@ -101,10 +99,11 @@ else
             }
             else
             {
+                userEmail = "luke.wilson@example.com";
                 errorMessage = "Not running in Microsoft Teams.";
             }
 
-            _vm = new(userName, "luke.wilson@example.com", ApprovalsHubConfig.CurrentValue, ServiceNowService);
+            _vm = new(userName, userEmail, ApprovalsHubConfig.CurrentValue, ServiceNowService);
 
             isLoading = false;
             StateHasChanged();         

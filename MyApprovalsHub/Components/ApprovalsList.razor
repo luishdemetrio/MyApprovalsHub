@@ -8,7 +8,7 @@
     <h5>Pending Approvals</h5>
 
     <div class="form-floating mb-3" style="margin-top: 20px;width:30%;min-width:300px">
-        <input type="text" class="form-control" id="floatingInput" placeholder="Luis Demetrio" @oninput="FilterChanged">
+        <input type="text" class="form-control" id="floatingInput"  @oninput="FilterChanged">
         <label for="floatingInput">Filter by requestor</label>
     </div>
 
@@ -39,7 +39,7 @@
         {
             <tr>
                 <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
-                <td>@item.Number</td>
+               @* <td>@item.Number</td>*@
                     <td>@item.ShortDescription</td>
                     <td>@item.Date.ToShortDateString()</td>
                 <td>@item.RequestorName</td>                
@@ -121,7 +121,7 @@
     {
 
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Source", x => x.Source));
-        SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Number", x => x.Number));
+        //SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Number", x => x.Number));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Description", x => x.ShortDescription));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Date", x => x.Date));
         SortingColumnsGrid.Add(new ColumnDefinition<PendingApproval>("Requestor", x => x.RequestorName));

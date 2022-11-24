@@ -6,9 +6,6 @@ namespace MyApprovalsHub.Services;
 public class ConcurService : IExternalService
 {
 
-    
-    private readonly string _accessTokenUrl;
-
     public bool Approve(PendingApproval pendingApproval)
     {
         throw new NotImplementedException();

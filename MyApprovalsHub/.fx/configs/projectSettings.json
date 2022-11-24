@@ -9,21 +9,51 @@
         "hostType": "Azure",
         "azureResources": [],
         "capabilities": [
-            "Tab"
+            "Tab",
+            "TabSSO"
         ],
         "activeResourcePlugins": [
-            "fx-resource-frontend-hosting",
-            "fx-resource-identity",
-            "fx-resource-aad-app-for-teams",
             "fx-resource-local-debug",
             "fx-resource-appstudio",
             "fx-resource-cicd",
-            "fx-resource-api-connector"
+            "fx-resource-api-connector",
+            "fx-resource-aad-app-for-teams",
+            "fx-resource-frontend-hosting",
+            "fx-resource-identity"
         ]
     },
     "programmingLanguage": "csharp",
     "pluginSettings": {
         "projectFilePath": "C:\\Users\\luisdem\\source\\repos\\MyApprovalsHub\\MyApprovalsHub\\MyApprovalsHub.csproj"
     },
-    "isFirstTimeOpenProject": false
+    "isFirstTimeOpenProject": false,
+    "components": [
+        {
+            "name": "aad-app",
+            "provision": true,
+            "deploy": true
+        },
+        {
+            "hosting": "azure-web-app",
+            "name": "teams-tab",
+            "build": true,
+            "provision": true,
+            "folder": "",
+            "artifactFolder": "bin\\Release\\net6.0\\win-x86\\publish",
+            "sso": true,
+            "deploy": true
+        },
+        {
+            "name": "azure-web-app",
+            "connections": [
+                "identity",
+                "aad-app",
+                "teams-tab"
+            ],
+            "provision": true
+        },
+        {
+            "name": "identity"
+        }
+    ]
 }
