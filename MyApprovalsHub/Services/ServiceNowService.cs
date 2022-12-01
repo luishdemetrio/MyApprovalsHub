@@ -315,7 +315,7 @@ public class ServiceNowService : IServiceNowService
                          RequestorName = user.name,
                          RequestorEmail = user.email,
                          OpenedAt = approvalDetail.opened_at.Date,
-                         Date = approval.due_date.Date,
+                         Date = approval.due_date.HasValue ? approval.due_date.Value.Date : null,
                          Source = PendingApprovalSource.ServiceNow.ToString(),
                          SourcePhoto = "servicenow.png",
                          State = approval.state,

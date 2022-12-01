@@ -7,7 +7,7 @@ public class PendingApproval
     public string? Source { get; set; }
     public string? RequestorName { get; set; }
     public DateTime ApprovedOnDate { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     public DateTime OpenedAt { get; set; }
     public string? RequestorEmail { get; set; }
     public string? SourcePhoto { get; set; }

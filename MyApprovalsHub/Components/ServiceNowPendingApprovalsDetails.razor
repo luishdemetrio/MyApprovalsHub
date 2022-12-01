@@ -52,7 +52,17 @@
                         </tr>
                         <tr>
                             <th scope="row">Request Date:</th>
-                            <td style="padding-bottom: 10px;">@selectedExpense.Date.ToShortDateString()</td>
+
+                            @if (@selectedExpense.Date.HasValue)
+                            {
+                             
+                                <td style="padding-bottom: 10px;">@selectedExpense.Date.Value.ToShortDateString()</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            
                         </tr>
 
                         <tr>

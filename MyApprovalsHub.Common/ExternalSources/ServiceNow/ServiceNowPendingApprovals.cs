@@ -7,7 +7,7 @@ public  class ServiceNowPendingApprovals
 
 }
 
-public record Pending(string sys_id, string sysapproval, DateTime due_date, string state);
+public record Pending(string sys_id, string sysapproval, DateTime? due_date, string state);
 
 //public class Pending
 //{

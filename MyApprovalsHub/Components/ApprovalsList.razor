@@ -41,7 +41,15 @@
                 <th scope="row"><img src=@item.SourcePhoto height="25" width="25" /></th>
                @* <td>@item.Number</td>*@
                     <td>@item.ShortDescription</td>
-                    <td>@item.Date.ToShortDateString()</td>
+                    @if (@item.Date.HasValue)
+                    {
+                        <td>@item.Date.Value.Date.ToShortDateString()</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
                 <td>@item.RequestorName</td>                
                 <td>
                     <div>
