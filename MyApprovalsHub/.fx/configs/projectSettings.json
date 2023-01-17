@@ -24,7 +24,7 @@
     },
     "programmingLanguage": "csharp",
     "pluginSettings": {
-        "projectFilePath": "C:\\Users\\luisdem\\source\\repos\\MyApprovalsHub\\MyApprovalsHub\\MyApprovalsHub.csproj"
+        "projectFilePath": "MyApprovalsHub.csproj"
     },
     "isFirstTimeOpenProject": false,
     "components": [
